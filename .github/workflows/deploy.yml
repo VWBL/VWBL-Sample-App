@@ -1,0 +1,134 @@
+name: deploy
+
+on:
+  push:
+    branches:
+      - develop
+    tags:
+      - '*'
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  # バージョン何が使えるのかは以下を参照
+  # https://github.com/actions/node-versions/blob/main/versions-manifest.json
+  node-version: '16.x'
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+
+      #
+      # Setup for build
+      #
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        id: setup-node
+        with:
+          node-version: ${{ env.node-version }}
+          cache: 'yarn'
+
+      - name: node_modules cache
+        uses: actions/cache@v2
+        id: cache_node_modules
+        with:
+          # キャッシュキー完全一致しない場合 yarn installする必要があるのでrestore-keysは使わない
+          key: ${{ runner.os }}-build-node_modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/package.json') }}
+          path: '**/node_modules'
+
+      - name: Install Dependencies
+        if: steps.cache_node_modules.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+
+  deploy-staging:
+    if: github.ref == 'refs/heads/develop'
+    needs: setup
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+    steps:
+      #
+      # Init
+      #
+      - uses: actions/checkout@v2
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/vwbl-demo-stg-deploy-role
+          aws-region: ap-northeast-1
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node-version }}
+      - name: node_modules cache
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-build-node_modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/package.json') }}
+          path: '**/node_modules'
+      #
+      # Build & Deploy
+      #
+      - name: Build
+        env:
+          NEXT_PUBLIC_PROVIDER_URL: ${{ secrets.PROVIDER_URL }}
+          NEXT_PUBLIC_NFT_CONTRACT_ADDRESS: "0x744f3bB4D8067e972fB01720eb158ba6243b37a6"
+          NEXT_PUBLIC_VWBL_NETWORK_URL: https://dev.vwbl.network
+          NEXT_PUBLIC_CHAIN_ID: "5"
+          NEXT_PUBLIC_NFT_STORAGE_KEY: ${{ secrets.NFT_STORAGE_KEY }}
+        run: |
+          yarn build
+      - name: Deploy to s3
+        run: |
+          aws s3 sync \
+            --exact-timestamps \
+            --delete \
+            "./out" s3://${{ secrets.DEPLOY_BUCKET }}
+      - name: Clear cloudfront cache
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
+
+  deploy-production:
+    if: contains(github.ref, 'tags/v')
+    needs: setup
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    steps:
+      #
+      # Init
+      #
+      - uses: actions/checkout@v2
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/vwbl-demo-deploy-role
+          aws-region: ap-northeast-1
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node-version }}
+      - name: node_modules cache
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-build-node_modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/package.json') }}
+          path: '**/node_modules'
+      #
+      # Build & Deploy
+      #
+      - name: Build
+        env:
+          NEXT_PUBLIC_PROVIDER_URL: ${{ secrets.PROVIDER_URL }}
+          NEXT_PUBLIC_NFT_CONTRACT_ADDRESS: "0xfCD7669A5AAb4D85772cC8791331182bf0f1E2F2"
+          NEXT_PUBLIC_VWBL_NETWORK_URL: "https://vwbl.network"
+          NEXT_PUBLIC_CHAIN_ID: "137"
+          NEXT_PUBLIC_NFT_STORAGE_KEY: ${{ secrets.NFT_STORAGE_KEY }}
+        run: |
+          yarn build
+      - name: Deploy to s3
+        run: |
+          aws s3 sync \
+            --exact-timestamps \
+            --delete \
+            "./out" s3://${{ secrets.DEPLOY_BUCKET }}
+      - name: Clear cloudfront cache
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"

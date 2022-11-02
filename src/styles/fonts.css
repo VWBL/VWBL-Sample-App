@@ -1,0 +1,63 @@
+@font-face {
+  font-family: 'KintoSans';
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/KintoSans/KintoSans-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'KintoSans';
+  font-display: swap;
+  font-weight: bold;
+  font-style: bold;
+  src: url('/fonts/KintoSans/KintoSans-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'KintoSans';
+  font-display: swap;
+  font-weight: 100;
+  font-style: normal;
+  src: url('/fonts/KintoSans/KintoSans-Thin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'KintoSans';
+  font-display: swap;
+  font-weight: 300;
+  font-style: normal;
+  src: url('/fonts/KintoSans/KintoSans-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'KintoSans';
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/KintoSans/KintoSans-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'KintoSans';
+  font-display: swap;
+  font-weight: 500;
+  font-style: normal;
+  src: url('/fonts/KintoSans/KintoSans-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'KintoSans';
+  font-display: swap;
+  font-weight: 700;
+  font-style: bold;
+  src: url('/fonts/KintoSans/KintoSans-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'KintoSans';
+  font-display: swap;
+  font-weight: 900;
+  font-style: bold;
+  src: url('/fonts/KintoSans/KintoSans-Black.woff2') format('woff2');
+}
