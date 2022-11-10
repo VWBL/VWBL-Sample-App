@@ -1,11 +1,11 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Image, Box, Button } from '@chakra-ui/react';
 import ReactPlayer from 'react-player';
-import { Document, Page } from 'react-pdf';
 import { ExtractMetadata } from 'vwbl-sdk';
 
 import { VALID_EXTENSIONS } from '../../../utils';
 import { FetchedNFT } from '../../types';
+import { PdfViewer } from '../pdf-viewer';
 
 type Props = {
   nft: FetchedNFT | ExtractMetadata;
@@ -16,13 +16,7 @@ const isExtractMetadata = (token: FetchedNFT | ExtractMetadata): token is Extrac
 };
 
 export const FileViewer: React.FC<Props> = ({ nft }) => {
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
   const [fileUrl, setFileUrl] = useState('');
-
-  const onDocumentLoadSuccess = useCallback(({ numPages }) => {
-    setNumPages(numPages);
-  }, []);
 
   const download = useCallback(() => {
     const a = document.createElement('a');
@@ -54,16 +48,7 @@ export const FileViewer: React.FC<Props> = ({ nft }) => {
         } else if (nft.mimeType.match(VALID_EXTENSIONS.audio)) {
           return <ReactPlayer url={fileUrl} controls={true} height='54px' />;
         } else if (nft.mimeType.includes('pdf')) {
-          return (
-            <>
-              <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess}>
-                <Page pageNumber={pageNumber} />
-              </Document>
-              <p>
-                Page {pageNumber} of {numPages}
-              </p>
-            </>
-          );
+          return <PdfViewer fileUrl={fileUrl} />;
         } else {
           return <Button onClick={download}>Download</Button>;
         }
@@ -71,7 +56,7 @@ export const FileViewer: React.FC<Props> = ({ nft }) => {
         return <Image src={nft.image} alt='thumbnail data' rounded='md' />;
       }
     },
-    [numPages, onDocumentLoadSuccess, pageNumber, fileUrl],
+    [download, fileUrl],
   );
 
   return (
