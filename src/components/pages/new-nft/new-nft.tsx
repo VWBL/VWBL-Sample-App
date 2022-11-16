@@ -86,7 +86,7 @@ export const NewNFTComponent: React.FC<Props> = ({
               onClear={onClearFile}
               inputId='asset'
               mimeType={mimeType}
-              labelText={'Image, Video, or Audio'}
+              labelText={'Image, Video, Audio, or PDF'}
               opt={{
                 ...register('asset', {
                   required: 'Asset is required',
