@@ -117,7 +117,7 @@ export const NewNFTComponent: React.FC<Props> = ({
                   },
                 }),
               }}
-              acceptType='.jpeg,.jpg,.png'
+              acceptType='.jpeg,.jpg,.png,.gif'
               labelText={'Image'}
             />
 
