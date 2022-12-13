@@ -1,3 +1,4 @@
+// Blockchain
 export type ChainId = 1 | 3 | 4 | 5 | 42 | 137 | 1337;
 export type Currency = {
   name: string;
@@ -31,4 +32,18 @@ export const NETWORKS: Record<ChainId, Network> = {
     },
   },
   1337: { chainName: 'Local Network', rpcUrls: ['https://localhost:8545'], blockExplorerUrls: [''] },
+};
+
+// Other
+type stringObject = {
+  [key: string]: string;
+};
+
+export const MEDIA_TYPE: stringObject = {
+  All: 'all',
+  Image: 'image',
+  Movie: 'video',
+  Sound: 'audio',
+  Document: 'application',
+  Data: 'text',
 };
