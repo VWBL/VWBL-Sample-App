@@ -44,6 +44,5 @@ export const MEDIA_TYPE: stringObject = {
   Image: 'image',
   Movie: 'video',
   Sound: 'audio',
-  Document: 'application',
-  Data: 'text',
+  Other: 'text,application',
 };

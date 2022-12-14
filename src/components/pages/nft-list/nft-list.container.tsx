@@ -15,22 +15,31 @@ export const NFTList = () => {
     setNfts(items.reverse());
   }, []);
 
-  const sortNFTs = (nfts: (Metadata | undefined)[], sortType: string) => {
+  const sortNFTsByMedia = (nfts: (Metadata | undefined)[], sortType: string) => {
+    // MediaType: All
     if (sortType === MEDIA_TYPE.All) {
       return nfts;
-    } else {
-      const sortedNFTs: (Metadata | undefined)[] = [];
+    }
+
+    const sortedNFTs: (Metadata | undefined)[] = [];
+    // MediaType: Other
+    if (sortType === MEDIA_TYPE.Other) {
       for (const nft of nfts) {
-        if (sortType === nft?.mimeType.split('/')[0]) sortedNFTs.push(nft);
+        if (nft && sortType.includes(nft.mimeType.split('/')[0])) sortedNFTs.push(nft);
       }
       return sortedNFTs;
     }
+    // MediaType: Image, Sound, Movie
+    for (const nft of nfts) {
+      if (nft && sortType === nft.mimeType.split('/')[0]) sortedNFTs.push(nft);
+    }
+    return sortedNFTs;
   };
 
   const changeSortType = (newType: string) => setSortType(newType);
 
   useEffect(() => {
-    setSortedNFTs(sortNFTs(nfts, sortType));
+    setSortedNFTs(sortNFTsByMedia(nfts, sortType));
   }, [sortType, nfts]);
 
   useEffect(() => {
