@@ -59,8 +59,6 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
         const { biconomy, ethersProvider, walletProvider, userAddress } = await initBiconomy();
         console.log('biconomy init:', biconomy);
         await sendTransferMetaTx(biconomy, userAddress, walletAddress, parseInt(getAsString(tokenId)), ethersProvider, walletProvider);
-
-        // await vwbl.safeTransfer(walletAddress, parseInt(getAsString(tokenId)));
         setIsComplete(true);
       } catch (err) {
         console.log(err);
