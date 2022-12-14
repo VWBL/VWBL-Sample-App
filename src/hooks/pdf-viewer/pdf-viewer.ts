@@ -13,15 +13,23 @@ export const usePdfViewer = () => {
   const onClickNextPage = () => {
     if (pageNumber === numPages) return;
     setPageNumber((prev) => prev + 1);
-  }
+  };
 
   const onClickPreviousPage = () => {
     if (pageNumber === 1) return;
     setPageNumber((prev) => prev - 1);
-  }
+  };
 
   const targetRef = useRef(null);
   const { getElementProperty } = useGetElementProperty<HTMLDivElement>(targetRef);
 
-  return { numPages, pageNumber, onDocumentLoadSuccess, onClickNextPage, onClickPreviousPage, targetRef, width: getElementProperty('width') }
-}
+  return {
+    numPages,
+    pageNumber,
+    onDocumentLoadSuccess,
+    onClickNextPage,
+    onClickPreviousPage,
+    targetRef,
+    width: getElementProperty('width'),
+  };
+};

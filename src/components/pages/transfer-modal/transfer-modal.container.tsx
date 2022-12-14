@@ -7,6 +7,7 @@ import { ExtractMetadata } from 'vwbl-sdk';
 import { VwblContainer, ToastContainer } from '../../../container';
 import { getAsString } from '../../../utils/helper';
 import { ChainId, NETWORKS } from '../../../utils';
+import { initBiconomy, sendTransferMetaTx } from '../../../hooks/biconomy';
 
 export type FormInputs = {
   walletAddress: string;
@@ -55,7 +56,11 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
       }
       try {
         setIsLoading(true);
-        await vwbl.safeTransfer(walletAddress, parseInt(getAsString(tokenId)));
+        const { biconomy, ethersProvider, walletProvider, userAddress } = await initBiconomy();
+        console.log('biconomy init:', biconomy);
+        await sendTransferMetaTx(biconomy, userAddress, walletAddress, parseInt(getAsString(tokenId)), ethersProvider, walletProvider);
+
+        // await vwbl.safeTransfer(walletAddress, parseInt(getAsString(tokenId)));
         setIsComplete(true);
       } catch (err) {
         console.log(err);

@@ -20,7 +20,6 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
-
       #
       # Setup for build
       #
@@ -72,9 +71,9 @@ jobs:
       - name: Build
         env:
           NEXT_PUBLIC_PROVIDER_URL: ${{ secrets.PROVIDER_URL }}
-          NEXT_PUBLIC_NFT_CONTRACT_ADDRESS: "0x744f3bB4D8067e972fB01720eb158ba6243b37a6"
+          NEXT_PUBLIC_NFT_CONTRACT_ADDRESS: '0x744f3bB4D8067e972fB01720eb158ba6243b37a6'
           NEXT_PUBLIC_VWBL_NETWORK_URL: https://dev.vwbl.network
-          NEXT_PUBLIC_CHAIN_ID: "5"
+          NEXT_PUBLIC_CHAIN_ID: '5'
           NEXT_PUBLIC_NFT_STORAGE_KEY: ${{ secrets.NFT_STORAGE_KEY }}
         run: |
           yarn build
@@ -117,9 +116,9 @@ jobs:
       - name: Build
         env:
           NEXT_PUBLIC_PROVIDER_URL: ${{ secrets.PROVIDER_URL }}
-          NEXT_PUBLIC_NFT_CONTRACT_ADDRESS: "0xfCD7669A5AAb4D85772cC8791331182bf0f1E2F2"
-          NEXT_PUBLIC_VWBL_NETWORK_URL: "https://vwbl.network"
-          NEXT_PUBLIC_CHAIN_ID: "137"
+          NEXT_PUBLIC_NFT_CONTRACT_ADDRESS: '0xfCD7669A5AAb4D85772cC8791331182bf0f1E2F2'
+          NEXT_PUBLIC_VWBL_NETWORK_URL: 'https://vwbl.network'
+          NEXT_PUBLIC_CHAIN_ID: '137'
           NEXT_PUBLIC_NFT_STORAGE_KEY: ${{ secrets.NFT_STORAGE_KEY }}
         run: |
           yarn build
