@@ -7,7 +7,7 @@ export const NFTList = () => {
   const [nfts, setNfts] = useState<(Metadata | undefined)[]>([]);
   const [sortedNFTs, setSortedNFTs] = useState<(Metadata | undefined)[]>([]);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-  const [sortType, setSortType] = useState<string>('all');
+  const [sortType, setSortType] = useState<string>(MEDIA_TYPE.All);
 
   const loadNFTs = useCallback(async () => {
     const items = await fetchAllTokens();
@@ -20,20 +20,12 @@ export const NFTList = () => {
     if (sortType === MEDIA_TYPE.All) {
       return nfts;
     }
-
-    const sortedNFTs: (Metadata | undefined)[] = [];
     // MediaType: Other
     if (sortType === MEDIA_TYPE.Other) {
-      for (const nft of nfts) {
-        if (nft && sortType.includes(nft.mimeType.split('/')[0])) sortedNFTs.push(nft);
-      }
-      return sortedNFTs;
+      return nfts.filter((nft) => nft && sortType.includes(nft.mimeType.split('/')[0]));
     }
     // MediaType: Image, Sound, Movie
-    for (const nft of nfts) {
-      if (nft && sortType === nft.mimeType.split('/')[0]) sortedNFTs.push(nft);
-    }
-    return sortedNFTs;
+    return nfts.filter((nft) => nft && sortType === nft.mimeType.split('/')[0]);
   };
 
   const changeSortType = (newType: string) => setSortType(newType);
