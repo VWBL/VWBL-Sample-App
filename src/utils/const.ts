@@ -35,13 +35,7 @@ export const NETWORKS: Record<ChainId, Network> = {
 };
 
 // Other
-type mediaTypeIndex = 'All' | 'Image' | 'Movie' | 'Sound' | 'Other';
-
-type mediaTypeObject = {
-  [key in mediaTypeIndex]: string;
-};
-
-export const MEDIA_TYPE: mediaTypeObject = {
+export const MEDIA_TYPE = {
   All: 'all',
   Image: 'image',
   Movie: 'video',
