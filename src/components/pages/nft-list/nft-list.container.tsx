@@ -48,6 +48,7 @@ export const NFTList = () => {
       nfts={sortedNFTs}
       isOpenModal={isOpenModal}
       onCloseModal={() => setIsOpenModal(false)}
+      sortType={sortType}
       changeSortType={changeSortType}
     />
   );

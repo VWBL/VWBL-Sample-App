@@ -1,6 +1,5 @@
 import { ChevronDownIcon, CheckIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, Text, MenuList, MenuItem } from '@chakra-ui/react';
-import { useState } from 'react';
 
 type stringObject = {
   [key: string]: string;
@@ -8,12 +7,12 @@ type stringObject = {
 
 type Props = {
   name: string;
+  sortType: string;
   changeSortType: (value: string) => void;
   typeOptions: stringObject;
 };
 
-export const SortMenu: React.FC<Props> = ({ name, changeSortType, typeOptions }) => {
-  const [selectedType, setSelectedType] = useState<string>('all');
+export const SortMenu: React.FC<Props> = ({ name, sortType, changeSortType, typeOptions }) => {
   return (
     <Menu>
       <MenuButton
@@ -31,16 +30,15 @@ export const SortMenu: React.FC<Props> = ({ name, changeSortType, typeOptions })
           return (
             <MenuItem
               key={key}
-              pl={selectedType === typeOptions[key] ? 0 : 6}
+              pl={sortType === typeOptions[key] ? 0 : 6}
               gap={2}
               _hover={{ bg: 'white' }}
               _focus={{ bg: 'white' }}
               onClick={() => {
                 changeSortType(typeOptions[key]);
-                setSelectedType(typeOptions[key]);
               }}
             >
-              {selectedType === typeOptions[key] && <CheckIcon fontSize={16} />}
+              {sortType === typeOptions[key] && <CheckIcon fontSize={16} />}
               <Text fontWeight='bold'>{key}</Text>
             </MenuItem>
           );
