@@ -1,15 +1,11 @@
 import { ChevronDownIcon, CheckIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, Text, MenuList, MenuItem } from '@chakra-ui/react';
 
-type stringObject = {
-  [key: string]: string;
-};
-
 type Props = {
   name: string;
   sortType: string;
   changeSortType: (value: string) => void;
-  typeOptions: stringObject;
+  typeOptions: { [key: string]: string };
 };
 
 export const SortMenu: React.FC<Props> = ({ name, sortType, changeSortType, typeOptions }) => {
