@@ -7,7 +7,7 @@ import { ExtractMetadata } from 'vwbl-sdk';
 import { VwblContainer, ToastContainer } from '../../../container';
 import { getAsString } from '../../../utils/helper';
 import { ChainId, NETWORKS } from '../../../utils';
-import { initBiconomy, sendTransferMetaTx } from '../../../hooks/biconomy';
+import { useBiconomy } from '../../../hooks/biconomy';
 
 export type FormInputs = {
   walletAddress: string;
@@ -31,6 +31,7 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
   const { vwbl, checkNetwork } = VwblContainer.useContainer();
   const { openToast } = ToastContainer.useContainer();
   const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
+  const { sendTransferMetaTx } = useBiconomy();
 
   const onSubmit = useCallback(
     async (data: FormInputs) => {
@@ -56,9 +57,7 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
       }
       try {
         setIsLoading(true);
-        const { biconomy, ethersProvider, walletProvider, userAddress } = await initBiconomy();
-        console.log('biconomy init:', biconomy);
-        await sendTransferMetaTx(biconomy, userAddress, walletAddress, parseInt(getAsString(tokenId)), ethersProvider, walletProvider);
+        await sendTransferMetaTx(walletAddress, parseInt(getAsString(tokenId)));
         setIsComplete(true);
       } catch (err) {
         console.log(err);

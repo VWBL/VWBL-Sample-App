@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { NewNFTComponent } from './new-nft';
 import { VwblContainer, ToastContainer } from '../../../container';
 import { segmentation, MAX_FILE_SIZE, BASE64_MAX_SIZE, VALID_EXTENSIONS, ChainId, switchChain } from '../../../utils';
-import { initBiconomy, sendMintMetaTx } from '../../../hooks/biconomy';
+import { useBiconomy } from '../../../hooks/biconomy';
 import { UploadToIPFS } from '../../../utils/ipfsHelper';
 import { VWBLApi } from 'vwbl-sdk';
 
@@ -29,6 +29,7 @@ export const NewNFT = () => {
   const { vwbl, checkNetwork, web3 } = VwblContainer.useContainer();
   const { openToast } = ToastContainer.useContainer();
   const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
+  const { sendMintMetaTx } = useBiconomy();
 
   const {
     register,
@@ -124,6 +125,7 @@ export const NewNFT = () => {
         );
         const thumbnailImageUrl = await uploadToIpfs.uploadThumbnail(thumbnail[0]);
         // 4. upload metadata
+        console.log("upload metadata");
         const metadataUrl = await uploadToIpfs.uploadMetadata(
           title,
           description,
@@ -133,11 +135,11 @@ export const NewNFT = () => {
           encryptLogic,
         );
         // 5. mint nft by meta transaction
-        const { biconomy, ethersProvider, walletProvider, userAddress } = await initBiconomy();
-        console.log('biconomy init:', biconomy);
+        console.log("mint via meta transaction")
         const documentId = web3.utils.randomHex(32);
-        await sendMintMetaTx(biconomy, documentId, metadataUrl, userAddress, ethersProvider, walletProvider);
+        await sendMintMetaTx(documentId, metadataUrl);
         // 6. set key to vwbl-network
+        console.log("set key");
         const keySetApi = new VWBLApi(process.env.NEXT_PUBLIC_VWBL_NETWORK_URL!);
         const chainId = await vwbl.opts.web3.eth.getChainId();
         await keySetApi.setKey(documentId, chainId, key, vwbl.signature!);

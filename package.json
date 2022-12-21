@@ -11,7 +11,6 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@biconomy/mexa": "2.0.35",
     "@chakra-ui/icons": "^1.1.7",
     "@chakra-ui/react": "^1.8.3",
     "@emotion/react": "^11.7.1",
