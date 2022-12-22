@@ -1,1 +1,1 @@
-export * from "./ogp";
+export * from './ogp';

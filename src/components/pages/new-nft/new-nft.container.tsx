@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { NewNFTComponent } from './new-nft';
 import { VwblContainer, ToastContainer } from '../../../container';
 import { segmentation, MAX_FILE_SIZE, BASE64_MAX_SIZE, VALID_EXTENSIONS, ChainId, switchChain } from '../../../utils';
+import { managedCreateTokenViaMetaTx } from '../../../utils';
 
 export type FormInputs = {
   asset: FileList;
@@ -102,7 +103,9 @@ export const NewNFT = () => {
         const isLarge = asset[0].size > MAX_FILE_SIZE;
         const isBase64 = asset[0].size < BASE64_MAX_SIZE;
         const plainFile = isLarge ? segmentation(asset[0], MAX_FILE_SIZE) : asset[0];
-        await vwbl.managedCreateTokenForIPFS(title, description, plainFile, thumbnail[0], 0, isBase64 ? 'base64' : 'binary');
+        const encryptLogic = isBase64 ? 'base64' : 'binary';
+
+        await managedCreateTokenViaMetaTx(vwbl, plainFile, isBase64, thumbnail, title, description, encryptLogic, web3);
 
         router.push('/');
       } catch (err: any) {
