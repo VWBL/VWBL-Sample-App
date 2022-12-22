@@ -6,8 +6,7 @@ import { TransferModalComponent } from './transfer-modal';
 import { ExtractMetadata } from 'vwbl-sdk';
 import { VwblContainer, ToastContainer } from '../../../container';
 import { getAsString } from '../../../utils/helper';
-import { ChainId, NETWORKS } from '../../../utils';
-import { sendTransferMetaTx } from '../../../hooks/biconomy';
+import { ChainId, NETWORKS, sendTransferMetaTx } from '../../../utils';
 
 export type FormInputs = {
   walletAddress: string;

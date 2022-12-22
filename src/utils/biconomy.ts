@@ -2,9 +2,9 @@ import { ethers } from 'ethers';
 import axios from 'axios';
 import { EncryptLogic, VWBL, VWBLApi } from 'vwbl-sdk';
 import Web3 from 'web3';
-import { buildForwardTxRequest, getDataToSignForEIP712, getDomainSeparator, TxParam } from '../../utils/biconomyHelper';
-import { vwblMetaTxAbi, forwarderABI } from '../../utils/contract/MetaTxABI';
-import { UploadToIPFS } from '../../utils/ipfsHelper';
+import { buildForwardTxRequest, getDataToSignForEIP712, getDomainSeparator, TxParam } from './biconomyHelper';
+import { vwblMetaTxAbi, forwarderABI } from './contract/MetaTxABI';
+import { UploadToIPFS } from './ipfsHelper';
 
 export const managedCreateTokenViaMetaTx = async (
   vwbl: VWBL,
@@ -130,13 +130,13 @@ const sendTransaction = async (
     };
     const { data } = await axios.post(
       `https://api.biconomy.io/api/v2/meta-tx/native`,
-      JSON.stringify({
+      {
         to: process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS!,
         apiId: process.env.NEXT_PUBLIC_MINT_API_ID!,
         params: params,
         from: userAddress,
         signatureType: signatureType,
-      }),
+      },
       { headers: headers },
     );
     await walletProvider.waitForTransaction(data.txHash);

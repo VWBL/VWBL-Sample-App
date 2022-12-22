@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { NewNFTComponent } from './new-nft';
 import { VwblContainer, ToastContainer } from '../../../container';
 import { segmentation, MAX_FILE_SIZE, BASE64_MAX_SIZE, VALID_EXTENSIONS, ChainId, switchChain } from '../../../utils';
-import { managedCreateTokenViaMetaTx } from '../../../hooks/biconomy';
+import { managedCreateTokenViaMetaTx } from '../../../utils';
 
 export type FormInputs = {
   asset: FileList;
