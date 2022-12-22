@@ -7,7 +7,7 @@ import { ExtractMetadata } from 'vwbl-sdk';
 import { VwblContainer, ToastContainer } from '../../../container';
 import { getAsString } from '../../../utils/helper';
 import { ChainId, NETWORKS } from '../../../utils';
-import { useBiconomy } from '../../../hooks/biconomy';
+import { sendTransferMetaTx } from '../../../hooks/biconomy';
 
 export type FormInputs = {
   walletAddress: string;
@@ -31,7 +31,6 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
   const { vwbl, checkNetwork } = VwblContainer.useContainer();
   const { openToast } = ToastContainer.useContainer();
   const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
-  const { sendTransferMetaTx } = useBiconomy();
 
   const onSubmit = useCallback(
     async (data: FormInputs) => {

@@ -5,9 +5,7 @@ import { useForm } from 'react-hook-form';
 import { NewNFTComponent } from './new-nft';
 import { VwblContainer, ToastContainer } from '../../../container';
 import { segmentation, MAX_FILE_SIZE, BASE64_MAX_SIZE, VALID_EXTENSIONS, ChainId, switchChain } from '../../../utils';
-import { useBiconomy } from '../../../hooks/biconomy';
-import { UploadToIPFS } from '../../../utils/ipfsHelper';
-import { VWBLApi } from 'vwbl-sdk';
+import { managedCreateTokenViaMetaTx } from '../../../hooks/biconomy';
 
 export type FormInputs = {
   asset: FileList;
@@ -29,7 +27,6 @@ export const NewNFT = () => {
   const { vwbl, checkNetwork, web3 } = VwblContainer.useContainer();
   const { openToast } = ToastContainer.useContainer();
   const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
-  const { sendMintMetaTx } = useBiconomy();
 
   const {
     register,
@@ -108,41 +105,7 @@ export const NewNFT = () => {
         const plainFile = isLarge ? segmentation(asset[0], MAX_FILE_SIZE) : asset[0];
         const encryptLogic = isBase64 ? 'base64' : 'binary';
 
-        // 1. create key in frontend
-        const key = vwbl.createKey();
-        // 2. encrypt data
-        console.log('encrypt data');
-        const plainFileArray = [plainFile].flat();
-        // 3. upload data
-        console.log('upload data');
-        const uploadToIpfs = new UploadToIPFS(process.env.NEXT_PUBLIC_NFT_STORAGE_KEY!);
-        const encryptedDataUrls = await Promise.all(
-          plainFileArray.map(async (file) => {
-            const encryptedContent = isBase64 ? await vwbl.encryptDataViaBase64(file, key) : await vwbl.encryptFile(file, key);
-            console.log(typeof encryptedContent);
-            return await uploadToIpfs.uploadEncryptedFile(encryptedContent);
-          }),
-        );
-        const thumbnailImageUrl = await uploadToIpfs.uploadThumbnail(thumbnail[0]);
-        // 4. upload metadata
-        console.log("upload metadata");
-        const metadataUrl = await uploadToIpfs.uploadMetadata(
-          title,
-          description,
-          thumbnailImageUrl,
-          encryptedDataUrls,
-          plainFileArray[0].type,
-          encryptLogic,
-        );
-        // 5. mint nft by meta transaction
-        console.log("mint via meta transaction")
-        const documentId = web3.utils.randomHex(32);
-        await sendMintMetaTx(documentId, metadataUrl);
-        // 6. set key to vwbl-network
-        console.log("set key");
-        const keySetApi = new VWBLApi(process.env.NEXT_PUBLIC_VWBL_NETWORK_URL!);
-        const chainId = await vwbl.opts.web3.eth.getChainId();
-        await keySetApi.setKey(documentId, chainId, key, vwbl.signature!);
+        await managedCreateTokenViaMetaTx(vwbl, plainFile, isBase64, thumbnail, title, description, encryptLogic, web3);
 
         router.push('/');
       } catch (err: any) {
