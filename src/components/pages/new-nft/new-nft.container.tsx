@@ -104,7 +104,7 @@ export const NewNFT = () => {
         const plainFile = isLarge ? segmentation(asset[0], MAX_FILE_SIZE) : asset[0];
         await vwbl.managedCreateTokenForIPFS(title, description, plainFile, thumbnail[0], 0, isBase64 ? 'base64' : 'binary');
 
-        router.push('/');
+        router.push('/account');
       } catch (err: any) {
         if (err.message.includes('User denied')) {
           openToast({
