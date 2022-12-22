@@ -83,8 +83,8 @@ export const Layout: React.FC = ({ children }) => {
       target: '_blank',
     },
     {
-      title: 'Explore',
-      to: '/',
+      title: 'Official Page',
+      to: 'https://vwbl-protocol.org/',
     },
     {
       title: 'Create',
@@ -94,8 +94,8 @@ export const Layout: React.FC = ({ children }) => {
 
   const FooterLinks: Link[] = [
     {
-      title: 'Explore',
-      to: '/',
+      title: 'Official Page',
+      to: 'https://vwbl-protocol.org/',
     },
     {
       title: 'Create',
