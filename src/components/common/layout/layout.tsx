@@ -85,6 +85,7 @@ export const Layout: React.FC = ({ children }) => {
     {
       title: 'Official Page',
       to: 'https://vwbl-protocol.org/',
+      target: 'blank',
     },
     {
       title: 'Create',
@@ -96,6 +97,7 @@ export const Layout: React.FC = ({ children }) => {
     {
       title: 'Official Page',
       to: 'https://vwbl-protocol.org/',
+      target: 'blank',
     },
     {
       title: 'Create',
