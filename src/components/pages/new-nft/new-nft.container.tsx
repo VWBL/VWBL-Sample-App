@@ -107,7 +107,7 @@ export const NewNFT = () => {
 
         await managedCreateTokenViaMetaTx(vwbl, plainFile, isBase64, thumbnail, title, description, encryptLogic, web3);
 
-        router.push('/');
+        router.push('/account');
       } catch (err: any) {
         if (err.message.includes('User denied')) {
           openToast({
