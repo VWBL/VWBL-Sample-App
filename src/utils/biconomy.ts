@@ -77,7 +77,7 @@ const sendMintMetaTx = async (documentId: string, metadataURl: string) => {
   const { data } = await vwblMetaTxContract.populateTransaction.mint(metadataURl, process.env.NEXT_PUBLIC_VWBL_NETWORK_URL!, 0, documentId);
 
   const { txParam, sig, domainSeparator } = await constructMetaTx(userAddress, walletProvider, data);
-  await sendTransaction(txParam, sig, userAddress, domainSeparator, 'EIP712_SIGN', walletProvider);
+  await sendTransaction(txParam, sig, process.env.NEXT_PUBLIC_MINT_API_ID!, userAddress, domainSeparator, 'EIP712_SIGN', walletProvider);
 };
 
 export const sendTransferMetaTx = async (toAddress: string, tokenId: number) => {
@@ -87,7 +87,7 @@ export const sendTransferMetaTx = async (toAddress: string, tokenId: number) => 
   const { data } = await vwblMetaTxContract.populateTransaction.transferFrom(userAddress, toAddress, tokenId);
 
   const { txParam, sig, domainSeparator } = await constructMetaTx(userAddress, walletProvider, data);
-  await sendTransaction(txParam, sig, userAddress, domainSeparator, 'EIP712_SIGN', walletProvider);
+  await sendTransaction(txParam, sig, process.env.NEXT_PUBLIC_TRANSFER_API_ID!, userAddress, domainSeparator, 'EIP712_SIGN', walletProvider);
 };
 
 const constructMetaTx = async (userAddress: string, walletProvider: ethers.providers.Web3Provider, data: any) => {
@@ -116,13 +116,13 @@ const constructMetaTx = async (userAddress: string, walletProvider: ethers.provi
 const sendTransaction = async (
   request: TxParam,
   sig: any,
+  methodApiId: string,
   userAddress: string,
   domainSeparator: string,
   signatureType: string,
   walletProvider: ethers.providers.Web3Provider,
 ) => {
   const params = [request, domainSeparator, sig];
-
   try {
     const headers = {
       'x-api-key': process.env.NEXT_PUBLIC_BICONOMY_API_KEY!,
@@ -132,16 +132,18 @@ const sendTransaction = async (
       `https://api.biconomy.io/api/v2/meta-tx/native`,
       {
         to: process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS!,
-        apiId: process.env.NEXT_PUBLIC_MINT_API_ID!,
+        apiId: methodApiId,
         params: params,
         from: userAddress,
         signatureType: signatureType,
       },
       { headers: headers },
     );
+    console.log('post meta tx resp', data);
     await walletProvider.waitForTransaction(data.txHash);
     console.log('confirmed:', data.txHash);
   } catch (error) {
+    console.log('post meta tx error:', error);
     throw new Error('post meta tx error');
   }
 };
