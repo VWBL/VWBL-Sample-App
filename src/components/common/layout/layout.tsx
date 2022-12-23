@@ -89,7 +89,7 @@ export const Layout: React.FC = ({ children }) => {
     },
     {
       title: 'Create',
-      to: '/new',
+      to: '/',
     },
   ];
 
@@ -101,7 +101,7 @@ export const Layout: React.FC = ({ children }) => {
     },
     {
       title: 'Create',
-      to: '/new',
+      to: '/',
     },
   ];
 
