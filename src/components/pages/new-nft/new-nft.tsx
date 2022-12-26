@@ -11,7 +11,6 @@ import {
   Text,
   Box,
   Link as ChakraLink,
-  Flex,
 } from '@chakra-ui/react';
 import { UseFormRegister, UseFormHandleSubmit, FieldErrors } from 'react-hook-form';
 
@@ -74,7 +73,7 @@ export const NewNFTComponent: React.FC<Props> = ({
       <Box w={'100%'} maxW={480}>
         <Heading as='h2' mb={12}>
           Create New Item
-          <Box as='small' color='red' pl={2}>
+          <Box as='small' color='red' pl={3}>
             for Free
           </Box>
         </Heading>
