@@ -73,6 +73,9 @@ export const NewNFTComponent: React.FC<Props> = ({
       <Box w={'100%'} maxW={480}>
         <Heading as='h2' mb={12}>
           Create New Item
+          <Box as='small' color='red' pl={3}>
+            for Free
+          </Box>
         </Heading>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl isInvalid={!!errors.asset}>
@@ -166,7 +169,7 @@ export const NewNFTComponent: React.FC<Props> = ({
           </Checkbox>
 
           <Button
-            text='Create Item'
+            text='Create Item for Free'
             type='submit'
             isLoading={isLoading}
             loadingText='Creating Your NFT'
