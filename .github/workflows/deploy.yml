@@ -120,10 +120,14 @@ jobs:
       - name: Build
         env:
           NEXT_PUBLIC_PROVIDER_URL: ${{ secrets.PROVIDER_URL }}
-          NEXT_PUBLIC_NFT_CONTRACT_ADDRESS: '0xfCD7669A5AAb4D85772cC8791331182bf0f1E2F2'
+          NEXT_PUBLIC_NFT_CONTRACT_ADDRESS: '0x42Dd5Ef4773aA438A668f02C5E26f0F31a5e994C'
           NEXT_PUBLIC_VWBL_NETWORK_URL: 'https://vwbl.network'
           NEXT_PUBLIC_CHAIN_ID: '137'
           NEXT_PUBLIC_NFT_STORAGE_KEY: ${{ secrets.NFT_STORAGE_KEY }}
+          NEXT_PUBLIC_BICONOMY_API_KEY: ${{ secrets.BICONOMY_API_KEY }}
+          NEXT_PUBLIC_MINT_API_ID: ${{ secrets.MINT_API_ID }}
+          NEXT_PUBLIC_TRANSFER_API_ID: ${{ secrets.TRANSFER_API_ID }}
+          NEXT_PUBLIC_FORWARDER_ADDRESS: '0xf0511f123164602042ab2bCF02111fA5D3Fe97CD'
         run: |
           yarn build
       - name: Deploy to s3
