@@ -47,7 +47,7 @@ export const Account = () => {
       }
     };
     setup();
-  }, [vwbl, updateVwbl, web3, connectWallet]);
+  }, [vwbl]);
 
   const fetchTokens = async (vwbl: VWBL, tokenIds: number[]) => {
     const items = await Promise.all(
