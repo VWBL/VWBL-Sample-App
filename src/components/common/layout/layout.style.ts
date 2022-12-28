@@ -1,5 +1,5 @@
 export const hamburgerMenu = {
-  'span': {
+  span: {
     position: 'absolute',
     left: 0,
     width: '100%',
@@ -12,11 +12,11 @@ export const hamburgerMenu = {
   },
   'span:nth-of-type(2)': {
     top: '10px',
-  }
-}
+  },
+};
 
 export const closeButton = {
-  'span': {
+  span: {
     position: 'absolute',
     left: 0,
     width: '100%',
@@ -30,6 +30,6 @@ export const closeButton = {
   },
   'span:nth-of-type(2)': {
     top: '10px',
-    transform: 'translateY(-5px) rotate(15deg)'
+    transform: 'translateY(-5px) rotate(15deg)',
   },
-}
+};

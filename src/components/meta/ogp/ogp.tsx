@@ -1,4 +1,4 @@
-import { FunctionComponent, memo } from "react";
+import { FunctionComponent, memo } from 'react';
 
 export const Ogp = () => {
   const title = 'VWBL Demo App';
@@ -23,4 +23,4 @@ export const Ogp = () => {
     </>
   );
 };
-Ogp.displayName = "Ogp";
+Ogp.displayName = 'Ogp';
