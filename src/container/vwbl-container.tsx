@@ -2,15 +2,17 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Web3Modal from 'web3modal';
 import { createContainer } from 'unstated-next';
-import { ManageKeyType, UploadContentType, UploadMetadataType, VWBL } from 'vwbl-sdk';
-import Web3 from 'web3';
+//import { ManageKeyType, UploadContentType, UploadMetadataType, VWBL } from 'vwbl-sdk';
+import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx } from '../../VWBL-SDK/src/index'
+import { ethers } from 'ethers';
 
 const useVWBL = () => {
-  const [vwbl, setVwbl] = useState<VWBL>();
+  const [vwbl, setVwbl] = useState<VWBLMetaTx>();
   const [userSignature, setUserSignature] = useState<string>();
   const [userAddress, setUserAddress] = useState<string>();
   const [errorMessage, setErrorMessage] = useState<string>();
-  const [web3, setWeb3] = useState<Web3>();
+  const [provider, setProvider] = useState<any>();
+  const [ethersProvider, setEthersProvider] = useState<ethers.providers.Web3Provider>();
   const [web3Modal, setWeb3Modal] = useState<Web3Modal>();
   const router = useRouter();
 
@@ -22,11 +24,11 @@ const useVWBL = () => {
     await web3Modal?.clearCachedProvider();
     refreshState();
     clearVwbl();
-    setWeb3(undefined);
+    setProvider(undefined);
     router.push('/');
   }, [refreshState, web3Modal, router]);
 
-  const updateVwbl = useCallback((web3: Web3): void => {
+  const updateVwbl = useCallback((provider: any): void => {
     if (
       !process.env.NEXT_PUBLIC_VWBL_NETWORK_URL ||
       !process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS ||
@@ -35,14 +37,18 @@ const useVWBL = () => {
     ) {
       throw new Error('missing setting');
     }
-    const vwblInstance = new VWBL({
-      web3,
+    const vwblInstance = new VWBLMetaTx({
+      bcProvider: provider,
       contractAddress: process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS,
       manageKeyType: ManageKeyType.VWBL_NETWORK_SERVER,
       uploadContentType: UploadContentType.IPFS,
       uploadMetadataType: UploadMetadataType.IPFS,
       vwblNetworkUrl: process.env.NEXT_PUBLIC_VWBL_NETWORK_URL,
       ipfsNftStorageKey: process.env.NEXT_PUBLIC_NFT_STORAGE_KEY,
+      biconomyConfig: {
+        apiKey: process.env.NEXT_PUBLIC_BICONOMY_API_KEY!,
+        forwarderAddress: process.env.NEXT_PUBLIC_FORWARDER_ADDRESS!
+      }
     });
     setVwbl(vwblInstance);
   }, []);
@@ -50,11 +56,12 @@ const useVWBL = () => {
   const connectWallet = useCallback(async () => {
     try {
       const provider = await web3Modal?.connect();
-      const web3 = new Web3(provider);
-      const accounts = await web3.eth.getAccounts();
-      setWeb3(web3);
-      updateVwbl(web3);
-      if (accounts) setUserAddress(accounts[0]);
+      setProvider(provider);
+      const ethProvider = new ethers.providers.Web3Provider(provider);
+      setEthersProvider(ethersProvider);
+      const ethSigner = ethProvider.getSigner();
+      const myAddress = await ethSigner.getAddress();
+      if (myAddress) setUserAddress(myAddress);
     } catch (err) {
       console.log(err);
     }
@@ -68,12 +75,15 @@ const useVWBL = () => {
     ) {
       throw new Error('missing setting');
     }
-    const provider = new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_PROVIDER_URL);
-    const web3 = new Web3(provider);
-    const vwblInstance = new VWBL({
-      web3,
+    
+    const vwblInstance = new VWBLMetaTx({
+      bcProvider: provider,
       contractAddress: process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS,
       vwblNetworkUrl: process.env.NEXT_PUBLIC_VWBL_NETWORK_URL,
+      biconomyConfig: {
+        apiKey: process.env.NEXT_PUBLIC_BICONOMY_API_KEY!,
+        forwarderAddress: process.env.NEXT_PUBLIC_FORWARDER_ADDRESS!
+      }
     });
     setVwbl(vwblInstance);
   }, []);
@@ -90,15 +100,17 @@ const useVWBL = () => {
 
   const checkNetwork = useCallback(
     async (callback: () => void) => {
-      if (!web3) return;
+      if (!provider) return;
 
-      const connectedChainId = await web3.eth.getChainId();
+      const ethProvider = new ethers.providers.Web3Provider(provider);
+      const ethSigner = ethProvider.getSigner();
+      const connectedChainId = await ethSigner?.getChainId();
       const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!);
       if (connectedChainId !== properChainId) {
         callback();
       }
     },
-    [web3],
+    [provider],
   );
 
   return {
@@ -110,7 +122,8 @@ const useVWBL = () => {
     userSignature,
     userAddress,
     disconnect,
-    web3,
+    provider,
+    ethersProvider,
     connectWallet,
     web3Modal,
     initVwbl,

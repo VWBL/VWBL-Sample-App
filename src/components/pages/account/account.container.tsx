@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 
 import { AccountComponent } from './account';
 import { VwblContainer } from '../../../container';
-import { Metadata, VWBL } from 'vwbl-sdk';
+import { Metadata } from 'vwbl-sdk';
 import { ChainId, switchChain } from '../../../utils';
+import { VWBLMetaTx } from '../../../../VWBL-SDK/src';
+import { ethers } from 'ethers';
 
 export const Account = () => {
   const [ownedNfts, setOwnedNfts] = useState<Metadata[]>([]);
@@ -11,7 +13,7 @@ export const Account = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');
 
-  const { vwbl, updateVwbl, web3, connectWallet, checkNetwork } = VwblContainer.useContainer();
+  const { vwbl, updateVwbl, provider, connectWallet, checkNetwork } = VwblContainer.useContainer();
   const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
 
   useEffect(() => {
@@ -20,15 +22,16 @@ export const Account = () => {
 
   useEffect(() => {
     const setup = async () => {
-      if (!web3) {
+      if (!provider) {
         await connectWallet();
         return;
       }
-      const userAddress = (await web3.eth.getAccounts())[0];
+      const ethersProvider  = new ethers.providers.Web3Provider(provider);
+      const userAddress = await (ethersProvider.getSigner()).getAddress()
       setWalletAddress(userAddress);
 
       if (!vwbl) {
-        await updateVwbl(web3);
+        await updateVwbl(provider);
         return;
       }
       try {
@@ -47,9 +50,9 @@ export const Account = () => {
       }
     };
     setup();
-  }, [vwbl]);
+  }, [vwbl, updateVwbl, provider, connectWallet]);
 
-  const fetchTokens = async (vwbl: VWBL, tokenIds: number[]) => {
+  const fetchTokens = async (vwbl: VWBLMetaTx, tokenIds: number[]) => {
     const items = await Promise.all(
       tokenIds.map(async (tokenId: number) => {
         let item = await vwbl.getMetadata(tokenId);

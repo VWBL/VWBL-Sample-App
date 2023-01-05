@@ -6,6 +6,7 @@ import { VwblContainer } from '../../../container';
 import { getAsString, switchChain } from '../../../utils/helper';
 import { FetchedNFT } from '../../types';
 import { ChainId, isOwnerOf } from '../../../utils';
+import { ethers } from 'ethers';
 
 const NoMetadata = 'metadata not found';
 
@@ -16,17 +17,17 @@ export const NftDetail = () => {
   const [isOpenTransferModal, setIsOpenTransferModal] = useState(false);
   const [isOpenNotificationModal, setIsOpenNotificationModal] = useState(false);
   const router = useRouter();
-  const { vwbl, userAddress, web3, initVwbl, updateVwbl, checkNetwork } = VwblContainer.useContainer();
+  const { vwbl, userAddress, provider, initVwbl, updateVwbl, checkNetwork } = VwblContainer.useContainer();
   const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
 
   const loadNFTByTokenId = useCallback(async () => {
     const { tokenId } = router.query;
     if (!tokenId) return;
     if (!vwbl) {
-      if (!web3) {
+      if (!provider) {
         initVwbl();
       } else {
-        updateVwbl(web3);
+        updateVwbl(provider);
       }
       return;
     }
@@ -57,17 +58,18 @@ export const NftDetail = () => {
           encryptLogic: 'base64',
           owner: '',
         };
-        if (!web3 || !(await isOwnerOf(web3, id))) {
+        const ethersProvider  = new ethers.providers.Web3Provider(provider);
+        if (!provider || !(await isOwnerOf(ethersProvider, id))) {
           setLoadedNft(nftWithoutMetadata);
         } else {
-          setLoadedNft({ ...nftWithoutMetadata, owner: (await web3.eth.getAccounts())[0] });
+          setLoadedNft({ ...nftWithoutMetadata, owner: await (ethersProvider.getSigner()).getAddress() });
         }
       } else {
         setIsOpenNotificationModal(true);
         throw err;
       }
     }
-  }, [router.query, initVwbl, updateVwbl, web3, vwbl, userAddress]);
+  }, [router.query, initVwbl, updateVwbl, provider, vwbl, userAddress]);
 
   const onCloseNotificationModal = useCallback(() => {
     router.back();

@@ -6,7 +6,7 @@ import { TransferModalComponent } from './transfer-modal';
 import { ExtractMetadata } from 'vwbl-sdk';
 import { VwblContainer, ToastContainer } from '../../../container';
 import { getAsString } from '../../../utils/helper';
-import { ChainId, NETWORKS, sendTransferMetaTx } from '../../../utils';
+import { ChainId, NETWORKS } from '../../../utils';
 
 export type FormInputs = {
   walletAddress: string;
@@ -55,7 +55,7 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
       }
       try {
         setIsLoading(true);
-        await sendTransferMetaTx(walletAddress, parseInt(getAsString(tokenId)));
+        await vwbl.safeTransfer(walletAddress, parseInt(getAsString(tokenId)), process.env.NEXT_PUBLIC_TRANSFER_API_ID!);
         setIsComplete(true);
       } catch (err) {
         console.log(err);
