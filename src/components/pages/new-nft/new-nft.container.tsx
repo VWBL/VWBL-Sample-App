@@ -82,7 +82,6 @@ export const NewNFT = () => {
         return;
       }
 
-      console.log('new nft vwbl:', vwbl);
       if (!vwbl) {
         setIsLoading(false);
         return;
@@ -95,11 +94,9 @@ export const NewNFT = () => {
           console.log('Something went wrong.');
           return;
         }
-        console.log('new nft sig:', vwbl.signature);
         if (!vwbl.signature) {
           await vwbl.sign();
         }
-        console.log('new nft sig2:', vwbl.signature);
 
         // NOTE: MAX_FILE_SIZE > BASE64_MAX_SIZE
         const isLarge = asset[0].size > MAX_FILE_SIZE;
