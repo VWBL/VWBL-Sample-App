@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Web3Modal from 'web3modal';
 import { createContainer } from 'unstated-next';
 //import { ManageKeyType, UploadContentType, UploadMetadataType, VWBL } from 'vwbl-sdk';
-import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx } from '../../VWBL-SDK/src/index'
+import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx } from '../../VWBL-SDK/src/index';
 import { ethers } from 'ethers';
 
 const useVWBL = () => {
@@ -47,8 +47,8 @@ const useVWBL = () => {
       ipfsNftStorageKey: process.env.NEXT_PUBLIC_NFT_STORAGE_KEY,
       biconomyConfig: {
         apiKey: process.env.NEXT_PUBLIC_BICONOMY_API_KEY!,
-        forwarderAddress: process.env.NEXT_PUBLIC_FORWARDER_ADDRESS!
-      }
+        forwarderAddress: process.env.NEXT_PUBLIC_FORWARDER_ADDRESS!,
+      },
     });
     setVwbl(vwblInstance);
   }, []);
@@ -75,15 +75,15 @@ const useVWBL = () => {
     ) {
       throw new Error('missing setting');
     }
-    
+
     const vwblInstance = new VWBLMetaTx({
       bcProvider: provider,
       contractAddress: process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS,
       vwblNetworkUrl: process.env.NEXT_PUBLIC_VWBL_NETWORK_URL,
       biconomyConfig: {
         apiKey: process.env.NEXT_PUBLIC_BICONOMY_API_KEY!,
-        forwarderAddress: process.env.NEXT_PUBLIC_FORWARDER_ADDRESS!
-      }
+        forwarderAddress: process.env.NEXT_PUBLIC_FORWARDER_ADDRESS!,
+      },
     });
     setVwbl(vwblInstance);
   }, []);

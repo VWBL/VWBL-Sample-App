@@ -26,8 +26,8 @@ export const Account = () => {
         await connectWallet();
         return;
       }
-      const ethersProvider  = new ethers.providers.Web3Provider(provider);
-      const userAddress = await (ethersProvider.getSigner()).getAddress()
+      const ethersProvider = new ethers.providers.Web3Provider(provider);
+      const userAddress = await ethersProvider.getSigner().getAddress();
       setWalletAddress(userAddress);
 
       if (!vwbl) {

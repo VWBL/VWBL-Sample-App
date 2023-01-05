@@ -1,4 +1,4 @@
-import { Wrap, WrapItem} from '@chakra-ui/react';
+import { Wrap, WrapItem } from '@chakra-ui/react';
 import { Metadata } from 'vwbl-sdk';
 import { NFTItem } from '../nft-item';
 import { style } from './item-list.style';

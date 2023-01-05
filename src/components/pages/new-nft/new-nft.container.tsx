@@ -82,7 +82,7 @@ export const NewNFT = () => {
         return;
       }
 
-      console.log("new nft vwbl:", vwbl);
+      console.log('new nft vwbl:', vwbl);
       if (!vwbl) {
         setIsLoading(false);
         return;
@@ -95,17 +95,25 @@ export const NewNFT = () => {
           console.log('Something went wrong.');
           return;
         }
-        console.log("new nft sig:", vwbl.signature);
+        console.log('new nft sig:', vwbl.signature);
         if (!vwbl.signature) {
           await vwbl.sign();
         }
-        console.log("new nft sig2:", vwbl.signature);
+        console.log('new nft sig2:', vwbl.signature);
 
         // NOTE: MAX_FILE_SIZE > BASE64_MAX_SIZE
         const isLarge = asset[0].size > MAX_FILE_SIZE;
         const isBase64 = asset[0].size < BASE64_MAX_SIZE;
         const plainFile = isLarge ? segmentation(asset[0], MAX_FILE_SIZE) : asset[0];
-        await vwbl.managedCreateTokenForIPFS(title, description, plainFile, thumbnail[0], 0, isBase64 ? 'base64' : 'binary', process.env.NEXT_PUBLIC_MINT_API_ID!);
+        await vwbl.managedCreateTokenForIPFS(
+          title,
+          description,
+          plainFile,
+          thumbnail[0],
+          0,
+          isBase64 ? 'base64' : 'binary',
+          process.env.NEXT_PUBLIC_MINT_API_ID!,
+        );
 
         router.push('/');
       } catch (err: any) {
