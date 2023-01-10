@@ -7,6 +7,8 @@ import { ExtractMetadata } from 'vwbl-sdk';
 import { VwblContainer, ToastContainer } from '../../../container';
 import { getAsString } from '../../../utils/helper';
 import { ChainId, NETWORKS } from '../../../utils';
+import { ethers } from 'ethers';
+import VWBL from '../../../utils/contract/VWBL.json';
 
 export type FormInputs = {
   walletAddress: string;
@@ -27,14 +29,14 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
     formState: { errors },
   } = useForm<FormInputs>({ mode: 'onBlur' });
   const router = useRouter();
-  const { vwbl, checkNetwork } = VwblContainer.useContainer();
+  const { vwbl, provider, userAddress, checkNetwork } = VwblContainer.useContainer();
   const { openToast } = ToastContainer.useContainer();
   const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
 
   const onSubmit = useCallback(
     async (data: FormInputs) => {
-      const { tokenId } = router.query;
-      if (!tokenId) return;
+      const { contractAddress, tokenId } = router.query;
+      if (!contractAddress || !tokenId) return;
       const { walletAddress } = data;
       if (!walletAddress) {
         console.log('something went wrong');
@@ -55,7 +57,13 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
       }
       try {
         setIsLoading(true);
-        await vwbl.safeTransfer(walletAddress, parseInt(getAsString(tokenId)), process.env.NEXT_PUBLIC_TRANSFER_API_ID!);
+        if (getAsString(contractAddress) === process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS) {
+          await vwbl.safeTransfer(walletAddress, parseInt(getAsString(tokenId)), process.env.NEXT_PUBLIC_TRANSFER_API_ID!);
+        } else {
+          const ethProvider = new ethers.providers.Web3Provider(provider);
+          const vwblContract = new ethers.Contract(getAsString(contractAddress), VWBL.abi, ethProvider);
+          await vwblContract.connect(ethProvider.getSigner()).transferFrom(userAddress, walletAddress, parseInt(getAsString(tokenId)));
+        }
         setIsComplete(true);
       } catch (err) {
         console.log(err);
@@ -66,9 +74,10 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
     [vwbl, router, checkNetwork, openToast],
   );
 
-  const onRefresh = () => {
-    router.reload();
+  const onRefresh = async () => {
+    await router.push('/account');
     setIsComplete(false);
+    router.reload();
   };
 
   return (

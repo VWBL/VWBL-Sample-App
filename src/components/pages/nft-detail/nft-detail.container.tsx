@@ -7,6 +7,7 @@ import { getAsString, switchChain } from '../../../utils/helper';
 import { FetchedNFT } from '../../types';
 import { ChainId, isOwnerOf } from '../../../utils';
 import { ethers } from 'ethers';
+import vwblABI from '../../../utils/contract/VWBL.json';
 
 const NoMetadata = 'metadata not found';
 
@@ -17,12 +18,12 @@ export const NftDetail = () => {
   const [isOpenTransferModal, setIsOpenTransferModal] = useState(false);
   const [isOpenNotificationModal, setIsOpenNotificationModal] = useState(false);
   const router = useRouter();
-  const { vwbl, userAddress, provider, initVwbl, updateVwbl, checkNetwork } = VwblContainer.useContainer();
+  const { vwbl, vwblViewer, userAddress, provider, initVwbl, updateVwbl, initVWBLViewer, checkNetwork } = VwblContainer.useContainer();
   const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
 
   const loadNFTByTokenId = useCallback(async () => {
-    const { tokenId } = router.query;
-    if (!tokenId) return;
+    const { contractAddress, tokenId } = router.query;
+    if (!contractAddress || !tokenId) return;
     if (!vwbl) {
       if (!provider) {
         initVwbl();
@@ -31,16 +32,22 @@ export const NftDetail = () => {
       }
       return;
     }
+    if (!vwblViewer) {
+      initVWBLViewer();
+      return;
+    }
 
     try {
       checkNetwork(() => switchChain(properChainId));
 
       if (userAddress && !vwbl.signature) await vwbl.sign();
 
-      const item = await vwbl.getTokenById(parseInt(getAsString(tokenId)));
-      if (!item) {
+      const metadata = await vwblViewer!.extractMetadata(getAsString(contractAddress), parseInt(getAsString(tokenId)), vwbl.signature);
+      if (!metadata) {
         throw new Error('Something went wrong, please try again.');
       }
+      const owner = await vwblViewer!.getNFTOwner(getAsString(contractAddress), parseInt(getAsString(tokenId)));
+      const item = { ...metadata, owner };
       setLoadedNft(item);
     } catch (err: any) {
       console.error(err);
