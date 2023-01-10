@@ -7,7 +7,6 @@ import { getAsString, switchChain } from '../../../utils/helper';
 import { FetchedNFT } from '../../types';
 import { ChainId, isOwnerOf } from '../../../utils';
 import { ethers } from 'ethers';
-import vwblABI from '../../../utils/contract/VWBL.json';
 
 const NoMetadata = 'metadata not found';
 
