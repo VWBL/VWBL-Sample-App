@@ -2,18 +2,18 @@ import { useState, useEffect } from 'react';
 
 import { AccountComponent } from './account';
 import { VwblContainer } from '../../../container';
-import { Metadata } from 'vwbl-sdk';
+import { ExtendedMetadeta } from '../../../../VWBL-SDK/src/vwbl/metadata';
+// import { ExtendedMetadeta } from 'vwbl-sdk';
 import { ChainId, switchChain } from '../../../utils';
-import { VWBLMetaTx } from '../../../../VWBL-SDK/src';
 import { ethers } from 'ethers';
 
 export const Account = () => {
-  const [ownedNfts, setOwnedNfts] = useState<Metadata[]>([]);
-  const [mintedNfts, setMintedNfts] = useState<Metadata[]>([]);
+  const [ownedNfts, setOwnedNfts] = useState<ExtendedMetadeta[]>([]);
+  const [mintedNfts, setMintedNfts] = useState<ExtendedMetadeta[]>([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');
 
-  const { vwbl, updateVwbl, provider, connectWallet, checkNetwork } = VwblContainer.useContainer();
+  const { vwblViewer, initVWBLViewer, provider, connectWallet, checkNetwork } = VwblContainer.useContainer();
   const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
 
   useEffect(() => {
@@ -30,47 +30,23 @@ export const Account = () => {
       const userAddress = await ethersProvider.getSigner().getAddress();
       setWalletAddress(userAddress);
 
-      if (!vwbl) {
-        await updateVwbl(provider);
+      if (!vwblViewer) {
+        initVWBLViewer();
         return;
       }
       try {
-        const ownedTokenIds = await vwbl.getOwnTokenIds();
-        if (!ownedTokenIds) return;
-        const ownedItems = await fetchTokens(vwbl, ownedTokenIds);
-        setOwnedNfts(ownedItems.reverse());
+        const ownedItems = await vwblViewer.listOwnedNFTMetadata(userAddress);
+        setOwnedNfts(ownedItems.filter((v) => v).reverse() as ExtendedMetadeta[]);
 
-        const mintedTokenIds = await vwbl.getTokenByMinter(userAddress);
-        if (!mintedTokenIds) return;
-        const mintedItems = await fetchTokens(vwbl, mintedTokenIds);
-        setMintedNfts(mintedItems.reverse());
+        const mintedItems = await vwblViewer.listMintedNFTMetadata(userAddress);
+        setMintedNfts(mintedItems.filter((v) => v).reverse() as ExtendedMetadeta[]);
       } catch (err) {
         setIsOpenModal(true);
         console.log(err);
       }
     };
     setup();
-  }, [vwbl, updateVwbl, provider, connectWallet]);
-
-  const fetchTokens = async (vwbl: VWBLMetaTx, tokenIds: number[]) => {
-    const items = await Promise.all(
-      tokenIds.map(async (tokenId: number) => {
-        let item = await vwbl.getMetadata(tokenId);
-        if (!item) {
-          item = {
-            id: tokenId,
-            name: `#${tokenId}`,
-            description: '',
-            image: '/noimage.jpg',
-            mimeType: '',
-            encryptLogic: 'base64',
-          };
-        }
-        return item;
-      }),
-    );
-    return items;
-  };
+  }, [vwblViewer, provider]);
 
   return (
     <AccountComponent
