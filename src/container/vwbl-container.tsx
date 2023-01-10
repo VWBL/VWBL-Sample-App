@@ -3,11 +3,13 @@ import { useRouter } from 'next/router';
 import Web3Modal from 'web3modal';
 import { createContainer } from 'unstated-next';
 //import { ManageKeyType, UploadContentType, UploadMetadataType, VWBL } from 'vwbl-sdk';
-import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx } from '../../VWBL-SDK/src/index';
+import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx, VWBLViewer } from '../../VWBL-SDK/src/index';
 import { ethers } from 'ethers';
+import Web3 from 'web3';
 
 const useVWBL = () => {
   const [vwbl, setVwbl] = useState<VWBLMetaTx>();
+  const [vwblViewer, setVwblViewer] = useState<VWBLViewer>();
   const [userSignature, setUserSignature] = useState<string>();
   const [userAddress, setUserAddress] = useState<string>();
   const [errorMessage, setErrorMessage] = useState<string>();
@@ -55,7 +57,8 @@ const useVWBL = () => {
 
   const connectWallet = useCallback(async () => {
     try {
-      const provider = await web3Modal?.connect();
+      const web3Modal = new Web3Modal({ cacheProvider: true });
+      const provider = await web3Modal.connect();
       setProvider(provider);
       const ethProvider = new ethers.providers.Web3Provider(provider);
       setEthersProvider(ethersProvider);
@@ -88,6 +91,24 @@ const useVWBL = () => {
     setVwbl(vwblInstance);
   }, []);
 
+  const initVWBLViewer = () => {
+    if (
+      !process.env.NEXT_PUBLIC_VWBL_NETWORK_URL ||
+      !process.env.NEXT_PUBLIC_PROVIDER_URL ||
+      !process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS
+    ) {
+      throw new Error('missing setting');
+    }
+    const provider = new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_PROVIDER_URL);
+    const web3 = new Web3(provider);
+    const vwblViewer = new VWBLViewer({
+      web3,
+      vwblNetworkUrl: process.env.NEXT_PUBLIC_VWBL_NETWORK_URL,
+      dataCollectorAddress: process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS,
+    });
+    setVwblViewer(vwblViewer);
+  };
+
   const clearVwbl = useCallback(() => {
     setVwbl(undefined);
     setUserSignature(undefined);
@@ -96,6 +117,7 @@ const useVWBL = () => {
   useEffect(() => {
     const web3Modal = new Web3Modal({ cacheProvider: true });
     setWeb3Modal(web3Modal);
+    initVWBLViewer();
   }, []);
 
   const checkNetwork = useCallback(
@@ -116,6 +138,8 @@ const useVWBL = () => {
   return {
     vwbl,
     updateVwbl,
+    vwblViewer,
+    initVWBLViewer,
     clearVwbl,
     errorMessage,
     setErrorMessage,
