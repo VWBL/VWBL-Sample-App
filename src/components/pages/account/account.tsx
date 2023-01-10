@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { Box, Tabs, Tab, TabList, TabPanels, TabPanel, Text, Container, Badge, Stack } from '@chakra-ui/react';
 
-import { Metadata } from 'vwbl-sdk';
+import { ExtendedMetadeta } from '../../../../VWBL-SDK/src/vwbl/metadata';
+// import { ExtendedMetadeta } from 'vwbl-sdk';
 import { ItemList } from '../../common/item-list';
 import { NotificationModal, notifications } from '../../common/notification-modal';
 
 type Props = {
-  ownedNfts: Metadata[];
-  mintedNfts: Metadata[];
+  ownedNfts: ExtendedMetadeta[];
+  mintedNfts: ExtendedMetadeta[];
   walletAddress: string;
   isOpenModal: boolean;
   onCloseModal: () => void;

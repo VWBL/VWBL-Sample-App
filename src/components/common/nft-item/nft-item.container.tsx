@@ -1,8 +1,9 @@
 import { NFTItemComponent } from './nft-item';
-import { Metadata } from 'vwbl-sdk';
+import { ExtendedMetadeta } from '../../../../VWBL-SDK/src/vwbl/metadata';
+// import { ExtendedMetadeta } from 'vwbl-sdk';
 
 type Props = {
-  nft: Metadata;
+  nft: ExtendedMetadeta;
 };
 
 export const NFTItem: React.FC<Props> = ({ nft }) => {
