@@ -1,8 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-// import { ExtendedMetadeta } from 'vwbl-sdk';
+import { ExtendedMetadeta } from 'vwbl-sdk';
 import { NFTListComponent } from './nft-list';
 import { MEDIA_TYPE } from '../../../utils';
-import { ExtendedMetadeta } from '../../../../VWBL-SDK/src';
 import { VwblContainer } from '../../../container';
 
 export const NFTList = () => {

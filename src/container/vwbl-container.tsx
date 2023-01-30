@@ -2,8 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Web3Modal from 'web3modal';
 import { createContainer } from 'unstated-next';
-//import { ManageKeyType, UploadContentType, UploadMetadataType, VWBL } from 'vwbl-sdk';
-import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx, VWBLViewer } from '../../VWBL-SDK/src/index';
+import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx, VWBLViewer } from 'vwbl-sdk';
 import { ethers } from 'ethers';
 import Web3 from 'web3';
 
@@ -59,16 +58,17 @@ const useVWBL = () => {
     try {
       const web3Modal = new Web3Modal({ cacheProvider: true });
       const provider = await web3Modal.connect();
+      updateVwbl(provider);
       setProvider(provider);
       const ethProvider = new ethers.providers.Web3Provider(provider);
-      setEthersProvider(ethersProvider);
+      setEthersProvider(ethProvider);
       const ethSigner = ethProvider.getSigner();
       const myAddress = await ethSigner.getAddress();
       if (myAddress) setUserAddress(myAddress);
     } catch (err) {
       console.log(err);
     }
-  }, [web3Modal, updateVwbl]);
+  }, [updateVwbl]);
 
   const initVwbl = useCallback((): void => {
     if (
@@ -101,23 +101,23 @@ const useVWBL = () => {
     }
     const provider = new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_PROVIDER_URL);
     const web3 = new Web3(provider);
-    const vwblViewer = new VWBLViewer({
+    const vwblViewerInstance = new VWBLViewer({
       web3,
       vwblNetworkUrl: process.env.NEXT_PUBLIC_VWBL_NETWORK_URL,
       dataCollectorAddress: process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS,
     });
-    setVwblViewer(vwblViewer);
+    setVwblViewer(vwblViewerInstance);
   };
 
   const clearVwbl = useCallback(() => {
     setVwbl(undefined);
+    setVwblViewer(undefined);
     setUserSignature(undefined);
   }, []);
 
   useEffect(() => {
     const web3Modal = new Web3Modal({ cacheProvider: true });
     setWeb3Modal(web3Modal);
-    initVWBLViewer();
   }, []);
 
   const checkNetwork = useCallback(

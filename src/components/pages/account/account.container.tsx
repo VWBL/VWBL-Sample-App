@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 
 import { AccountComponent } from './account';
 import { VwblContainer } from '../../../container';
-import { ExtendedMetadeta } from '../../../../VWBL-SDK/src/vwbl/metadata';
-// import { ExtendedMetadeta } from 'vwbl-sdk';
+import { ExtendedMetadeta } from 'vwbl-sdk';
 import { ChainId, switchChain } from '../../../utils';
 import { ethers } from 'ethers';
 

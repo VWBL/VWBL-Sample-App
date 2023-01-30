@@ -1,6 +1,5 @@
 import { Wrap, WrapItem } from '@chakra-ui/react';
-// import { ExtendedMetadeta } from 'vwbl-sdk';
-import { ExtendedMetadeta } from '../../../../VWBL-SDK/src';
+import { ExtendedMetadeta } from 'vwbl-sdk';
 import { NFTItem } from '../nft-item';
 import { style } from './item-list.style';
 
