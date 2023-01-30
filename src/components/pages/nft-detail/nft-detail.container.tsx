@@ -39,13 +39,13 @@ export const NftDetail = () => {
     try {
       checkNetwork(() => switchChain(properChainId));
 
-      if (userAddress && !vwbl.signature) await vwbl.sign();
+      if (!vwbl.signature) await vwbl.sign();
 
-      const metadata = await vwblViewer!.extractMetadata(getAsString(contractAddress), parseInt(getAsString(tokenId)), vwbl.signature);
+      const metadata = await vwblViewer.extractMetadata(getAsString(contractAddress), parseInt(getAsString(tokenId)), vwbl.signature);
       if (!metadata) {
         throw new Error('Something went wrong, please try again.');
       }
-      const owner = await vwblViewer!.getNFTOwner(getAsString(contractAddress), parseInt(getAsString(tokenId)));
+      const owner = await vwblViewer.getNFTOwner(getAsString(contractAddress), parseInt(getAsString(tokenId)));
       const item = { ...metadata, owner };
       setLoadedNft(item);
     } catch (err: any) {
