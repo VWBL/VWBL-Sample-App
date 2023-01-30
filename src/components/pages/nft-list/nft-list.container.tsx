@@ -1,31 +1,36 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Metadata } from 'vwbl-sdk';
+import { ExtendedMetadeta } from 'vwbl-sdk';
 import { NFTListComponent } from './nft-list';
-import { fetchAllTokens, MEDIA_TYPE } from '../../../utils';
+import { MEDIA_TYPE } from '../../../utils';
+import { VwblContainer } from '../../../container';
 
 export const NFTList = () => {
-  const [nfts, setNfts] = useState<(Metadata | undefined)[]>([]);
-  const [sortedNFTs, setSortedNFTs] = useState<(Metadata | undefined)[]>([]);
+  const [nfts, setNfts] = useState<ExtendedMetadeta[]>([]);
+  const [sortedNFTs, setSortedNFTs] = useState<ExtendedMetadeta[]>([]);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [sortType, setSortType] = useState<string>(MEDIA_TYPE.All);
+  const { vwblViewer, initVWBLViewer } = VwblContainer.useContainer();
 
   const loadNFTs = useCallback(async () => {
-    const items = await fetchAllTokens();
+    const items = await vwblViewer?.listMetadataFormMultiContracts([
+      '0xfCD7669A5AAb4D85772cC8791331182bf0f1E2F2',
+      '0x42Dd5Ef4773aA438A668f02C5E26f0F31a5e994C',
+    ]);
     if (!items) return;
-    setNfts(items.reverse());
+    setNfts(items.filter((v) => v).reverse() as ExtendedMetadeta[]);
   }, []);
 
-  const sortNFTsByMedia = (nfts: (Metadata | undefined)[], sortType: string) => {
+  const sortNFTsByMedia = (nfts: ExtendedMetadeta[], sortType: string) => {
     // MediaType: All
     if (sortType === MEDIA_TYPE.All) {
       return nfts;
     }
     // MediaType: Other
     if (sortType === MEDIA_TYPE.Other) {
-      return nfts.filter((nft) => nft && sortType.includes(nft.mimeType.split('/')[0]));
+      return nfts.filter((nft) => sortType.includes(nft.mimeType.split('/')[0]));
     }
     // MediaType: Image, Sound, Movie
-    return nfts.filter((nft) => nft && sortType === nft.mimeType.split('/')[0]);
+    return nfts.filter((nft) => sortType === nft.mimeType.split('/')[0]);
   };
 
   const changeSortType = (newType: string) => setSortType(newType);
@@ -35,13 +40,17 @@ export const NFTList = () => {
   }, [sortType, nfts]);
 
   useEffect(() => {
+    if (!vwblViewer) {
+      initVWBLViewer();
+      return;
+    }
     try {
       loadNFTs();
     } catch (err) {
       setIsOpenModal(true);
       console.log(err);
     }
-  }, [loadNFTs]);
+  }, [vwblViewer]);
 
   return (
     <NFTListComponent

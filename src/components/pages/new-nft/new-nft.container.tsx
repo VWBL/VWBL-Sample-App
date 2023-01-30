@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { NewNFTComponent } from './new-nft';
 import { VwblContainer, ToastContainer } from '../../../container';
 import { segmentation, MAX_FILE_SIZE, BASE64_MAX_SIZE, VALID_EXTENSIONS, ChainId, switchChain } from '../../../utils';
-import { managedCreateTokenViaMetaTx } from '../../../utils';
 
 export type FormInputs = {
   asset: FileList;
@@ -24,7 +23,7 @@ export const NewNFT = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
-  const { vwbl, checkNetwork, web3 } = VwblContainer.useContainer();
+  const { vwbl, checkNetwork, provider } = VwblContainer.useContainer();
   const { openToast } = ToastContainer.useContainer();
   const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
 
@@ -73,7 +72,7 @@ export const NewNFT = () => {
     async (data: FormInputs) => {
       setIsLoading(true);
       const { title, description, asset, thumbnail } = data;
-      if (!web3) {
+      if (!provider) {
         openToast({
           title: 'Wallet Not Connected',
           status: 'error',
@@ -103,11 +102,17 @@ export const NewNFT = () => {
         const isLarge = asset[0].size > MAX_FILE_SIZE;
         const isBase64 = asset[0].size < BASE64_MAX_SIZE;
         const plainFile = isLarge ? segmentation(asset[0], MAX_FILE_SIZE) : asset[0];
-        const encryptLogic = isBase64 ? 'base64' : 'binary';
+        await vwbl.managedCreateTokenForIPFS(
+          title,
+          description,
+          plainFile,
+          thumbnail[0],
+          0,
+          isBase64 ? 'base64' : 'binary',
+          process.env.NEXT_PUBLIC_MINT_API_ID!,
+        );
 
-        await managedCreateTokenViaMetaTx(vwbl, plainFile, isBase64, thumbnail, title, description, encryptLogic, web3);
-
-        router.push('/account');
+        router.push('/');
       } catch (err: any) {
         if (err.message.includes('User denied')) {
           openToast({
