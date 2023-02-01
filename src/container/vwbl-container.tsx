@@ -68,7 +68,7 @@ const useVWBL = () => {
     } catch (err) {
       console.log(err);
     }
-  }, [updateVwbl]);
+  }, [web3Modal, updateVwbl]);
 
   const initVwbl = useCallback((): void => {
     if (
