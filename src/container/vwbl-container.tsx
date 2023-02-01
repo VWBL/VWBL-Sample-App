@@ -58,8 +58,8 @@ const useVWBL = () => {
     try {
       const web3Modal = new Web3Modal({ cacheProvider: true });
       const provider = await web3Modal.connect();
-      updateVwbl(provider);
       setProvider(provider);
+      updateVwbl(provider);
       const ethProvider = new ethers.providers.Web3Provider(provider);
       setEthersProvider(ethProvider);
       const ethSigner = ethProvider.getSigner();
@@ -68,7 +68,7 @@ const useVWBL = () => {
     } catch (err) {
       console.log(err);
     }
-  }, [web3Modal, updateVwbl]);
+  }, [updateVwbl]);
 
   const initVwbl = useCallback((): void => {
     if (
