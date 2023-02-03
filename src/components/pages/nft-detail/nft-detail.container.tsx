@@ -6,6 +6,7 @@ import { VwblContainer } from '../../../container';
 import { getAsString, switchChain } from '../../../utils/helper';
 import { FetchedNFT } from '../../types';
 import { ChainId, isOwnerOf } from '../../../utils';
+import { ethers } from 'ethers';
 
 const NoMetadata = 'metadata not found';
 
@@ -16,30 +17,36 @@ export const NftDetail = () => {
   const [isOpenTransferModal, setIsOpenTransferModal] = useState(false);
   const [isOpenNotificationModal, setIsOpenNotificationModal] = useState(false);
   const router = useRouter();
-  const { vwbl, userAddress, web3, initVwbl, updateVwbl, checkNetwork } = VwblContainer.useContainer();
+  const { vwbl, vwblViewer, userAddress, provider, initVwbl, updateVwbl, initVWBLViewer, checkNetwork } = VwblContainer.useContainer();
   const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
 
   const loadNFTByTokenId = useCallback(async () => {
-    const { tokenId } = router.query;
-    if (!tokenId) return;
+    const { contractAddress, tokenId } = router.query;
+    if (!contractAddress || !tokenId) return;
     if (!vwbl) {
-      if (!web3) {
+      if (!provider) {
         initVwbl();
       } else {
-        updateVwbl(web3);
+        updateVwbl(provider);
       }
+      return;
+    }
+    if (!vwblViewer) {
+      initVWBLViewer();
       return;
     }
 
     try {
       checkNetwork(() => switchChain(properChainId));
 
-      if (userAddress && !vwbl.signature) await vwbl.sign();
+      if (!vwbl.signature) await vwbl.sign();
 
-      const item = await vwbl.getTokenById(parseInt(getAsString(tokenId)));
-      if (!item) {
+      const metadata = await vwblViewer.extractMetadata(getAsString(contractAddress), parseInt(getAsString(tokenId)), vwbl.signature);
+      if (!metadata) {
         throw new Error('Something went wrong, please try again.');
       }
+      const owner = await vwblViewer.getNFTOwner(getAsString(contractAddress), parseInt(getAsString(tokenId)));
+      const item = { ...metadata, owner };
       setLoadedNft(item);
     } catch (err: any) {
       console.error(err);
@@ -57,17 +64,18 @@ export const NftDetail = () => {
           encryptLogic: 'base64',
           owner: '',
         };
-        if (!web3 || !(await isOwnerOf(web3, id))) {
+        const ethersProvider = new ethers.providers.Web3Provider(provider);
+        if (!provider || !(await isOwnerOf(ethersProvider, id))) {
           setLoadedNft(nftWithoutMetadata);
         } else {
-          setLoadedNft({ ...nftWithoutMetadata, owner: (await web3.eth.getAccounts())[0] });
+          setLoadedNft({ ...nftWithoutMetadata, owner: await ethersProvider.getSigner().getAddress() });
         }
       } else {
         setIsOpenNotificationModal(true);
         throw err;
       }
     }
-  }, [router.query, initVwbl, updateVwbl, web3, vwbl, userAddress]);
+  }, [router.query, initVwbl, updateVwbl, provider, vwbl, userAddress]);
 
   const onCloseNotificationModal = useCallback(() => {
     router.back();

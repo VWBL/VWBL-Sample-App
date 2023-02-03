@@ -1,15 +1,14 @@
 import { useColorModeValue, VStack, Box, Image, Text } from '@chakra-ui/react';
 import Link from 'next/link';
-
-import { Metadata } from 'vwbl-sdk';
+import { ExtendedMetadeta } from 'vwbl-sdk';
 
 type Props = {
-  nft: Metadata;
+  nft: ExtendedMetadeta;
 };
 
 export const NFTItemComponent: React.FC<Props> = ({ nft }) => {
   return (
-    <Link href={`/assets/${nft.id}`}>
+    <Link href={`/assets/${nft.address}/${nft.id}`}>
       <a>
         <VStack bg={useColorModeValue('white', 'gray.800')} width={300} py={8} gap={4}>
           <Box

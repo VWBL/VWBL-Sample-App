@@ -1,5 +1,5 @@
 import { Box, Container } from '@chakra-ui/react';
-import { Metadata } from 'vwbl-sdk';
+import { ExtendedMetadeta } from 'vwbl-sdk';
 import { ItemList } from '../../common/item-list';
 import { CustomLoading } from '../../common/custom-loading';
 import { NotificationModal, notifications } from '../../common/notification-modal';
@@ -7,7 +7,7 @@ import { SortMenu } from '../../common/sort-menu';
 import { MEDIA_TYPE } from '../../../utils';
 
 type Props = {
-  nfts: (Metadata | undefined)[];
+  nfts: ExtendedMetadeta[];
   isOpenModal: boolean;
   onCloseModal: () => void;
   sortType: string;
