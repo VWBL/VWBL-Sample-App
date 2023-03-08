@@ -98,6 +98,7 @@ const useVWBL = () => {
   const initVWBLViewer = () => {
     if (
       !process.env.NEXT_PUBLIC_VWBL_NETWORK_URL ||
+      !process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS ||
       !process.env.NEXT_PUBLIC_PROVIDER_URL ||
       !process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS
     ) {
@@ -107,6 +108,7 @@ const useVWBL = () => {
     const web3 = new Web3(provider);
     const vwblViewerInstance = new VWBLViewer({
       web3,
+      contractAddress: process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS,
       vwblNetworkUrl: process.env.NEXT_PUBLIC_VWBL_NETWORK_URL,
       dataCollectorAddress: process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS,
     });
