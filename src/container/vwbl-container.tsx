@@ -5,7 +5,7 @@ import { createContainer } from 'unstated-next';
 import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx, VWBLViewer } from 'vwbl-sdk';
 import { ethers } from 'ethers';
 import Web3 from 'web3';
-import { providerOptions } from '../utils/providerOprions';
+import { PROVIDER_OPTIONS } from '../utils/const';
 
 const useVWBL = () => {
   const [vwbl, setVwbl] = useState<VWBLMetaTx>();
@@ -58,7 +58,7 @@ const useVWBL = () => {
   const connectWallet = useCallback(async () => {
     try {
       const web3Modal = new Web3Modal({
-        providerOptions,
+        providerOptions: PROVIDER_OPTIONS,
         cacheProvider: true,
       });
       const provider = await web3Modal.connect();
