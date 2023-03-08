@@ -1,3 +1,6 @@
+import WalletConnectProvider from '@walletconnect/web3-provider';
+import MetaMask from '@walletconnect/web3-provider';
+
 // Blockchain
 export type ChainId = 1 | 3 | 4 | 5 | 42 | 137 | 1337;
 export type Currency = {
@@ -32,6 +35,20 @@ export const NETWORKS: Record<ChainId, Network> = {
     },
   },
   1337: { chainName: 'Local Network', rpcUrls: ['https://localhost:8545'], blockExplorerUrls: [''] },
+};
+export const PROVIDER_OPTIONS = {
+  walletconnect: {
+    package: WalletConnectProvider,
+    options: {
+      infuraId: process.env.NEXT_PUBLIC_INFURA_KEY,
+    },
+  },
+  metamask: {
+    package: MetaMask,
+    options: {
+      infuraId: process.env.NEXT_PUBLIC_INFURA_KEY,
+    },
+  },
 };
 
 // Other

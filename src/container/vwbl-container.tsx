@@ -5,6 +5,7 @@ import { createContainer } from 'unstated-next';
 import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx, VWBLViewer } from 'vwbl-sdk';
 import { ethers } from 'ethers';
 import Web3 from 'web3';
+import { PROVIDER_OPTIONS } from '../utils/const';
 
 const useVWBL = () => {
   const [vwbl, setVwbl] = useState<VWBLMetaTx>();
@@ -56,7 +57,10 @@ const useVWBL = () => {
 
   const connectWallet = useCallback(async () => {
     try {
-      const web3Modal = new Web3Modal({ cacheProvider: true });
+      const web3Modal = new Web3Modal({
+        providerOptions: PROVIDER_OPTIONS,
+        cacheProvider: true,
+      });
       const provider = await web3Modal.connect();
       setProvider(provider);
       updateVwbl(provider);
@@ -94,6 +98,7 @@ const useVWBL = () => {
   const initVWBLViewer = () => {
     if (
       !process.env.NEXT_PUBLIC_VWBL_NETWORK_URL ||
+      !process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS ||
       !process.env.NEXT_PUBLIC_PROVIDER_URL ||
       !process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS
     ) {
@@ -103,6 +108,7 @@ const useVWBL = () => {
     const web3 = new Web3(provider);
     const vwblViewerInstance = new VWBLViewer({
       web3,
+      contractAddress: process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS,
       vwblNetworkUrl: process.env.NEXT_PUBLIC_VWBL_NETWORK_URL,
       dataCollectorAddress: process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS,
     });
