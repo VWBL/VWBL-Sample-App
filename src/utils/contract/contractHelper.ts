@@ -1,12 +1,10 @@
-import axios from 'axios';
+import Web3 from 'web3';
+import { AbiItem } from 'web3-utils';
 import VWBLInterface from './VWBL.json';
-import { Metadata } from 'vwbl-sdk';
-import { ethers } from 'ethers';
 
-export const isOwnerOf = async (ethersProvider: ethers.providers.Web3Provider, tokenId: number) => {
-  const signer = ethersProvider.getSigner();
-  const myAddress = await signer.getAddress();
-  const vwbl = new ethers.Contract(process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS!, VWBLInterface.abi, signer);
-  const owner = await vwbl.callStatic.ownerOf(tokenId);
+export const isOwnerOf = async (web3: Web3, tokenId: number) => {
+  const myAddress = (await web3.eth.getAccounts())[0];
+  const vwbl = new web3.eth.Contract(VWBLInterface.abi as AbiItem[], process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS);
+  const owner = await vwbl.methods.ownerOf(tokenId).call();
   return myAddress === owner;
 };

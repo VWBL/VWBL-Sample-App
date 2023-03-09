@@ -23,7 +23,7 @@ export const NewNFT = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
-  const { vwbl, checkNetwork, provider } = VwblContainer.useContainer();
+  const { web3, vwbl, checkNetwork, provider } = VwblContainer.useContainer();
   const { openToast } = ToastContainer.useContainer();
   const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
 
@@ -72,7 +72,7 @@ export const NewNFT = () => {
     async (data: FormInputs) => {
       setIsLoading(true);
       const { title, description, asset, thumbnail } = data;
-      if (!provider) {
+      if (!web3) {
         openToast({
           title: 'Wallet Not Connected',
           status: 'error',
@@ -108,8 +108,7 @@ export const NewNFT = () => {
           plainFile,
           thumbnail[0],
           0,
-          isBase64 ? 'base64' : 'binary',
-          process.env.NEXT_PUBLIC_MINT_API_ID!,
+          isBase64 ? 'base64' : 'binary'
         );
 
         router.push('/');
