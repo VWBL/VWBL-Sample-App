@@ -16,7 +16,7 @@ export const NftDetail = () => {
   const [isOpenTransferModal, setIsOpenTransferModal] = useState(false);
   const [isOpenNotificationModal, setIsOpenNotificationModal] = useState(false);
   const router = useRouter();
-  const { web3, vwbl, vwblViewer, userAddress, provider, initVwbl, updateVwbl, initVWBLViewer, checkNetwork } = VwblContainer.useContainer();
+  const { web3, vwbl, vwblViewer, userAddress, initVwbl, updateVwbl, initVWBLViewer, checkNetwork } = VwblContainer.useContainer();
   const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
 
   const loadNFTByTokenId = useCallback(async () => {
@@ -73,7 +73,7 @@ export const NftDetail = () => {
         throw err;
       }
     }
-  }, [router.query, initVwbl, updateVwbl, provider, vwbl, userAddress]);
+  }, [router.query, initVwbl, updateVwbl, vwbl, userAddress]);
 
   const onCloseNotificationModal = useCallback(() => {
     router.back();
