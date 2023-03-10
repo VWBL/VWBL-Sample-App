@@ -40,7 +40,10 @@ export const PROVIDER_OPTIONS = {
   walletconnect: {
     package: WalletConnectProvider,
     options: {
-      infuraId: process.env.NEXT_PUBLIC_INFURA_KEY,
+      rpc: {
+        137: process.env.NEXT_PUBLIC_PROVIDER_URL,
+      },
+      // infuraId: process.env.NEXT_PUBLIC_INFURA_KEY,
     },
   },
   metamask: {
