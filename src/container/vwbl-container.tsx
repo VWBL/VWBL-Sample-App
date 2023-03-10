@@ -2,13 +2,14 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Web3Modal from 'web3modal';
 import { createContainer } from 'unstated-next';
-import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx, VWBLViewer } from 'vwbl-sdk';
+import { ManageKeyType, UploadContentType, UploadMetadataType, VWBL, VWBLViewer } from 'vwbl-sdk';
 import { ethers } from 'ethers';
 import Web3 from 'web3';
 import { PROVIDER_OPTIONS } from '../utils/const';
 
 const useVWBL = () => {
-  const [vwbl, setVwbl] = useState<VWBLMetaTx>();
+  const [web3, setWeb3] = useState<Web3>();
+  const [vwbl, setVwbl] = useState<VWBL>();
   const [vwblViewer, setVwblViewer] = useState<VWBLViewer>();
   const [userSignature, setUserSignature] = useState<string>();
   const [userAddress, setUserAddress] = useState<string>();
@@ -30,7 +31,7 @@ const useVWBL = () => {
     router.push('/');
   }, [refreshState, web3Modal, router]);
 
-  const updateVwbl = useCallback((provider: any): void => {
+  const updateVwbl = useCallback((web3: Web3): void => {
     if (
       !process.env.NEXT_PUBLIC_VWBL_NETWORK_URL ||
       !process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS ||
@@ -39,18 +40,15 @@ const useVWBL = () => {
     ) {
       throw new Error('missing setting');
     }
-    const vwblInstance = new VWBLMetaTx({
-      bcProvider: provider,
+
+    const vwblInstance = new VWBL({
+      web3,
       contractAddress: process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS,
       manageKeyType: ManageKeyType.VWBL_NETWORK_SERVER,
       uploadContentType: UploadContentType.IPFS,
       uploadMetadataType: UploadMetadataType.IPFS,
       vwblNetworkUrl: process.env.NEXT_PUBLIC_VWBL_NETWORK_URL,
       ipfsNftStorageKey: process.env.NEXT_PUBLIC_NFT_STORAGE_KEY,
-      biconomyConfig: {
-        apiKey: process.env.NEXT_PUBLIC_BICONOMY_API_KEY!,
-        forwarderAddress: process.env.NEXT_PUBLIC_FORWARDER_ADDRESS!,
-      },
     });
     setVwbl(vwblInstance);
   }, []);
@@ -62,13 +60,14 @@ const useVWBL = () => {
         cacheProvider: true,
       });
       const provider = await web3Modal.connect();
+      const web3 = new Web3(provider);
+      const accounts = await web3.eth.getAccounts();
+      setWeb3(web3);
+      updateVwbl(web3);
       setProvider(provider);
-      updateVwbl(provider);
       const ethProvider = new ethers.providers.Web3Provider(provider);
       setEthersProvider(ethProvider);
-      const ethSigner = ethProvider.getSigner();
-      const myAddress = await ethSigner.getAddress();
-      if (myAddress) setUserAddress(myAddress);
+      if (accounts) setUserAddress(accounts[0]);
     } catch (err) {
       console.log(err);
     }
@@ -83,14 +82,12 @@ const useVWBL = () => {
       throw new Error('missing setting');
     }
 
-    const vwblInstance = new VWBLMetaTx({
-      bcProvider: provider,
+    const provider = new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_PROVIDER_URL);
+    const web3 = new Web3(provider);
+    const vwblInstance = new VWBL({
+      web3,
       contractAddress: process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS,
       vwblNetworkUrl: process.env.NEXT_PUBLIC_VWBL_NETWORK_URL,
-      biconomyConfig: {
-        apiKey: process.env.NEXT_PUBLIC_BICONOMY_API_KEY!,
-        forwarderAddress: process.env.NEXT_PUBLIC_FORWARDER_ADDRESS!,
-      },
     });
     setVwbl(vwblInstance);
   }, []);
@@ -140,6 +137,7 @@ const useVWBL = () => {
   );
 
   return {
+    web3,
     vwbl,
     updateVwbl,
     vwblViewer,
