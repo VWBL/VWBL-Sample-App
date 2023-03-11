@@ -38,7 +38,7 @@ export const NftDetailComponent: React.FC<Props> = ({
   if (!nft) {
     return (
       <>
-        <CustomLoading />
+        <CustomLoading />;
         <NotificationModal
           isOpen={isOpenNotificationModal}
           onClose={onCloseNotificationModal}
