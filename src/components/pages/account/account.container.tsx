@@ -4,6 +4,7 @@ import { AccountComponent } from './account';
 import { VwblContainer } from '../../../container';
 import { ExtendedMetadeta } from 'vwbl-sdk';
 import { ChainId, switchChain } from '../../../utils';
+import { ethers } from 'ethers';
 
 export const Account = () => {
   const [ownedNfts, setOwnedNfts] = useState<ExtendedMetadeta[]>([]);
@@ -11,7 +12,7 @@ export const Account = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');
 
-  const { vwblViewer, initVWBLViewer, web3, connectWallet, checkNetwork } = VwblContainer.useContainer();
+  const { vwblViewer, initVWBLViewer, provider, connectWallet, checkNetwork } = VwblContainer.useContainer();
   const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
 
   useEffect(() => {
@@ -20,11 +21,12 @@ export const Account = () => {
 
   useEffect(() => {
     const setup = async () => {
-      if (!web3) {
+      if (!provider) {
         await connectWallet();
         return;
       }
-      const userAddress = (await web3.eth.getAccounts())[0];
+      const ethersProvider = new ethers.providers.Web3Provider(provider);
+      const userAddress = await ethersProvider.getSigner().getAddress();
       setWalletAddress(userAddress);
 
       if (!vwblViewer) {
@@ -43,7 +45,7 @@ export const Account = () => {
       }
     };
     setup();
-  }, [vwblViewer, web3]);
+  }, [vwblViewer, provider]);
 
   return (
     <AccountComponent
