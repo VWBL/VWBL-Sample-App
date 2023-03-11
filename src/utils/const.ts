@@ -40,6 +40,9 @@ export const PROVIDER_OPTIONS = {
   walletconnect: {
     package: WalletConnectProvider,
     options: {
+      rpc: {
+        80001: 'https://rpc-mumbai.maticvigil.com/',
+      },
       infuraId: process.env.NEXT_PUBLIC_INFURA_KEY,
     },
   },
