@@ -25,7 +25,6 @@ export const NewNFT = () => {
 
   const { vwbl, checkNetwork, provider } = VwblContainer.useContainer();
   const { openToast } = ToastContainer.useContainer();
-  const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
 
   const {
     register,
@@ -87,7 +86,7 @@ export const NewNFT = () => {
         return;
       }
 
-      checkNetwork(() => switchChain(properChainId));
+      checkNetwork(() => switchChain(provider));
 
       try {
         if (!title || !description || !asset || !thumbnail) {

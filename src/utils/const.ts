@@ -42,6 +42,7 @@ export const PROVIDER_OPTIONS = {
     options: {
       rpc: {
         80001: 'https://rpc-mumbai.maticvigil.com/',
+        137: process.env.NEXT_PUBLIC_PROVIDER_URL,
       },
       infuraId: process.env.NEXT_PUBLIC_INFURA_KEY,
     },
@@ -49,6 +50,10 @@ export const PROVIDER_OPTIONS = {
   metamask: {
     package: MetaMask,
     options: {
+      rpc: {
+        80001: 'https://rpc-mumbai.maticvigil.com/',
+        137: process.env.NEXT_PUBLIC_PROVIDER_URL,
+      },
       infuraId: process.env.NEXT_PUBLIC_INFURA_KEY,
     },
   },

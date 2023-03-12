@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { AccountComponent } from './account';
 import { VwblContainer } from '../../../container';
 import { ExtendedMetadeta } from 'vwbl-sdk';
-import { ChainId, switchChain } from '../../../utils';
+import { switchChain } from '../../../utils';
 import { ethers } from 'ethers';
 
 export const Account = () => {
@@ -13,11 +13,10 @@ export const Account = () => {
   const [walletAddress, setWalletAddress] = useState('');
 
   const { vwblViewer, initVWBLViewer, provider, connectWallet, checkNetwork } = VwblContainer.useContainer();
-  const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
 
   useEffect(() => {
-    checkNetwork(() => switchChain(properChainId));
-  }, [checkNetwork]);
+    checkNetwork(() => switchChain(provider));
+  }, [checkNetwork, provider]);
 
   useEffect(() => {
     const setup = async () => {
@@ -36,7 +35,6 @@ export const Account = () => {
       try {
         const ownedItems = await vwblViewer.listOwnedNFTMetadata(userAddress);
         setOwnedNfts(ownedItems.filter((v) => v).reverse() as ExtendedMetadeta[]);
-
         const mintedItems = await vwblViewer.listMintedNFTMetadata(userAddress);
         setMintedNfts(mintedItems.filter((v) => v).reverse() as ExtendedMetadeta[]);
       } catch (err) {

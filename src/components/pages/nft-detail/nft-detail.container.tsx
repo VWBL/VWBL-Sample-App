@@ -5,7 +5,7 @@ import { NftDetailComponent } from './nft-detail';
 import { VwblContainer } from '../../../container';
 import { getAsString, switchChain } from '../../../utils/helper';
 import { FetchedNFT } from '../../types';
-import { ChainId, isOwnerOf } from '../../../utils';
+import { isOwnerOf } from '../../../utils';
 import { ethers } from 'ethers';
 
 const NoMetadata = 'metadata not found';
@@ -18,7 +18,6 @@ export const NftDetail = () => {
   const [isOpenNotificationModal, setIsOpenNotificationModal] = useState(false);
   const router = useRouter();
   const { vwbl, vwblViewer, userAddress, provider, initVwbl, updateVwbl, initVWBLViewer, checkNetwork } = VwblContainer.useContainer();
-  const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
 
   const loadNFTByTokenId = useCallback(async () => {
     const { contractAddress, tokenId } = router.query;
@@ -37,7 +36,7 @@ export const NftDetail = () => {
     }
 
     try {
-      checkNetwork(() => switchChain(properChainId));
+      checkNetwork(() => switchChain(provider));
 
       if (!vwbl.signature) await vwbl.sign();
 
