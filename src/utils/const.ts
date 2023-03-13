@@ -41,14 +41,19 @@ export const PROVIDER_OPTIONS = {
     package: WalletConnectProvider,
     options: {
       rpc: {
+        80001: 'https://rpc-mumbai.maticvigil.com/',
         137: process.env.NEXT_PUBLIC_PROVIDER_URL,
       },
-      // infuraId: process.env.NEXT_PUBLIC_INFURA_KEY,
+      infuraId: process.env.NEXT_PUBLIC_INFURA_KEY,
     },
   },
   metamask: {
     package: MetaMask,
     options: {
+      rpc: {
+        80001: 'https://rpc-mumbai.maticvigil.com/',
+        137: process.env.NEXT_PUBLIC_PROVIDER_URL,
+      },
       infuraId: process.env.NEXT_PUBLIC_INFURA_KEY,
     },
   },

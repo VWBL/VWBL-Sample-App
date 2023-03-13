@@ -2,6 +2,8 @@ import { toHex } from 'web3-utils';
 import { FetchedNFT } from '../components/types';
 import { ChainId, NETWORKS } from './const';
 
+const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
+
 export const getAsString = (value: string | string[]) => {
   if (Array.isArray(value)) {
     return value[0];
@@ -22,27 +24,22 @@ export const segmentation = (file: File, segmentSize: number) => {
   return segments;
 };
 
-export const switchChain = async (chainId: ChainId) => {
-  // Check if MetaMask is installed
-  // MetaMask injects the global API into window.ethereum
-  if (window.ethereum) {
+export const switchChain = async (provider: any) => {
+  if (provider) {
     try {
-      // check if the chain to connect to is installed
-      await window.ethereum.request({
+      await provider.request({
         method: 'wallet_switchEthereumChain',
-        params: [{ chainId: toHex(chainId) }], // chainId must be in hexadecimal numbers
+        params: [{ chainId: toHex(properChainId) }], // chainId must be in hexadecimal numbers
       });
     } catch (error: any) {
-      // This error code indicates that the chain has not been added to MetaMask
-      // if it is not, then install it into the user MetaMask
       if (error.code === 4902) {
         try {
-          await window.ethereum.request({
+          await provider.request({
             method: 'wallet_addEthereumChain',
             params: [
               {
-                chainId: toHex(chainId),
-                ...NETWORKS[chainId],
+                chainId: toHex(properChainId),
+                ...NETWORKS[properChainId],
               },
             ],
           });
@@ -53,8 +50,7 @@ export const switchChain = async (chainId: ChainId) => {
       console.error(error);
     }
   } else {
-    // if no window.ethereum then MetaMask is not installed
-    alert('MetaMask is not installed. Please consider installing it: https://metamask.io/download.html');
+    throw new Error('provider does not exist');
   }
 };
 

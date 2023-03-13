@@ -58,7 +58,7 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
       try {
         setIsLoading(true);
         if (getAsString(contractAddress) === process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS) {
-          await vwbl.safeTransfer(walletAddress, parseInt(getAsString(tokenId)));
+          await vwbl.safeTransfer(walletAddress, parseInt(getAsString(tokenId)), process.env.NEXT_PUBLIC_TRANSFER_API_ID!);
         } else {
           const ethProvider = new ethers.providers.Web3Provider(provider);
           const vwblContract = new ethers.Contract(getAsString(contractAddress), VWBL.abi, ethProvider);

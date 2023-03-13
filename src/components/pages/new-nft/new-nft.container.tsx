@@ -23,9 +23,8 @@ export const NewNFT = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
-  const { web3, vwbl, checkNetwork } = VwblContainer.useContainer();
+  const { vwbl, checkNetwork, provider } = VwblContainer.useContainer();
   const { openToast } = ToastContainer.useContainer();
-  const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
 
   const {
     register,
@@ -72,7 +71,7 @@ export const NewNFT = () => {
     async (data: FormInputs) => {
       setIsLoading(true);
       const { title, description, asset, thumbnail } = data;
-      if (!web3) {
+      if (!provider) {
         openToast({
           title: 'Wallet Not Connected',
           status: 'error',
@@ -87,7 +86,7 @@ export const NewNFT = () => {
         return;
       }
 
-      checkNetwork(() => switchChain(properChainId));
+      checkNetwork(() => switchChain(provider));
 
       try {
         if (!title || !description || !asset || !thumbnail) {
@@ -102,9 +101,22 @@ export const NewNFT = () => {
         const isLarge = asset[0].size > MAX_FILE_SIZE;
         const isBase64 = asset[0].size < BASE64_MAX_SIZE;
         const plainFile = isLarge ? segmentation(asset[0], MAX_FILE_SIZE) : asset[0];
-        await vwbl.managedCreateTokenForIPFS(title, description, plainFile, thumbnail[0], 0, isBase64 ? 'base64' : 'binary');
+        await vwbl.managedCreateTokenForIPFS(
+          title,
+          description,
+          plainFile,
+          thumbnail[0],
+          0,
+          isBase64 ? 'base64' : 'binary',
+          process.env.NEXT_PUBLIC_MINT_API_ID!,
+        );
 
-        router.push('/');
+        openToast({
+          title: 'NFT Minted',
+          status: 'success',
+          message: 'Your VWBL NFT has been minted successfully!',
+        });
+        setTimeout(() => router.push('/account/'), 1000);
       } catch (err: any) {
         if (err.message.includes('User denied')) {
           openToast({
