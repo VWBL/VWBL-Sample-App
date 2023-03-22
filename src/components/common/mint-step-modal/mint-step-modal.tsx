@@ -44,8 +44,8 @@ const MintStep: React.FC<MintStepProps> = ({ mintStep, handleMintStart }) => {
     <Box my={3} px={6}>
       <Flex alignItems={'center'} mb={6}>
         <Box mr={8}>
-          {mintStep.length < 1 || mintStep.includes(StepStatus.UPLOAD_METADATA) ? (
-            <CheckIcon sx={{ width: 30, height: 30 }} color={mintStep.includes(StepStatus.UPLOAD_METADATA) ? 'gray' : 'black'} />
+          {!mintStep.includes(StepStatus.ENCRYPT_DATA) || mintStep.includes(StepStatus.UPLOAD_METADATA) ? (
+            <CheckIcon sx={{ width: 30, height: 30 }} color={mintStep.includes(StepStatus.UPLOAD_METADATA) ? 'black' : 'gray'} />
           ) : (
             <CircularProgress isIndeterminate size='30px' color='black' />
           )}
@@ -60,8 +60,8 @@ const MintStep: React.FC<MintStepProps> = ({ mintStep, handleMintStart }) => {
 
       <Flex alignItems={'center'} mb={6}>
         <Box mr={8}>
-          {mintStep.length < 1 || mintStep.includes(StepStatus.MINT_TOKEN) ? (
-            <CheckIcon sx={{ width: 30, height: 30 }} color={mintStep.includes(StepStatus.MINT_TOKEN) ? 'gray' : 'black'} />
+          {!mintStep.includes(StepStatus.UPLOAD_METADATA) || mintStep.includes(StepStatus.MINT_TOKEN) ? (
+            <CheckIcon sx={{ width: 30, height: 30 }} color={mintStep.includes(StepStatus.MINT_TOKEN) ? 'black' : 'gray'} />
           ) : (
             <CircularProgress isIndeterminate size='30px' color='black' />
           )}
@@ -76,8 +76,8 @@ const MintStep: React.FC<MintStepProps> = ({ mintStep, handleMintStart }) => {
 
       <Flex alignItems={'center'} mb={6}>
         <Box mr={8}>
-          {mintStep.length < 1 || mintStep.includes(StepStatus.SET_KEY) ? (
-            <CheckIcon sx={{ width: 30, height: 30 }} color={mintStep.includes(StepStatus.SET_KEY) ? 'gray' : 'black'} />
+          {!mintStep.includes(StepStatus.MINT_TOKEN) || mintStep.includes(StepStatus.SET_KEY) ? (
+            <CheckIcon sx={{ width: 30, height: 30 }} color={mintStep.includes(StepStatus.SET_KEY) ? 'black' : 'gray'} />
           ) : (
             <CircularProgress isIndeterminate size='30px' color='black' />
           )}

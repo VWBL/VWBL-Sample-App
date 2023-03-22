@@ -10,7 +10,6 @@ type Props = {
 };
 
 export const MintStepModal: React.FC<Props> = ({ isOpen, onClose, handleCancelClick, onMintClick, mintStep }: Props) => {
-  console.log(mintStep);
   return (
     <MintStepModalComponent
       isOpen={isOpen}
