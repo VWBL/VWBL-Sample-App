@@ -16,8 +16,10 @@ import { UseFormRegister, UseFormHandleSubmit, FieldErrors } from 'react-hook-fo
 
 import { FormInputs } from './new-nft.container';
 import { FilePreviewer } from '../../common/file-previewer';
+import { MintStepModal } from '../../common/mint-step-modal';
 import { Button } from '../../common/button';
 import { MAX_FILE_SIZE } from '../../../utils';
+import { StepStatus } from 'vwbl-sdk';
 
 type Props = {
   onSubmit: (data: FormInputs) => Promise<void>;
@@ -34,6 +36,9 @@ type Props = {
   errors: FieldErrors<FormInputs>;
   isChecked: boolean;
   onChangeCheckbox: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  mintStep: StepStatus[];
+  isModalOpen: boolean;
+  toggleModal: () => void;
 };
 
 type LabelProps = {
@@ -67,6 +72,9 @@ export const NewNFTComponent: React.FC<Props> = ({
   errors,
   isChecked,
   onChangeCheckbox,
+  mintStep,
+  isModalOpen,
+  toggleModal,
 }) => {
   return (
     <Container maxW='container.md' my={12} centerContent>
@@ -170,7 +178,7 @@ export const NewNFTComponent: React.FC<Props> = ({
 
           <Button
             text='Create Item for Free'
-            type='submit'
+            onClick={toggleModal}
             isLoading={isLoading}
             loadingText='Creating Your NFT'
             width='100%'
@@ -184,6 +192,13 @@ export const NewNFTComponent: React.FC<Props> = ({
             Please do not move to another page while loading.
             <br />
           </Text>
+          <MintStepModal
+            mintStep={mintStep}
+            isOpen={isModalOpen}
+            onMintClick={handleSubmit(onSubmit)}
+            onClose={() => console.log('click cancel')}
+            handleCancelClick={toggleModal}
+          />
         </form>
       </Box>
     </Container>
