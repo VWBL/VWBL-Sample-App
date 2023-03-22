@@ -9,7 +9,7 @@ export const MintStepModal: React.FC<Props> = ({ isOpen, mintStep, onClose, hand
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
-      <ModalContent p={5} mx={'a'} maxW={480}>
+      <ModalContent p={5} mx={'a'}>
         {mintStep.includes(StepStatus.SET_KEY) ? (
           <>
             <ModalHeader fontSize={'2xl'}>You have minted your VWBL NFT! 🎉</ModalHeader>
@@ -28,7 +28,7 @@ export const MintStepModal: React.FC<Props> = ({ isOpen, mintStep, onClose, hand
             <MintStep mintStep={mintStep} handleMintStart={handleMintStart} />
 
             <Center>
-              <Button color='black' bg='white' variant='outline' onClick={handleCancelClick} w={400}>
+              <Button color='black' bg='white' variant='outline' onClick={handleCancelClick} w={'90%'}>
                 Cancel
               </Button>
             </Center>
@@ -41,11 +41,11 @@ export const MintStepModal: React.FC<Props> = ({ isOpen, mintStep, onClose, hand
 
 const MintStep: React.FC<MintStepProps> = ({ mintStep, handleMintStart }) => {
   return (
-    <Box my={3} px={6}>
-      <Flex alignItems={'center'} mb={6}>
+    <Box my={3}>
+      <Flex alignItems={'center'} mb={6} px={6}>
         <Box mr={8}>
           {!mintStep.includes(StepStatus.ENCRYPT_DATA) || mintStep.includes(StepStatus.UPLOAD_METADATA) ? (
-            <CheckIcon sx={{ width: 30, height: 30 }} color={mintStep.includes(StepStatus.UPLOAD_METADATA) ? 'black' : 'gray'} />
+            <CheckIcon sx={{ width: 30, height: 30 }} color={mintStep.includes(StepStatus.UPLOAD_METADATA) ? 'black' : 'gray.200'} />
           ) : (
             <CircularProgress isIndeterminate size='30px' color='black' />
           )}
@@ -58,10 +58,10 @@ const MintStep: React.FC<MintStepProps> = ({ mintStep, handleMintStart }) => {
         </Box>
       </Flex>
 
-      <Flex alignItems={'center'} mb={6}>
+      <Flex alignItems={'center'} mb={6} px={6}>
         <Box mr={8}>
           {!mintStep.includes(StepStatus.UPLOAD_METADATA) || mintStep.includes(StepStatus.MINT_TOKEN) ? (
-            <CheckIcon sx={{ width: 30, height: 30 }} color={mintStep.includes(StepStatus.MINT_TOKEN) ? 'black' : 'gray'} />
+            <CheckIcon sx={{ width: 30, height: 30 }} color={mintStep.includes(StepStatus.MINT_TOKEN) ? 'black' : 'gray.200'} />
           ) : (
             <CircularProgress isIndeterminate size='30px' color='black' />
           )}
@@ -74,10 +74,10 @@ const MintStep: React.FC<MintStepProps> = ({ mintStep, handleMintStart }) => {
         </Box>
       </Flex>
 
-      <Flex alignItems={'center'} mb={6}>
+      <Flex alignItems={'center'} mb={6} px={6}>
         <Box mr={8}>
           {!mintStep.includes(StepStatus.MINT_TOKEN) || mintStep.includes(StepStatus.SET_KEY) ? (
-            <CheckIcon sx={{ width: 30, height: 30 }} color={mintStep.includes(StepStatus.SET_KEY) ? 'black' : 'gray'} />
+            <CheckIcon sx={{ width: 30, height: 30 }} color={mintStep.includes(StepStatus.SET_KEY) ? 'black' : 'gray.200'} />
           ) : (
             <CircularProgress isIndeterminate size='30px' color='black' />
           )}
@@ -91,7 +91,7 @@ const MintStep: React.FC<MintStepProps> = ({ mintStep, handleMintStart }) => {
       </Flex>
 
       <Center>
-        <Button type='submit' color='white' bg='black' w={400} disabled={mintStep.length > 1} onClick={handleMintStart}>
+        <Button type='submit' color='white' bg='black' w={'90%'} disabled={mintStep.length > 0} onClick={handleMintStart}>
           {mintStep.length < 1 && 'Start'}
           {mintStep.length > 1 && 'In Progress...'}
           {mintStep.includes(StepStatus.SET_KEY) && 'Minted'}

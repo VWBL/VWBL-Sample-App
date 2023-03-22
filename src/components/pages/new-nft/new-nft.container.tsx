@@ -120,13 +120,6 @@ export const NewNFT = () => {
           process.env.NEXT_PUBLIC_MINT_API_ID!,
           progressSubscriber,
         );
-
-        // openToast({
-        //   title: 'NFT Minted',
-        //   status: 'success',
-        //   message: 'Your VWBL NFT has been minted successfully!',
-        // });
-        // setTimeout(() => router.push('/account/'), 1000);
       } catch (err: any) {
         if (err.message.includes('User denied')) {
           openToast({
