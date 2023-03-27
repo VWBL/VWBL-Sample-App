@@ -1,11 +1,24 @@
 import { Modal, ModalContent, ModalHeader, ModalOverlay, Text, Box, Button, CircularProgress, Flex, Center } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
-
-import { MintStepProps, Props } from './types';
 import { StepStatus } from 'vwbl-sdk';
 
-export const MintStepModal: React.FC<Props> = ({ isOpen, mintStep, onClose, handleCancelClick, handleMintStart }) => {
+export type Props = {
+  isOpen: boolean;
+  signature?: string;
+  mintStep: StepStatus[];
+  onClose: () => void;
+  handleCancelClick: () => void;
+  handleMintStart: () => void;
+};
+
+export type MintStepProps = {
+  mintStep: StepStatus[];
+  signature?: string;
+  handleMintStart: () => void;
+};
+
+export const MintStepModal: React.FC<Props> = ({ isOpen, signature, mintStep, onClose, handleCancelClick, handleMintStart }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
@@ -25,7 +38,7 @@ export const MintStepModal: React.FC<Props> = ({ isOpen, mintStep, onClose, hand
           <>
             <ModalHeader fontSize={'2xl'}>Follow the steps</ModalHeader>
 
-            <MintStep mintStep={mintStep} handleMintStart={handleMintStart} />
+            <MintStep mintStep={mintStep} signature={signature} handleMintStart={handleMintStart} />
 
             <Center>
               <Button color='black' bg='white' variant='outline' onClick={handleCancelClick} w={'90%'}>
@@ -39,9 +52,25 @@ export const MintStepModal: React.FC<Props> = ({ isOpen, mintStep, onClose, hand
   );
 };
 
-const MintStep: React.FC<MintStepProps> = ({ mintStep, handleMintStart }) => {
+const MintStep: React.FC<MintStepProps> = ({ mintStep, signature, handleMintStart }) => {
   return (
     <Box my={3}>
+      <Flex alignItems={'center'} mb={6} px={6}>
+        <Box mr={8}>
+          {mintStep.length < 1 || signature ? (
+            <CheckIcon sx={{ width: 30, height: 30 }} color={signature ? 'black' : 'gray.200'} />
+          ) : (
+            <CircularProgress isIndeterminate size='30px' color='black' />
+          )}
+        </Box>
+        <Box>
+          <Text fontSize='xl' as='b'>
+            Sign
+          </Text>
+          <Text>Sign a message to start using VWBL</Text>
+        </Box>
+      </Flex>
+
       <Flex alignItems={'center'} mb={6} px={6}>
         <Box mr={8}>
           {!mintStep.includes(StepStatus.ENCRYPT_DATA) || mintStep.includes(StepStatus.UPLOAD_METADATA) ? (
