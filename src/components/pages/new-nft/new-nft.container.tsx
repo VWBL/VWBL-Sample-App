@@ -1,10 +1,11 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
+import { ProgressSubscriber, StepStatus } from 'vwbl-sdk';
 
 import { NewNFTComponent } from './new-nft';
 import { VwblContainer, ToastContainer } from '../../../container';
-import { segmentation, MAX_FILE_SIZE, BASE64_MAX_SIZE, VALID_EXTENSIONS, ChainId, switchChain } from '../../../utils';
+import { segmentation, MAX_FILE_SIZE, BASE64_MAX_SIZE, VALID_EXTENSIONS, switchChain } from '../../../utils';
 
 export type FormInputs = {
   asset: FileList;
@@ -31,6 +32,14 @@ export const NewNFT = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormInputs>({ mode: 'onBlur' });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [mintStep, setMintStep] = useState<StepStatus[]>([]);
+  const progressSubscriber: ProgressSubscriber = {
+    kickStep: (status: StepStatus) => {
+      setMintStep((prev) => [...prev, status]);
+    },
+  };
 
   useEffect(() => {
     let fileReaderForFile: FileReader;
@@ -109,14 +118,8 @@ export const NewNFT = () => {
           0,
           isBase64 ? 'base64' : 'binary',
           process.env.NEXT_PUBLIC_MINT_API_ID!,
+          progressSubscriber,
         );
-
-        openToast({
-          title: 'NFT Minted',
-          status: 'success',
-          message: 'Your VWBL NFT has been minted successfully!',
-        });
-        setTimeout(() => router.push('/account/'), 1000);
       } catch (err: any) {
         if (err.message.includes('User denied')) {
           openToast({
@@ -160,6 +163,7 @@ export const NewNFT = () => {
 
   return (
     <NewNFTComponent
+      mintStep={mintStep}
       onSubmit={onSubmit}
       onChangeFile={onChangeFile}
       onClearFile={onClearFile}
@@ -174,6 +178,8 @@ export const NewNFT = () => {
       errors={errors}
       isChecked={isChecked}
       onChangeCheckbox={(e) => setIsChecked(e.target.checked)}
+      isModalOpen={isModalOpen}
+      toggleModal={() => setIsModalOpen((prev) => !prev)}
     />
   );
 };
