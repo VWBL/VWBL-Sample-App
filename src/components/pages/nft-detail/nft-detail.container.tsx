@@ -38,9 +38,10 @@ export const NftDetail = () => {
     try {
       checkNetwork(() => switchChain(properChainId));
 
-      if (!vwbl.signature) await vwbl.sign();
+      await vwbl.sign();
 
-      const metadata = await vwblViewer.extractMetadata(getAsString(contractAddress), parseInt(getAsString(tokenId)), vwbl.signature);
+      const metadata = await vwbl.extractMetadata(parseInt(getAsString(tokenId)), getAsString(contractAddress));
+      console.log(metadata);
       if (!metadata) {
         throw new Error('Something went wrong, please try again.');
       }
