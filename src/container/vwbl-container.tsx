@@ -35,7 +35,8 @@ const useVWBL = () => {
       !process.env.NEXT_PUBLIC_VWBL_NETWORK_URL ||
       !process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS ||
       !process.env.NEXT_PUBLIC_PROVIDER_URL ||
-      !process.env.NEXT_PUBLIC_NFT_STORAGE_KEY
+      !process.env.NEXT_PUBLIC_NFT_STORAGE_KEY ||
+      !process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS
     ) {
       throw new Error('missing setting');
     }
@@ -51,6 +52,7 @@ const useVWBL = () => {
         apiKey: process.env.NEXT_PUBLIC_BICONOMY_API_KEY!,
         forwarderAddress: process.env.NEXT_PUBLIC_FORWARDER_ADDRESS!,
       },
+      dataCollectorAddress: process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS,
     });
     setVwbl(vwblInstance);
   }, []);
@@ -96,18 +98,13 @@ const useVWBL = () => {
   }, []);
 
   const initVWBLViewer = () => {
-    if (
-      !process.env.NEXT_PUBLIC_VWBL_NETWORK_URL ||
-      !process.env.NEXT_PUBLIC_PROVIDER_URL ||
-      !process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS
-    ) {
+    if (!process.env.NEXT_PUBLIC_PROVIDER_URL || !process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS) {
       throw new Error('missing setting');
     }
     const provider = new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_PROVIDER_URL);
     const web3 = new Web3(provider);
     const vwblViewerInstance = new VWBLViewer({
-      web3,
-      vwblNetworkUrl: process.env.NEXT_PUBLIC_VWBL_NETWORK_URL,
+      provider: web3,
       dataCollectorAddress: process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS,
     });
     setVwblViewer(vwblViewerInstance);
