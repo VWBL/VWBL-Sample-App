@@ -102,9 +102,7 @@ export const NewNFT = () => {
           console.log('Something went wrong.');
           return;
         }
-        if (!vwbl.signature) {
-          await vwbl.sign();
-        }
+        await vwbl.sign();
 
         // NOTE: MAX_FILE_SIZE > BASE64_MAX_SIZE
         const isLarge = asset[0].size > MAX_FILE_SIZE;
@@ -121,7 +119,7 @@ export const NewNFT = () => {
           progressSubscriber,
         );
       } catch (err: any) {
-        if (err.message.includes('User denied')) {
+        if (err.message && err.message.includes('User denied')) {
           openToast({
             title: 'User Denied Sign',
             status: 'error',

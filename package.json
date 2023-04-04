@@ -32,7 +32,7 @@
     "react-pdf": "^5.7.2",
     "react-player": "^2.10.0",
     "unstated-next": "^1.1.0",
-    "vwbl-sdk": "^0.1.5",
+    "vwbl-sdk": "^0.1.6",
     "web3": "^1.8.0",
     "web3modal": "^1.9.5"
   },
