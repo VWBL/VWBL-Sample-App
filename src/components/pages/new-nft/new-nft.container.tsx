@@ -1,10 +1,11 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
+import { ProgressSubscriber, StepStatus } from 'vwbl-sdk';
 
 import { NewNFTComponent } from './new-nft';
 import { VwblContainer, ToastContainer } from '../../../container';
-import { segmentation, MAX_FILE_SIZE, BASE64_MAX_SIZE, VALID_EXTENSIONS, ChainId, switchChain } from '../../../utils';
+import { segmentation, MAX_FILE_SIZE, BASE64_MAX_SIZE, VALID_EXTENSIONS, switchChain } from '../../../utils';
 
 export type FormInputs = {
   asset: FileList;
@@ -23,15 +24,22 @@ export const NewNFT = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
-  const { web3, vwbl, checkNetwork } = VwblContainer.useContainer();
+  const { vwbl, checkNetwork, provider } = VwblContainer.useContainer();
   const { openToast } = ToastContainer.useContainer();
-  const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormInputs>({ mode: 'onBlur' });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [mintStep, setMintStep] = useState<StepStatus[]>([]);
+  const progressSubscriber: ProgressSubscriber = {
+    kickStep: (status: StepStatus) => {
+      setMintStep((prev) => [...prev, status]);
+    },
+  };
 
   useEffect(() => {
     let fileReaderForFile: FileReader;
@@ -72,7 +80,7 @@ export const NewNFT = () => {
     async (data: FormInputs) => {
       setIsLoading(true);
       const { title, description, asset, thumbnail } = data;
-      if (!web3) {
+      if (!provider) {
         openToast({
           title: 'Wallet Not Connected',
           status: 'error',
@@ -87,26 +95,31 @@ export const NewNFT = () => {
         return;
       }
 
-      checkNetwork(() => switchChain(properChainId));
+      checkNetwork(() => switchChain(provider));
 
       try {
         if (!title || !description || !asset || !thumbnail) {
           console.log('Something went wrong.');
           return;
         }
-        if (!vwbl.signature) {
-          await vwbl.sign();
-        }
+        await vwbl.sign();
 
         // NOTE: MAX_FILE_SIZE > BASE64_MAX_SIZE
         const isLarge = asset[0].size > MAX_FILE_SIZE;
         const isBase64 = asset[0].size < BASE64_MAX_SIZE;
         const plainFile = isLarge ? segmentation(asset[0], MAX_FILE_SIZE) : asset[0];
-        await vwbl.managedCreateTokenForIPFS(title, description, plainFile, thumbnail[0], 0, isBase64 ? 'base64' : 'binary');
-
-        router.push('/');
+        await vwbl.managedCreateTokenForIPFS(
+          title,
+          description,
+          plainFile,
+          thumbnail[0],
+          0,
+          isBase64 ? 'base64' : 'binary',
+          process.env.NEXT_PUBLIC_MINT_API_ID!,
+          progressSubscriber,
+        );
       } catch (err: any) {
-        if (err.message.includes('User denied')) {
+        if (err.message && err.message.includes('User denied')) {
           openToast({
             title: 'User Denied Sign',
             status: 'error',
@@ -148,6 +161,7 @@ export const NewNFT = () => {
 
   return (
     <NewNFTComponent
+      mintStep={mintStep}
       onSubmit={onSubmit}
       onChangeFile={onChangeFile}
       onClearFile={onClearFile}
@@ -162,6 +176,8 @@ export const NewNFT = () => {
       errors={errors}
       isChecked={isChecked}
       onChangeCheckbox={(e) => setIsChecked(e.target.checked)}
+      isModalOpen={isModalOpen}
+      toggleModal={() => setIsModalOpen((prev) => !prev)}
     />
   );
 };

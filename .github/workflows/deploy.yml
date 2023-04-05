@@ -5,7 +5,7 @@ on:
     branches:
       - develop
     tags:
-      - "*"
+      - '*'
 
 permissions:
   id-token: write
@@ -14,7 +14,7 @@ permissions:
 env:
   # バージョン何が使えるのかは以下を参照
   # https://github.com/actions/node-versions/blob/main/versions-manifest.json
-  node-version: "16.x"
+  node-version: '16.x'
 
 jobs:
   setup:
@@ -28,7 +28,7 @@ jobs:
         id: setup-node
         with:
           node-version: ${{ env.node-version }}
-          cache: "yarn"
+          cache: 'yarn'
 
       - name: node_modules cache
         uses: actions/cache@v2
@@ -36,7 +36,7 @@ jobs:
         with:
           # キャッシュキー完全一致しない場合 yarn installする必要があるのでrestore-keysは使わない
           key: ${{ runner.os }}-build-node_modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/package.json') }}
-          path: "**/node_modules"
+          path: '**/node_modules'
 
       - name: Install Dependencies
         if: steps.cache_node_modules.outputs.cache-hit != 'true'
@@ -64,19 +64,23 @@ jobs:
         uses: actions/cache@v2
         with:
           key: ${{ runner.os }}-build-node_modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/package.json') }}
-          path: "**/node_modules"
+          path: '**/node_modules'
       #
       # Build & Deploy
       #
       - name: Build
         env:
           NEXT_PUBLIC_PROVIDER_URL: ${{ secrets.PROVIDER_URL }}
-          NEXT_PUBLIC_NFT_CONTRACT_ADDRESS: "0x9850c4682475ac6bcB9CdA91F927CCc1574781C7"
+          NEXT_PUBLIC_NFT_CONTRACT_ADDRESS: '0x9850c4682475ac6bcB9CdA91F927CCc1574781C7'
           NEXT_PUBLIC_VWBL_NETWORK_URL: https://dev.vwbl.network
-          NEXT_PUBLIC_CHAIN_ID: "5"
+          NEXT_PUBLIC_CHAIN_ID: '80001'
           NEXT_PUBLIC_NFT_STORAGE_KEY: ${{ secrets.NFT_STORAGE_KEY }}
+          NEXT_PUBLIC_BICONOMY_API_KEY: ${{ secrets.BICONOMY_API_KEY }}
+          NEXT_PUBLIC_MINT_API_ID: ${{ secrets.MINT_API_ID }}
+          NEXT_PUBLIC_TRANSFER_API_ID: ${{ secrets.TRANSFER_API_ID }}
           NEXT_PUBLIC_INFURA_KEY: ${{ secrets.INFURA_KEY }}
-          NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS: "0x70Fb88205D1163D276458E5D12D1fcC995BcB252"
+          NEXT_PUBLIC_FORWARDER_ADDRESS: '0x69015912AA33720b842dCD6aC059Ed623F28d9f7'
+          NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS: '0x70Fb88205D1163D276458E5D12D1fcC995BcB252'
         run: |
           yarn build
       - name: Deploy to s3
@@ -111,19 +115,23 @@ jobs:
         uses: actions/cache@v2
         with:
           key: ${{ runner.os }}-build-node_modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/package.json') }}
-          path: "**/node_modules"
+          path: '**/node_modules'
       #
       # Build & Deploy
       #
       - name: Build
         env:
           NEXT_PUBLIC_PROVIDER_URL: ${{ secrets.PROVIDER_URL }}
-          NEXT_PUBLIC_NFT_CONTRACT_ADDRESS: "0xfCD7669A5AAb4D85772cC8791331182bf0f1E2F2"
-          NEXT_PUBLIC_VWBL_NETWORK_URL: "https://vwbl.network"
-          NEXT_PUBLIC_CHAIN_ID: "137"
+          NEXT_PUBLIC_NFT_CONTRACT_ADDRESS: '0x42Dd5Ef4773aA438A668f02C5E26f0F31a5e994C'
+          NEXT_PUBLIC_VWBL_NETWORK_URL: 'https://vwbl.network'
+          NEXT_PUBLIC_CHAIN_ID: '137'
           NEXT_PUBLIC_NFT_STORAGE_KEY: ${{ secrets.NFT_STORAGE_KEY }}
+          NEXT_PUBLIC_BICONOMY_API_KEY: ${{ secrets.BICONOMY_API_KEY }}
+          NEXT_PUBLIC_MINT_API_ID: ${{ secrets.MINT_API_ID }}
+          NEXT_PUBLIC_TRANSFER_API_ID: ${{ secrets.TRANSFER_API_ID }}
           NEXT_PUBLIC_INFURA_KEY: ${{ secrets.INFURA_KEY }}
-          NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS: "0x707Fa219bE169e88208A4a177dcEBd504a468fD9"
+          NEXT_PUBLIC_FORWARDER_ADDRESS: '0xf0511f123164602042ab2bCF02111fA5D3Fe97CD'
+          NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS: '0x707Fa219bE169e88208A4a177dcEBd504a468fD9'
         run: |
           yarn build
       - name: Deploy to s3
