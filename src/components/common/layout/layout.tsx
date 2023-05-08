@@ -79,14 +79,8 @@ export const Layout: React.FC = ({ children }) => {
 
   const HeaderLinks: Link[] = [
     {
-      title: 'Tips',
-      to: 'https://ango-ya.notion.site/VWBL-Sample-App-Tips-defe418d5e83439baf2d0833976316a1',
-      target: '_blank',
-    },
-    {
-      title: 'Official Page',
+      title: 'Explore',
       to: 'https://vwbl-protocol.org/',
-      target: '_blank',
     },
     {
       title: 'Create',
@@ -96,7 +90,7 @@ export const Layout: React.FC = ({ children }) => {
 
   const FooterLinks: Link[] = [
     {
-      title: 'Official Page',
+      title: 'Explore',
       to: 'https://vwbl-protocol.org/',
       target: '_blank',
     },
@@ -119,7 +113,7 @@ export const Layout: React.FC = ({ children }) => {
   return (
     <>
       <Box px={8}>
-        <Flex h='76px' alignItems={'center'} justifyContent={'space-between'} mx='auto' maxW={'80%'}>
+        <Flex h='76px' alignItems={'center'} justifyContent={'space-between'} mx='auto' maxW={{ md: '80%' }}>
           <Link href='/'>
             <a>
               <Image src='/header-logo.svg' alt='header-logo' h={7} />
