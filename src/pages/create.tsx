@@ -1,8 +1,8 @@
 import type { NextPage } from 'next';
-import { Home } from '../components/pages/home';
+import { NewNFT } from '../components/pages/new-nft';
 
 const Page: NextPage = () => {
-  return <Home />;
+  return <NewNFT />;
 };
 
 export default Page;
