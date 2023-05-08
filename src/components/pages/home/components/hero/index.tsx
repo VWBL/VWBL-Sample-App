@@ -6,7 +6,7 @@ export const HeroComponent: React.FC = () => {
   const router = useRouter();
 
   return (
-    <Container maxW='container.lg' display={'flex'} justifyContent={'space-between'} my={16}>
+    <Container maxW='2xl' display={'flex'} justifyContent={'space-between'} my={16}>
       <Box w={'100%'}>
         <Text fontSize='6xl' as='b'>
           Just try the <br />

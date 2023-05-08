@@ -56,7 +56,7 @@ const HowToCreate: React.FC = () => {
         </Text>
         <Image src='/howto_01.png' alt='howto_01' w={400} />
       </Box>
-      <Divider color={'black'} my={10} />
+      <Divider my={10} />
       <Box w={'100%'}>
         <Text fontSize='large' my={4} as='b' display={'flex'} justifyContent='center'>
           STEP2 Create Item for Free
@@ -67,7 +67,7 @@ const HowToCreate: React.FC = () => {
         </Text>
         <Image src='/howto_02.png' alt='howto_02' w={400} />
       </Box>
-      <Divider color={'black'} my={10} />
+      <Divider my={10} />
       <Box w={'100%'}>
         <Text fontSize='large' my={4} as='b' display={'flex'} justifyContent='center'>
           STEP3 Check your wallet
@@ -96,7 +96,7 @@ const HowToTransfer: React.FC = () => {
         </Text>
         <Image src='/howto_01.png' alt='howto_01' w={400} />
       </Box>
-      <Divider color={'black'} my={10} />
+      <Divider my={10} />
       <Box w={'100%'}>
         <Text fontSize='large' my={4} as='b' display={'flex'} justifyContent='center'>
           STEP2 Check your wallet
@@ -106,7 +106,7 @@ const HowToTransfer: React.FC = () => {
         </Text>
         <Image src='/howto_03.png' alt='howto_03' w={400} />
       </Box>
-      <Divider color={'black'} my={10} />
+      <Divider my={10} />
       <Box w={'100%'}>
         <Text fontSize='large' my={4} as='b' display={'flex'} justifyContent='center'>
           STEP3 Transfer

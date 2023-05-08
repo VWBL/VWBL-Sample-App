@@ -44,6 +44,11 @@ export const theme = extendTheme({
         },
       },
     },
+    Divider: {
+      baseStyle: {
+        borderColor: '#090909',
+      },
+    },
     Checkbox: {
       baseStyle: {
         control: {
