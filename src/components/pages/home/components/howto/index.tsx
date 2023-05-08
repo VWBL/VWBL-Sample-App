@@ -78,9 +78,8 @@ const HowToCreate: React.FC = () => {
         </Text>
         <Image src='/howto_03.png' alt='howto_03' w={400} />
       </Box>
-      <Box w={{ base: '100%', md: '50%' }}>
-        <Button text='Try demo' width='100%' mt={10} onClick={() => router.push('/create')} />
-      </Box>
+
+      <Button text='Try demo' width={{ base: '100%', md: '60%' }} mt={10} onClick={() => router.push('/create')} />
     </Container>
   );
 };
@@ -118,9 +117,7 @@ const HowToTransfer: React.FC = () => {
         </Text>
         <Image src='/howto_04.png' alt='howto_04' w={400} />
       </Box>
-      <Box w={{ base: '100%', md: '50%' }}>
-        <Button text='My Wallet' width='100%' mt={10} onClick={() => router.push('/account')} />
-      </Box>
+      <Button text='My Wallet' width={{ base: '100%', md: '60%' }} mt={10} onClick={() => router.push('/account')} />
     </Container>
   );
 };
