@@ -8,7 +8,7 @@ export const WhatVWBLComponent: React.FC = memo(() => {
         <Text fontSize={{ base: '3xl', md: '4xl' }} fontWeight='bold' textAlign='center'>
           What&apos;s VWBL demo
         </Text>
-        <Text fontSize={{ base: 'small', md: 'md' }} mt={4} mb={10} fontWeight='bold' display='center' justifyContent='center'>
+        <Text fontSize='md' mt={4} mb={10} fontWeight='bold' display='center' justifyContent='center'>
           VWBL demoは{'"'}VWBL NFT{'"'}をミントできるアプリです！
           <br />
           誰でも無料で使えて、作ったNFTはopenseaなどで売ることもできるよ！
