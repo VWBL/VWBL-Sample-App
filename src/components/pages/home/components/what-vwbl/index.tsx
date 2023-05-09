@@ -13,7 +13,7 @@ export const WhatVWBLComponent: React.FC = memo(() => {
           <br />
           誰でも無料で使えて、作ったNFTはopenseaなどで売ることもできるよ！
         </Text>
-        <Box display={'flex'} justifyContent={'space-between'} mt={14}>
+        <Box display={'flex'} justifyContent={'space-around'} mt={14}>
           <Image src='/what-vwbl_01.png' alt='what-vwbl_01' w={{ base: 40, md: 400 }} />
           <Image src='/what-vwbl_02.png' alt='home_01' w={{ base: 40, md: 400 }} />
         </Box>
