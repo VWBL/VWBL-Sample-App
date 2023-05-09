@@ -11,7 +11,7 @@ export const HeroComponent: React.FC = memo(() => {
       <Box display={{ md: 'block' }}>
         <Text fontSize={{ base: '5xl', md: '6xl' }} fontWeight='bold' lineHeight='1.1'>
           Just try the <br />
-          VWBL demo.
+          VWBL NFT.
         </Text>
         <Text fontSize={{ base: '2xl', md: 'large' }} my={4} fontWeight='bold'>
           <Box as='span' display={{ md: 'block' }}>
