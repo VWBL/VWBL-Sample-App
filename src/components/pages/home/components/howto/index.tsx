@@ -16,7 +16,7 @@ export const HowToComponent: React.FC = memo(() => {
       <Text fontSize={{ base: '3xl', md: '4xl' }} id='howto' fontWeight='bold' textAlign='center'>
         How to
       </Text>
-      <Text fontSize={{ base: 'small', md: 'md' }} mt={4} mb={10} fontWeight='bold' display={'flex'} justifyContent={'center'}>
+      <Text fontSize='md' mt={4} mb={10} px={{ base: 8, md: 0 }} fontWeight='bold' display={'flex'} justifyContent={'center'}>
         {'"'}VWBL NFT{'"'}の発行・送信方法はこちら！早速試してみよう！
       </Text>
 
