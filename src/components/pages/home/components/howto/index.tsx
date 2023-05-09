@@ -1,15 +1,15 @@
 import { Box, Container, Text, Tabs, TabList, Tab, TabPanels, TabPanel, Image, Divider } from '@chakra-ui/react';
 import { Button } from '../../../../common/button';
-import { memo, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { useRouter } from 'next/router';
 
 export const HowToComponent: React.FC = memo(() => {
   const tabOptions = [{ name: 'Create' }, { name: 'Transfer' }];
   const [tabIndex, setTabIndex] = useState(0);
 
-  const handleTabsChange = (index: number) => {
+  const handleTabsChange = useCallback((index: number) => {
     setTabIndex(index);
-  };
+  }, []);
 
   return (
     <Box mx='auto' my={16}>
