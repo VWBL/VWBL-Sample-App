@@ -9,7 +9,7 @@ export const HeroComponent: React.FC = memo(() => {
   return (
     <Container maxW='container.lg' display={{ md: 'flex' }} justifyContent={'space-between'} my={14}>
       <Box display={{ md: 'block' }}>
-        <Text fontSize={{ base: '5xl', md: '6xl' }} fontWeight='bold'>
+        <Text fontSize={{ base: '5xl', md: '6xl' }} fontWeight='bold' lineHeight='1.1'>
           Just try the <br />
           VWBL demo.
         </Text>
