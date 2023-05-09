@@ -15,6 +15,7 @@ import {
   DrawerContent,
   Button as ChakraButton,
   CSSObject,
+  Image,
 } from '@chakra-ui/react';
 import { MdOutlineAccountBalanceWallet } from 'react-icons/md';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
@@ -78,30 +79,24 @@ export const Layout: React.FC = ({ children }) => {
 
   const HeaderLinks: Link[] = [
     {
-      title: 'Tips',
-      to: 'https://ango-ya.notion.site/VWBL-Sample-App-Tips-defe418d5e83439baf2d0833976316a1',
-      target: '_blank',
-    },
-    {
-      title: 'Official Page',
+      title: 'Explore',
       to: 'https://vwbl-protocol.org/',
-      target: '_blank',
     },
     {
       title: 'Create',
-      to: '/',
+      to: '/create',
     },
   ];
 
   const FooterLinks: Link[] = [
     {
-      title: 'Official Page',
+      title: 'Explore',
       to: 'https://vwbl-protocol.org/',
       target: '_blank',
     },
     {
       title: 'Create',
-      to: '/',
+      to: '/create',
     },
   ];
 
@@ -118,9 +113,11 @@ export const Layout: React.FC = ({ children }) => {
   return (
     <>
       <Box px={8}>
-        <Flex h='60px' alignItems={'center'} justifyContent={'space-between'}>
+        <Flex h='76px' alignItems={'center'} justifyContent={'space-between'} mx='auto' maxW={{ md: '80%' }}>
           <Link href='/'>
-            <a style={{ fontWeight: 700, fontSize: 20 }}>Demoble</a>
+            <a>
+              <Image src='/header-logo.svg' alt='header-logo' h={7} />
+            </a>
           </Link>
           <HStack />
           <HamburgerMenu onClick={onOpen} sx={hamburgerMenu} />
