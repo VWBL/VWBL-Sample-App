@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
+import { utils } from 'ethers';
 
 import { ReceiveNFTComponent } from './receive-nft';
 import { VwblContainer, ToastContainer } from '../../../container';
@@ -42,17 +43,20 @@ export const ReceiveNFT = () => {
     checkNetwork(() => switchChain(provider));
 
     try {
-      // await vwbl.sign();
+      await vwbl.sign();
 
-      // await vwbl.managedCreateTokenForIPFS(
-      //   sampleNFT.name,
-      //   sampleNFT.description,
-      //   new File([], ''),
-      //   new File([], ''),
-      //   0,
-      //   'base64',
-      //   process.env.NEXT_PUBLIC_MINT_API_ID!,
-      // );
+      const documentId = utils.hexlify(utils.randomBytes(32));
+      const tokenId = await vwbl.nft.mintTokenForIPFS(
+        process.env.NEXT_PUBLIC_SAMPLE_NFT_METADATA_URL!,
+        vwbl.opts.vwblNetworkUrl,
+        0,
+        documentId,
+        process.env.NEXT_PUBLIC_MINT_API_ID!,
+      );
+
+      const key = vwbl.createKey();
+      await vwbl.setKey(tokenId, key);
+
       openToast({
         title: 'Successfully received',
         status: 'success',
