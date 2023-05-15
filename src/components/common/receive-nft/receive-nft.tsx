@@ -17,7 +17,7 @@ export const ReceiveNFTComponent: React.FC<Props> = ({ onSubmit, isLoading }) =>
       </Heading>
 
       <Box display='flex' justifyContent='center'>
-        <NFTItem nft={sampleNFT} />
+        <NFTItem nft={sampleNFT} disabled={true} />
       </Box>
 
       <form onSubmit={onSubmit}>

@@ -40,7 +40,8 @@ export const NewNFT = () => {
       setMintStep((prev) => [...prev, status]);
     },
   };
-  const isReceived = !!localStorage.getItem('is_received');
+
+  const isReceived = typeof window !== 'undefined' ? !!localStorage.getItem('is_received') : false;
 
   useEffect(() => {
     let fileReaderForFile: FileReader;

@@ -42,17 +42,17 @@ export const ReceiveNFT = () => {
     checkNetwork(() => switchChain(provider));
 
     try {
-      await vwbl.sign();
+      // await vwbl.sign();
 
-      await vwbl.managedCreateTokenForIPFS(
-        sampleNFT.name,
-        sampleNFT.description,
-        new File([], ''),
-        new File([], ''),
-        0,
-        'base64',
-        process.env.NEXT_PUBLIC_MINT_API_ID!,
-      );
+      // await vwbl.managedCreateTokenForIPFS(
+      //   sampleNFT.name,
+      //   sampleNFT.description,
+      //   new File([], ''),
+      //   new File([], ''),
+      //   0,
+      //   'base64',
+      //   process.env.NEXT_PUBLIC_MINT_API_ID!,
+      // );
       openToast({
         title: 'Successfully received',
         status: 'success',
