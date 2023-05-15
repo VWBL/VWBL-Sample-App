@@ -53,6 +53,12 @@ export const ReceiveNFT = () => {
         'base64',
         process.env.NEXT_PUBLIC_MINT_API_ID!,
       );
+      openToast({
+        title: 'Successfully received',
+        status: 'success',
+        message: 'you have successfully received NFT',
+      });
+      localStorage.setItem('is_received', 'true');
     } catch (err: any) {
       if (err.message && err.message.includes('User denied')) {
         openToast({

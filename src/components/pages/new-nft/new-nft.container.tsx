@@ -40,6 +40,7 @@ export const NewNFT = () => {
       setMintStep((prev) => [...prev, status]);
     },
   };
+  const isReceived = !!localStorage.getItem('is_received');
 
   useEffect(() => {
     let fileReaderForFile: FileReader;
@@ -178,6 +179,7 @@ export const NewNFT = () => {
       onChangeCheckbox={(e) => setIsChecked(e.target.checked)}
       isModalOpen={isModalOpen}
       toggleModal={() => setIsModalOpen((prev) => !prev)}
+      isReceived={isReceived}
     />
   );
 };

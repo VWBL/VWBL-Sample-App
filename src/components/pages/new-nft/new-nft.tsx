@@ -40,6 +40,7 @@ type Props = {
   mintStep: StepStatus[];
   isModalOpen: boolean;
   toggleModal: () => void;
+  isReceived: boolean;
 };
 
 type LabelProps = {
@@ -76,10 +77,11 @@ export const NewNFTComponent: React.FC<Props> = ({
   mintStep,
   isModalOpen,
   toggleModal,
+  isReceived,
 }) => {
   return (
     <Container maxW='container.md' my={12} centerContent>
-      <ReceiveNFT />
+      {isReceived || <ReceiveNFT />}
 
       <Box w={'100%'} maxW={480}>
         <Heading as='h2' mb={12}>
