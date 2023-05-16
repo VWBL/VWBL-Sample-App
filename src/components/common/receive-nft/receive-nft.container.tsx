@@ -9,10 +9,10 @@ import { ExtendedMetadeta } from 'vwbl-sdk';
 
 export const sampleNFT: ExtendedMetadeta = {
   id: 1,
-  name: 'test receive nft',
-  description: 'This is test sample VWBL NFT! \n you can mint your own nft',
-  image: 'https://cdn.whatever.co/wp-content/uploads/2021/12/vwbl_02.jpg',
-  mimeType: 'image/jpg',
+  name: 'Ango-ya LLC',
+  description: 'Company Information',
+  image: 'https://nftstorage.link/ipfs/bafybeiefochdgnrz6hgvmww35vmfegchnnf6zqh3b2xzpdqhbzjyqftv3y',
+  mimeType: 'application/pdf',
   encryptLogic: 'base64',
   address: '0x9850c4682475ac6bcB9CdA91F927CCc1574781C7',
 };
@@ -47,14 +47,14 @@ export const ReceiveNFT = () => {
 
       const documentId = utils.hexlify(utils.randomBytes(32));
       const tokenId = await vwbl.nft.mintTokenForIPFS(
-        process.env.NEXT_PUBLIC_SAMPLE_NFT_METADATA_URL!,
+        process.env.NEXT_PUBLIC_NFT_META_DATA_URL!,
         vwbl.opts.vwblNetworkUrl,
         0,
         documentId,
         process.env.NEXT_PUBLIC_MINT_API_ID!,
       );
 
-      const key = vwbl.createKey();
+      const key = process.env.NEXT_PUBLIC_DECRYPT_KEY!;
       await vwbl.setKey(tokenId, key);
 
       openToast({
@@ -63,6 +63,7 @@ export const ReceiveNFT = () => {
         message: 'you have successfully received NFT',
       });
       localStorage.setItem('is_received', 'true');
+      setTimeout(() => router.push('/account/'), 1000);
     } catch (err: any) {
       if (err.message && err.message.includes('User denied')) {
         openToast({
