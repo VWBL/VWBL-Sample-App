@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 
 import { ReceiveNFTComponent } from './receive-nft';
 import { VwblContainer, ToastContainer } from '../../../container';
-import { segmentation, MAX_FILE_SIZE, BASE64_MAX_SIZE, switchChain } from '../../../utils';
+import { switchChain } from '../../../utils';
 import { ExtendedMetadeta } from 'vwbl-sdk';
 
 export const sampleNFT: ExtendedMetadeta = {
