@@ -1,10 +1,9 @@
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
-import { utils } from 'ethers';
 
 import { ReceiveNFTComponent } from './receive-nft';
 import { VwblContainer, ToastContainer } from '../../../container';
-import { switchChain } from '../../../utils';
+import { segmentation, MAX_FILE_SIZE, BASE64_MAX_SIZE, switchChain } from '../../../utils';
 import { ExtendedMetadeta } from 'vwbl-sdk';
 
 export const sampleNFT: ExtendedMetadeta = {
@@ -45,17 +44,21 @@ export const ReceiveNFT = () => {
     try {
       await vwbl.sign();
 
-      const documentId = utils.hexlify(utils.randomBytes(32));
-      const tokenId = await vwbl.nft.mintTokenForIPFS(
-        process.env.NEXT_PUBLIC_NFT_META_DATA_URL!,
-        vwbl.opts.vwblNetworkUrl,
+      const content = await fetch('/sample-nft-content.pdf');
+      const contentFile = new File([await content.blob()], 'sample-nft-content.pdf', { type: 'application/pdf' });
+
+      const thumbnail = await fetch('https://nftstorage.link/ipfs/bafybeiefochdgnrz6hgvmww35vmfegchnnf6zqh3b2xzpdqhbzjyqftv3y');
+      const thumbnailFile = new File([await thumbnail.blob()], 'sample-nft-thumbnail.png', { type: 'image/png' });
+
+      await vwbl.managedCreateTokenForIPFS(
+        sampleNFT.name,
+        sampleNFT.description,
+        contentFile,
+        thumbnailFile,
         0,
-        documentId,
+        'base64',
         process.env.NEXT_PUBLIC_MINT_API_ID!,
       );
-
-      const key = process.env.NEXT_PUBLIC_DECRYPT_KEY!;
-      await vwbl.setKey(tokenId, key);
 
       openToast({
         title: 'Successfully received',
