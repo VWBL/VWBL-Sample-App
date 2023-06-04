@@ -4,12 +4,13 @@ import { ExtendedMetadeta } from 'vwbl-sdk';
 
 type Props = {
   nft: ExtendedMetadeta;
+  disabled?: boolean;
 };
 
-export const NFTItemComponent: React.FC<Props> = ({ nft }) => {
+export const NFTItemComponent: React.FC<Props> = ({ nft, disabled }) => {
   return (
     <Link href={`/assets/${nft.address}/${nft.id}`}>
-      <a>
+      <a style={{ pointerEvents: disabled ? 'none' : undefined }}>
         <VStack bg={useColorModeValue('white', 'gray.800')} width={300} py={8} gap={4}>
           <Box
             padding={'40px 30px'}
