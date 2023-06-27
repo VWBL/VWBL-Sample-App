@@ -1,11 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
-import Web3Modal from 'web3modal';
 import { createContainer } from 'unstated-next';
 import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx, VWBLViewer } from 'vwbl-sdk';
 import { ethers } from 'ethers';
 import Web3 from 'web3';
-import { PROVIDER_OPTIONS } from '../utils/const';
 import detectEthereumProvider from '@metamask/detect-provider';
 
 const useVWBL = () => {
@@ -16,7 +14,6 @@ const useVWBL = () => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [provider, setProvider] = useState<any>();
   const [ethersProvider, setEthersProvider] = useState<ethers.providers.Web3Provider>();
-  const [web3Modal, setWeb3Modal] = useState<Web3Modal>();
   const router = useRouter();
 
   const refreshState = useCallback(() => {
@@ -29,7 +26,7 @@ const useVWBL = () => {
     clearVwbl();
     setProvider(undefined);
     router.push('/');
-  }, [refreshState, web3Modal, router]);
+  }, [refreshState, router]);
 
   const updateVwbl = useCallback((provider: any): void => {
     if (
@@ -120,11 +117,6 @@ const useVWBL = () => {
     setUserSignature(undefined);
   }, []);
 
-  useEffect(() => {
-    const web3Modal = new Web3Modal({ cacheProvider: true });
-    setWeb3Modal(web3Modal);
-  }, []);
-
   const checkNetwork = useCallback(
     async (callback: () => void) => {
       if (!provider) return;
@@ -154,7 +146,6 @@ const useVWBL = () => {
     provider,
     ethersProvider,
     connectWallet,
-    web3Modal,
     initVwbl,
     checkNetwork,
   };

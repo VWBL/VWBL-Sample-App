@@ -74,7 +74,7 @@ const HamburgerMenu = ({ onClick, sx }: { onClick: () => void; sx: CSSObject }) 
 
 export const Layout: React.FC = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { connectWallet, disconnect, userAddress, web3Modal } = VwblContainer.useContainer();
+  const { connectWallet, disconnect, userAddress } = VwblContainer.useContainer();
   const router = useRouter();
 
   const HeaderLinks: Link[] = [
@@ -101,10 +101,8 @@ export const Layout: React.FC = ({ children }) => {
   ];
 
   useEffect(() => {
-    if (web3Modal?.cachedProvider) {
-      connectWallet();
-    }
-  }, [web3Modal, connectWallet]);
+    connectWallet();
+  }, []);
 
   useEffect(() => {
     onClose();
