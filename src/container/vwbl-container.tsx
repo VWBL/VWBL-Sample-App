@@ -66,6 +66,7 @@ const useVWBL = () => {
         updateVwbl(metaMaskProvider);
         const ethProvider = new ethers.providers.Web3Provider(metaMaskProvider);
         setEthersProvider(ethProvider);
+        await ethProvider.send('eth_requestAccounts', [])
         const ethSigner = ethProvider.getSigner();
         const myAddress = await ethSigner.getAddress();
         if (myAddress) setUserAddress(myAddress);
