@@ -6,6 +6,7 @@ import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx, VWBLV
 import { ethers } from 'ethers';
 import Web3 from 'web3';
 import { PROVIDER_OPTIONS } from '../utils/const';
+import detectEthereumProvider from '@metamask/detect-provider';
 
 const useVWBL = () => {
   const [vwbl, setVwbl] = useState<VWBLMetaTx>();
@@ -23,7 +24,7 @@ const useVWBL = () => {
   }, []);
 
   const disconnect = useCallback(async () => {
-    await web3Modal?.clearCachedProvider();
+    await provider.disconnect();
     refreshState();
     clearVwbl();
     setProvider(undefined);
@@ -59,24 +60,26 @@ const useVWBL = () => {
 
   const connectWallet = useCallback(async () => {
     try {
-      const web3Modal = new Web3Modal({
-        providerOptions: PROVIDER_OPTIONS,
-        cacheProvider: true,
-      });
-      const provider = await web3Modal.connect();
-      setProvider(provider);
-      updateVwbl(provider);
-      const ethProvider = new ethers.providers.Web3Provider(provider);
-      setEthersProvider(ethProvider);
-      const ethSigner = ethProvider.getSigner();
-      const myAddress = await ethSigner.getAddress();
-      if (myAddress) setUserAddress(myAddress);
+      const metaMaskProvider = await detectEthereumProvider({ mustBeMetaMask: true });
+      if(metaMaskProvider && metaMaskProvider.isMetaMask){
+        setProvider(metaMaskProvider);
+        updateVwbl(metaMaskProvider);
+        const ethProvider = new ethers.providers.Web3Provider(metaMaskProvider);
+        setEthersProvider(ethProvider);
+        const ethSigner = ethProvider.getSigner();
+        const myAddress = await ethSigner.getAddress();
+        if (myAddress) setUserAddress(myAddress);
+      }else{
+        throw new Error('missing metamask');
+      }
     } catch (err) {
       console.log(err);
     }
   }, [updateVwbl]);
 
   const initVwbl = useCallback((): void => {
+    console.log(process.env.NEXT_PUBLIC_VWBL_NETWORK_URL,process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS, process.env.NEXT_PUBLIC_PROVIDER_URL );
+    
     if (
       !process.env.NEXT_PUBLIC_VWBL_NETWORK_URL ||
       !process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS ||
