@@ -74,7 +74,7 @@ const HamburgerMenu = ({ onClick, sx }: { onClick: () => void; sx: CSSObject }) 
 
 export const Layout: React.FC = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { connectWallet, disconnect, userAddress, web3Modal } = VwblContainer.useContainer();
+  const { connectWallet, userAddress } = VwblContainer.useContainer();
   const router = useRouter();
 
   const HeaderLinks: Link[] = [
@@ -101,10 +101,8 @@ export const Layout: React.FC = ({ children }) => {
   ];
 
   useEffect(() => {
-    if (web3Modal?.cachedProvider) {
-      connectWallet();
-    }
-  }, [web3Modal, connectWallet]);
+    connectWallet();
+  }, []);
 
   useEffect(() => {
     onClose();
@@ -133,7 +131,6 @@ export const Layout: React.FC = ({ children }) => {
                 <Link href='/account' passHref>
                   <Button as='a' text='My Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} />
                 </Link>
-                <Button text='Disconnect' borderRadius={'3xl'} icon={TbWalletOff} onClick={disconnect} isReversed />
               </HStack>
             ) : (
               <Button text='Connect Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} onClick={connectWallet} />
@@ -157,14 +154,6 @@ export const Layout: React.FC = ({ children }) => {
                     <Link href='/account' passHref>
                       <Button as='a' text='My Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} isReversed fontSize='2xl' />
                     </Link>
-                    <Button
-                      text='Disconnect'
-                      borderRadius={'3xl'}
-                      icon={TbWalletOff}
-                      onClick={disconnect}
-                      border='1px solid white'
-                      fontSize='2xl'
-                    />
                   </VStack>
                 ) : (
                   <HStack>
