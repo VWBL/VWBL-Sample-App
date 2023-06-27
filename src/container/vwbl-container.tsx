@@ -19,14 +19,14 @@ const useVWBL = () => {
   const refreshState = useCallback(() => {
     setUserAddress('');
   }, []);
-
-  const disconnect = useCallback(async () => {
-    await provider.disconnect();
-    refreshState();
-    clearVwbl();
-    setProvider(undefined);
-    router.push('/');
-  }, [refreshState, router]);
+  // TODO: walletconnect v2対応後にdisconnect関数を復活させる
+  // const disconnect = useCallback(async () => {
+  //   await provider.disconnect();
+  //   refreshState();
+  //   clearVwbl();
+  //   setProvider(undefined);
+  //   router.push('/');
+  // }, [refreshState, router]);
 
   const updateVwbl = useCallback((provider: any): void => {
     if (
@@ -142,7 +142,6 @@ const useVWBL = () => {
     setErrorMessage,
     userSignature,
     userAddress,
-    disconnect,
     provider,
     ethersProvider,
     connectWallet,
