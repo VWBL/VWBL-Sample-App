@@ -41,6 +41,8 @@ export const NewNFT = () => {
     },
   };
 
+  const isReceived = typeof window !== 'undefined' ? !!localStorage.getItem('is_received') : false;
+
   useEffect(() => {
     let fileReaderForFile: FileReader;
     let fileReaderForThumbnail: FileReader;
@@ -178,6 +180,7 @@ export const NewNFT = () => {
       onChangeCheckbox={(e) => setIsChecked(e.target.checked)}
       isModalOpen={isModalOpen}
       toggleModal={() => setIsModalOpen((prev) => !prev)}
+      isReceived={isReceived}
     />
   );
 };

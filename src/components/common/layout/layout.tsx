@@ -15,6 +15,7 @@ import {
   DrawerContent,
   Button as ChakraButton,
   CSSObject,
+  Image,
 } from '@chakra-ui/react';
 import { MdOutlineAccountBalanceWallet } from 'react-icons/md';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
@@ -73,43 +74,35 @@ const HamburgerMenu = ({ onClick, sx }: { onClick: () => void; sx: CSSObject }) 
 
 export const Layout: React.FC = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { connectWallet, disconnect, userAddress, web3Modal } = VwblContainer.useContainer();
+  const { connectWallet, userAddress } = VwblContainer.useContainer();
   const router = useRouter();
 
   const HeaderLinks: Link[] = [
     {
-      title: 'Tips',
-      to: 'https://ango-ya.notion.site/VWBL-Sample-App-Tips-defe418d5e83439baf2d0833976316a1',
-      target: '_blank',
-    },
-    {
-      title: 'Official Page',
+      title: 'Explore',
       to: 'https://vwbl-protocol.org/',
-      target: '_blank',
     },
     {
       title: 'Create',
-      to: '/',
+      to: '/create',
     },
   ];
 
   const FooterLinks: Link[] = [
     {
-      title: 'Official Page',
+      title: 'Explore',
       to: 'https://vwbl-protocol.org/',
       target: '_blank',
     },
     {
       title: 'Create',
-      to: '/',
+      to: '/create',
     },
   ];
 
   useEffect(() => {
-    if (web3Modal?.cachedProvider) {
-      connectWallet();
-    }
-  }, [web3Modal, connectWallet]);
+    connectWallet();
+  }, []);
 
   useEffect(() => {
     onClose();
@@ -118,9 +111,11 @@ export const Layout: React.FC = ({ children }) => {
   return (
     <>
       <Box px={8}>
-        <Flex h='60px' alignItems={'center'} justifyContent={'space-between'}>
+        <Flex h='76px' alignItems={'center'} justifyContent={'space-between'} mx='auto' maxW={{ md: '80%' }}>
           <Link href='/'>
-            <a style={{ fontWeight: 700, fontSize: 20 }}>Demoble</a>
+            <a>
+              <Image src='/header-logo.svg' alt='header-logo' h={7} />
+            </a>
           </Link>
           <HStack />
           <HamburgerMenu onClick={onOpen} sx={hamburgerMenu} />
@@ -136,7 +131,6 @@ export const Layout: React.FC = ({ children }) => {
                 <Link href='/account' passHref>
                   <Button as='a' text='My Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} />
                 </Link>
-                <Button text='Disconnect' borderRadius={'3xl'} icon={TbWalletOff} onClick={disconnect} isReversed />
               </HStack>
             ) : (
               <Button text='Connect Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} onClick={connectWallet} />
@@ -160,14 +154,6 @@ export const Layout: React.FC = ({ children }) => {
                     <Link href='/account' passHref>
                       <Button as='a' text='My Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} isReversed fontSize='2xl' />
                     </Link>
-                    <Button
-                      text='Disconnect'
-                      borderRadius={'3xl'}
-                      icon={TbWalletOff}
-                      onClick={disconnect}
-                      border='1px solid white'
-                      fontSize='2xl'
-                    />
                   </VStack>
                 ) : (
                   <HStack>

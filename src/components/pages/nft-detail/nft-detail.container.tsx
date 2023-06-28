@@ -41,6 +41,7 @@ export const NftDetail = () => {
       await vwbl.sign();
 
       const metadata = await vwbl.extractMetadata(parseInt(getAsString(tokenId)), getAsString(contractAddress));
+      console.log({ metadata });
       if (!metadata) {
         throw new Error('Something went wrong, please try again.');
       }

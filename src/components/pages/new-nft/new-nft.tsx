@@ -20,6 +20,7 @@ import { MintStepModal } from '../../common/mint-step-modal';
 import { Button } from '../../common/button';
 import { MAX_FILE_SIZE } from '../../../utils';
 import { StepStatus } from 'vwbl-sdk';
+import { ReceiveNFT } from '../../common/receive-nft';
 
 type Props = {
   onSubmit: (data: FormInputs) => Promise<void>;
@@ -39,6 +40,7 @@ type Props = {
   mintStep: StepStatus[];
   isModalOpen: boolean;
   toggleModal: () => void;
+  isReceived: boolean;
 };
 
 type LabelProps = {
@@ -75,9 +77,12 @@ export const NewNFTComponent: React.FC<Props> = ({
   mintStep,
   isModalOpen,
   toggleModal,
+  isReceived,
 }) => {
   return (
     <Container maxW='container.md' my={12} centerContent>
+      {isReceived || <ReceiveNFT />}
+
       <Box w={'100%'} maxW={480}>
         <Heading as='h2' mb={12}>
           Create New Item

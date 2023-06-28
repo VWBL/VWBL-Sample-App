@@ -15,6 +15,7 @@ export const NFTList = () => {
     const items = await vwblViewer?.listMetadataFormMultiContracts([
       '0xfCD7669A5AAb4D85772cC8791331182bf0f1E2F2',
       '0x42Dd5Ef4773aA438A668f02C5E26f0F31a5e994C',
+      '0x268d2A3697DEcE5ed8Fd9972935635e4aa1201c1',
     ]);
     if (!items) return;
     setNfts(items.filter((v) => v).reverse() as ExtendedMetadeta[]);

@@ -1,11 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
-import Web3Modal from 'web3modal';
 import { createContainer } from 'unstated-next';
 import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx, VWBLViewer } from 'vwbl-sdk';
 import { ethers } from 'ethers';
 import Web3 from 'web3';
-import { PROVIDER_OPTIONS } from '../utils/const';
+import detectEthereumProvider from '@metamask/detect-provider';
 
 const useVWBL = () => {
   const [vwbl, setVwbl] = useState<VWBLMetaTx>();
@@ -15,20 +14,19 @@ const useVWBL = () => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [provider, setProvider] = useState<any>();
   const [ethersProvider, setEthersProvider] = useState<ethers.providers.Web3Provider>();
-  const [web3Modal, setWeb3Modal] = useState<Web3Modal>();
   const router = useRouter();
 
   const refreshState = useCallback(() => {
     setUserAddress('');
   }, []);
-
-  const disconnect = useCallback(async () => {
-    await web3Modal?.clearCachedProvider();
-    refreshState();
-    clearVwbl();
-    setProvider(undefined);
-    router.push('/');
-  }, [refreshState, web3Modal, router]);
+  // TODO: walletconnect v2対応後にdisconnect関数を復活させる
+  // const disconnect = useCallback(async () => {
+  //   await provider.disconnect();
+  //   refreshState();
+  //   clearVwbl();
+  //   setProvider(undefined);
+  //   router.push('/');
+  // }, [refreshState, router]);
 
   const updateVwbl = useCallback((provider: any): void => {
     if (
@@ -59,24 +57,27 @@ const useVWBL = () => {
 
   const connectWallet = useCallback(async () => {
     try {
-      const web3Modal = new Web3Modal({
-        providerOptions: PROVIDER_OPTIONS,
-        cacheProvider: true,
-      });
-      const provider = await web3Modal.connect();
-      setProvider(provider);
-      updateVwbl(provider);
-      const ethProvider = new ethers.providers.Web3Provider(provider);
-      setEthersProvider(ethProvider);
-      const ethSigner = ethProvider.getSigner();
-      const myAddress = await ethSigner.getAddress();
-      if (myAddress) setUserAddress(myAddress);
+      const metaMaskProvider = await detectEthereumProvider({ mustBeMetaMask: true });
+      if(metaMaskProvider && metaMaskProvider.isMetaMask){
+        setProvider(metaMaskProvider);
+        updateVwbl(metaMaskProvider);
+        const ethProvider = new ethers.providers.Web3Provider(metaMaskProvider);
+        setEthersProvider(ethProvider);
+        await ethProvider.send('eth_requestAccounts', [])
+        const ethSigner = ethProvider.getSigner();
+        const myAddress = await ethSigner.getAddress();
+        if (myAddress) setUserAddress(myAddress);
+      }else{
+        throw new Error('missing metamask');
+      }
     } catch (err) {
       console.log(err);
     }
   }, [updateVwbl]);
 
   const initVwbl = useCallback((): void => {
+    console.log(process.env.NEXT_PUBLIC_VWBL_NETWORK_URL,process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS, process.env.NEXT_PUBLIC_PROVIDER_URL );
+    
     if (
       !process.env.NEXT_PUBLIC_VWBL_NETWORK_URL ||
       !process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS ||
@@ -116,11 +117,6 @@ const useVWBL = () => {
     setUserSignature(undefined);
   }, []);
 
-  useEffect(() => {
-    const web3Modal = new Web3Modal({ cacheProvider: true });
-    setWeb3Modal(web3Modal);
-  }, []);
-
   const checkNetwork = useCallback(
     async (callback: () => void) => {
       if (!provider) return;
@@ -146,11 +142,9 @@ const useVWBL = () => {
     setErrorMessage,
     userSignature,
     userAddress,
-    disconnect,
     provider,
     ethersProvider,
     connectWallet,
-    web3Modal,
     initVwbl,
     checkNetwork,
   };
