@@ -167,6 +167,7 @@ export const Layout: React.FC = ({ children }) => {
                     />
                   </HStack>
                 )}
+                <Box fontSize='sm'>＊pcの方はmetamask chrome extention、mobileの方はmetamask appをご利用ください。</Box>
               </Stack>
             </VStack>
           </DrawerContent>

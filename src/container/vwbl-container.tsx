@@ -58,16 +58,16 @@ const useVWBL = () => {
   const connectWallet = useCallback(async () => {
     try {
       const metaMaskProvider = await detectEthereumProvider({ mustBeMetaMask: true });
-      if(metaMaskProvider && metaMaskProvider.isMetaMask){
+      if (metaMaskProvider && metaMaskProvider.isMetaMask) {
         setProvider(metaMaskProvider);
         updateVwbl(metaMaskProvider);
         const ethProvider = new ethers.providers.Web3Provider(metaMaskProvider);
         setEthersProvider(ethProvider);
-        await ethProvider.send('eth_requestAccounts', [])
+        await ethProvider.send('eth_requestAccounts', []);
         const ethSigner = ethProvider.getSigner();
         const myAddress = await ethSigner.getAddress();
         if (myAddress) setUserAddress(myAddress);
-      }else{
+      } else {
         throw new Error('missing metamask');
       }
     } catch (err) {
@@ -76,8 +76,12 @@ const useVWBL = () => {
   }, [updateVwbl]);
 
   const initVwbl = useCallback((): void => {
-    console.log(process.env.NEXT_PUBLIC_VWBL_NETWORK_URL,process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS, process.env.NEXT_PUBLIC_PROVIDER_URL );
-    
+    console.log(
+      process.env.NEXT_PUBLIC_VWBL_NETWORK_URL,
+      process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS,
+      process.env.NEXT_PUBLIC_PROVIDER_URL,
+    );
+
     if (
       !process.env.NEXT_PUBLIC_VWBL_NETWORK_URL ||
       !process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS ||
