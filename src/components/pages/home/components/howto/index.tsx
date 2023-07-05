@@ -1,4 +1,4 @@
-import { Box, Container, Text, Tabs, TabList, Tab, TabPanels, TabPanel, Image, Divider } from '@chakra-ui/react';
+import { Box, Container, Text, Tabs, TabList, Tab, TabPanels, TabPanel, Image, Divider, Link } from '@chakra-ui/react';
 import { Button } from '../../../../common/button';
 import { memo, useCallback, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -51,10 +51,26 @@ const HowToCreate: React.FC = memo(() => {
     <Container maxW='container.lg' my={10}>
       <Box>
         <Text fontSize='large' my={4} fontWeight='bold'>
+          STEP0 Prepare Wallet
+        </Text>
+        <Text fontSize='md' my={10} textAlign='left' whiteSpace='pre-line' w={{ base: '100%', md: '60%' }}>
+          NFTを受け取るには、仮想通貨用のウォレットが必要です。
+          <Link color='gray.500' href='https://metamask.io/download/'>
+            こちらのリンク
+          </Link>
+          から、MetaMaskという1000万人以上に使われているウォレットがインストールできます。{'\n\n'}
+          PCの方：Chromeブラウザ {'\n'}
+          Mobileの方：Metamask app内ブラウザ {'\n'}
+          でvwbl demo appを開いてください。
+        </Text>
+      </Box>
+      <Divider my={10} />
+      <Box>
+        <Text fontSize='large' my={4} fontWeight='bold'>
           STEP1 Connect Wallet
         </Text>
         <Text fontSize='md' my={10} textAlign='left' w={{ base: '100%', md: '60%' }}>
-          メニューの「Connect Wallet」クリックし、メタマスクなどの仮想通貨ウォレットを接続する。
+          メニューの「Connect Wallet」クリックし、Metamask Walletを接続する。
         </Text>
         <Image src='/howto_01.gif' alt='howto_01' w={400} border='1px' />
       </Box>
@@ -91,6 +107,22 @@ const HowToTransfer: React.FC = memo(() => {
   const router = useRouter();
   return (
     <Container maxW='container.lg' my={10}>
+      <Box w={'100%'}>
+        <Text fontSize='large' my={4} fontWeight='bold'>
+          STEP0 Prepare Wallet
+        </Text>
+        <Text fontSize='md' my={10} textAlign='left' whiteSpace='pre-line' w={{ base: '100%', md: '60%' }}>
+          NFTを受け取るには、仮想通貨用のウォレットが必要です。
+          <Link color='gray.500' href='https://metamask.io/download/'>
+            こちらのリンク
+          </Link>
+          から、MetaMaskという1000万人以上に使われているウォレットがインストールできます。{'\n\n'}
+          PCの方：Chromeブラウザ {'\n'}
+          Mobileの方：Metamask app内ブラウザ {'\n'}
+          でvwbl demo appを開いてください。
+        </Text>
+      </Box>
+      <Divider my={10} />
       <Box w={'100%'}>
         <Text fontSize='large' my={4} fontWeight='bold'>
           STEP1 Connect Wallet
