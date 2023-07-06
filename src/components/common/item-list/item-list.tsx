@@ -11,11 +11,11 @@ export const ItemList: React.FC<Props> = ({ nfts }) => {
   return (
     <Wrap spacing={4} justify='center' sx={style.wrapper}>
       {nfts.map((nft) => {
-          return (
-            <WrapItem key={nft.id} my={2} style={style.wrapItem}>
-              <NFTItem nft={nft} />
-            </WrapItem>
-          );
+        return (
+          <WrapItem key={nft.id} my={2} style={style.wrapItem}>
+            <NFTItem nft={nft} />
+          </WrapItem>
+        );
       })}
     </Wrap>
   );
