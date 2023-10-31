@@ -34,7 +34,7 @@ export const Account = () => {
         return;
       }
       try {
-        const query = `${process.env.NEXT_PUBLIC_ALCHEMY_NFT_API}/getNFTs?owner=${walletAddress}`;
+        const query = `${process.env.NEXT_PUBLIC_ALCHEMY_NFT_API}/getNFTs?owner=${userAddress}`;
         const result = await axios.get(query);
         const ownedItems = result.data.ownedNfts.filter((v: any) => {
           return typeof v.metadata.encrypted_data !== "undefined"
