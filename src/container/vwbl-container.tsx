@@ -34,7 +34,8 @@ const useVWBL = () => {
       !process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS ||
       !process.env.NEXT_PUBLIC_PROVIDER_URL ||
       !process.env.NEXT_PUBLIC_NFT_STORAGE_KEY ||
-      !process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS
+      !process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS ||
+      !process.env.NEXT_PUBLIC_ALCHEMY_NFT_API
     ) {
       throw new Error('missing setting');
     }
@@ -85,7 +86,8 @@ const useVWBL = () => {
     if (
       !process.env.NEXT_PUBLIC_VWBL_NETWORK_URL ||
       !process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS ||
-      !process.env.NEXT_PUBLIC_PROVIDER_URL
+      !process.env.NEXT_PUBLIC_PROVIDER_URL ||
+      !process.env.NEXT_PUBLIC_ALCHEMY_NFT_API
     ) {
       throw new Error('missing setting');
     }

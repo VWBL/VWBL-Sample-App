@@ -19,7 +19,7 @@ export const AccountComponent: React.FC<Props> = ({ ownedNfts, mintedNfts, walle
   ];
   const [tabIndex, setTabIndex] = useState(0);
 
-  const handleTabsChange = (index: number) => {
+  const handleTabsChange = async (index: number) => {
     setTabIndex(index);
   };
 

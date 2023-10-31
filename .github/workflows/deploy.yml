@@ -71,6 +71,7 @@ jobs:
       - name: Build
         env:
           NEXT_PUBLIC_PROVIDER_URL: ${{ secrets.PROVIDER_URL }}
+          NEXT_PUBLIC_ALCHEMY_NFT_API: ${{ secrets.ALCHEMY_NFT_API }}
           NEXT_PUBLIC_NFT_CONTRACT_ADDRESS: '0x9850c4682475ac6bcB9CdA91F927CCc1574781C7'
           NEXT_PUBLIC_VWBL_NETWORK_URL: https://dev.vwbl.network
           NEXT_PUBLIC_CHAIN_ID: '80001'
@@ -122,6 +123,7 @@ jobs:
       - name: Build
         env:
           NEXT_PUBLIC_PROVIDER_URL: ${{ secrets.PROVIDER_URL }}
+          NEXT_PUBLIC_ALCHEMY_NFT_API: ${{ secrets.ALCHEMY_NFT_API }}
           NEXT_PUBLIC_NFT_CONTRACT_ADDRESS: '0x42Dd5Ef4773aA438A668f02C5E26f0F31a5e994C'
           NEXT_PUBLIC_VWBL_NETWORK_URL: 'https://vwbl.network'
           NEXT_PUBLIC_CHAIN_ID: '137'
