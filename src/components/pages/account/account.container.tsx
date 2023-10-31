@@ -9,6 +9,7 @@ import axios from 'axios';
 
 export const Account = () => {
   const [ownedNfts, setOwnedNfts] = useState<ExtendedMetadeta[]>([]);
+  const [mintedNfts, setMintedNfts] = useState<ExtendedMetadeta[]>([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');
 
@@ -53,6 +54,13 @@ export const Account = () => {
         setIsOpenModal(true);
         console.log(err);
       }
+
+      try {
+        const mintedItems = await vwblViewer.listMintedNFTMetadata(userAddress);
+        setMintedNfts(mintedItems.filter((v) => v).reverse() as ExtendedMetadeta[]);      
+      } catch (err) {
+        console.log(err);
+      }
     };
     setup();
   }, [vwblViewer, provider]);
@@ -60,6 +68,7 @@ export const Account = () => {
   return (
     <AccountComponent
       ownedNfts={ownedNfts}
+      mintedNfts={mintedNfts}
       walletAddress={walletAddress}
       isOpenModal={isOpenModal}
       onCloseModal={() => setIsOpenModal(false)}
