@@ -95,7 +95,7 @@ jobs:
           aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
 
   deploy-production:
-    if: contains(github.ref, 'tags/v')
+    if: contains(github.ref, 'tags/releases/v')
     needs: setup
     runs-on: ubuntu-latest
     environment:
