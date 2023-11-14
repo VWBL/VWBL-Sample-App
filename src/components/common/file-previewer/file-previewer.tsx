@@ -20,7 +20,7 @@ const switchPlayer = (url: string, mimeType?: string) => {
   } else if (mimeType?.includes('video')) {
     return <ReactPlayer url={url} controls={true} width='100%' height='100%' />;
   } else if (mimeType?.includes('pdf')) {
-    return <Image src='/pdf-icon.jpeg' alt='pdf-icon' maxH='100%' maxW='100%' />;
+    return <Image src='/pdf-icon.jpeg' alt='pdf' maxH='100%' maxW='100%' />;
   } else {
     return <Image src={url} alt='selectedFile' maxH='100%' maxW='100%' />;
   }

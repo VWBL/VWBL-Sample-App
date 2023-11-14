@@ -31,7 +31,7 @@ export const HeroComponent: React.FC = memo(() => {
         <Text fontSize='2xl' fontWeight='bold' textAlign='center'>
           Only you can see it.
         </Text>
-        <Image src='/home_01.svg' alt='home_01' minW={{ md: 500 }} mx='auto' />
+        <Image src='/home_01.svg' alt='' minW={{ md: 500 }} mx='auto' />
       </Box>
     </Container>
   );
