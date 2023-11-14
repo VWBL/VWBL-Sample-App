@@ -81,12 +81,14 @@ export const Layout: React.FC = ({ children }) => {
     {
       title: 'Explore',
       to: 'https://vwbl-protocol.org/',
+      target: '_blank',
     },
     {
       title: 'Create',
       to: '/create',
     },
   ];
+  
 
   const FooterLinks: Link[] = [
     {
@@ -114,7 +116,7 @@ export const Layout: React.FC = ({ children }) => {
         <Flex h='76px' alignItems={'center'} justifyContent={'space-between'} mx='auto' maxW={{ md: '80%' }}>
           <Link href='/'>
             <a>
-              <Image src='/header-logo.svg' alt='header-logo' h={7} />
+              <Image src='/header-logo.svg' alt='VWBL Sample App' h={7} />
             </a>
           </Link>
           <HStack />
