@@ -13,7 +13,7 @@ export const WhatVWBLComponent: React.FC = memo(() => {
           VWBL demoは{'"'}VWBL NFT{'"'}をミントできるアプリです！
           <br />
           誰でも無料で使えて、作ったNFTは
-          <Link color='blue.500' href='https://ango-ya.notion.site/VWBL-NFT-OpenSea-fa6e5766bf3f4a809849e682d65fec8c' isExternal>
+          <Link color='blue.600' href='https://ango-ya.notion.site/VWBL-NFT-OpenSea-fa6e5766bf3f4a809849e682d65fec8c' isExternal>
             openseaなどで売ることもできるよ！
             <ExternalLinkIcon mx='2px' />
           </Link>
