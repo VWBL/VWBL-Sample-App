@@ -31,7 +31,7 @@
     "react-pdf": "^5.7.2",
     "react-player": "^2.10.0",
     "unstated-next": "^1.1.0",
-    "vwbl-sdk": "^0.1.6",
+    "vwbl-sdk": "^0.1.11",
     "web3": "^1.8.0"
   },
   "devDependencies": {
