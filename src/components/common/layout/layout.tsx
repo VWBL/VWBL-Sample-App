@@ -71,7 +71,7 @@ const HamburgerMenu = ({ onClick, sx }: { onClick: () => void; sx: CSSObject }) 
   );
 };
 
-export const Layout: React.FC = ({ children }) => {
+export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { connectWallet, userAddress } = VwblContainer.useContainer();
   const router = useRouter();
