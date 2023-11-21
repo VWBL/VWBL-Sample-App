@@ -13,8 +13,12 @@ export class UploadToIPFS {
     let cid;
     try {
       cid = await this.client.storeBlob(encryptedContentData);
-    } catch (err: any) {
-      throw new Error(err);
+    } catch (err) {
+      // 'Error' 型を使用してエラーをキャッチ
+      if (err instanceof Error) {
+        throw new Error(err.message);
+      }
+      throw err; // 予期せぬ型のエラーが発生した場合、元のエラーをスロー
     }
 
     return `https://nftstorage.link/ipfs/${cid}`;
@@ -26,8 +30,12 @@ export class UploadToIPFS {
     let cid;
     try {
       cid = await this.client.storeBlob(thumbnailblob);
-    } catch (err: any) {
-      throw new Error(err);
+    } catch (err) {
+      // 'Error' 型を使用してエラーをキャッチ
+      if (err instanceof Error) {
+        throw new Error(err.message);
+      }
+      throw err; // 予期せぬ型のエラーが発生した場合、元のエラーをスロー
     }
 
     return `https://nftstorage.link/ipfs/${cid}`;
@@ -56,8 +64,12 @@ export class UploadToIPFS {
     let cid;
     try {
       cid = await this.client.storeBlob(metaDataBlob);
-    } catch (err: any) {
-      throw new Error(err);
+    } catch (err) {
+      // 'Error' 型を使用してエラーをキャッチ
+      if (err instanceof Error) {
+        throw new Error(err.message);
+      }
+      throw err; // 予期せぬ型のエラーが発生した場合、元のエラーをスロー
     }
 
     return `https://nftstorage.link/ipfs/${cid}`;

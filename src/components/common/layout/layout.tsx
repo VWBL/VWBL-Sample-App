@@ -19,7 +19,6 @@ import {
 } from '@chakra-ui/react';
 import { MdOutlineAccountBalanceWallet } from 'react-icons/md';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
-import { TbWalletOff } from 'react-icons/tb';
 import { VwblContainer } from '../../../container/vwbl-container';
 import { Button } from '../button';
 import { hamburgerMenu, closeButton } from './layout.style';
@@ -88,7 +87,6 @@ export const Layout: React.FC = ({ children }) => {
       to: '/create',
     },
   ];
-  
 
   const FooterLinks: Link[] = [
     {
@@ -114,10 +112,8 @@ export const Layout: React.FC = ({ children }) => {
     <>
       <Box px={8}>
         <Flex h='76px' alignItems={'center'} justifyContent={'space-between'} mx='auto' maxW={{ md: '80%' }}>
-          <Link href='/'>
-            <a>
-              <Image src='/header-logo.svg' alt='VWBL Sample App' h={7} />
-            </a>
+          <Link href='/' passHref>
+            <Image src='/header-logo.svg' alt='VWBL Sample App' h={7} />
           </Link>
           <HStack />
           <HamburgerMenu onClick={onOpen} sx={hamburgerMenu} />

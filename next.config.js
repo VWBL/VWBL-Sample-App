@@ -1,9 +1,10 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
+const nextConfig = {
   experimental: {
     optimizeFonts: true,
   },
   reactStrictMode: true,
+  output: 'export',
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback.fs = false;
@@ -29,3 +30,4 @@ module.exports = {
   },
   trailingSlash: true,
 };
+module.exports = nextConfig;

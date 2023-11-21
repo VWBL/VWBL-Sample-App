@@ -36,7 +36,7 @@ export const FileViewer: React.FC<Props> = ({ nft }) => {
 
     // unset memory when unmount
     return () => URL.revokeObjectURL(fileUrl);
-  }, []);
+  }, [fileUrl, nft]);
 
   const switchViewer = useCallback(
     (nft: FetchedNFT | ExtractMetadata) => {
