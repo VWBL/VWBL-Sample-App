@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import {
   Box,
   Flex,
@@ -10,6 +10,7 @@ import {
   Stack,
   Container,
   Text,
+  Link,
   Drawer,
   DrawerOverlay,
   DrawerContent,
@@ -18,11 +19,11 @@ import {
   Image,
 } from '@chakra-ui/react';
 import { MdOutlineAccountBalanceWallet } from 'react-icons/md';
-import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { VwblContainer } from '../../../container/vwbl-container';
 import { Button } from '../button';
 import { hamburgerMenu, closeButton } from './layout.style';
 import { useRouter } from 'next/router';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 type Link = {
   title: string;
@@ -30,27 +31,17 @@ type Link = {
   target?: string;
 };
 
-const NavLink = ({ title, to, target }: Link) => (
-  <Link href={to} passHref>
-    <ChakraLink
-      rounded={'md'}
-      _hover={{
-        opacity: 0.7,
-      }}
-      _focus={{
-        boxShadow: 'none',
-      }}
-      target={target}
-      rel='noopener noreferrer'
-    >
-      <HStack>
-        {target === '_blank' && <BsBoxArrowUpRight />}
-        <Text>{title}</Text>
-      </HStack>
-    </ChakraLink>
-  </Link>
-);
+const NavLink = ({ title, to, target }: Link) => {
+  const isExternal = to.startsWith('https://');
 
+  return (
+    <Link as={!isExternal ? NextLink : undefined} href={to} isExternal={isExternal}>
+      <Text>
+        {title} {isExternal && <ExternalLinkIcon mx='2px' />}
+      </Text>
+    </Link>
+  );
+};
 const HamburgerMenu = ({ onClick, sx }: { onClick: () => void; sx: CSSObject }) => {
   return (
     <ChakraButton
@@ -80,7 +71,6 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     {
       title: 'Explore',
       to: 'https://vwbl-protocol.org/',
-      target: '_blank',
     },
     {
       title: 'Create',
@@ -92,7 +82,6 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     {
       title: 'Explore',
       to: 'https://vwbl-protocol.org/',
-      target: '_blank',
     },
     {
       title: 'Create',
@@ -112,7 +101,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     <>
       <Box px={8}>
         <Flex h='76px' alignItems={'center'} justifyContent={'space-between'} mx='auto' maxW={{ md: '80%' }}>
-          <Link href='/' passHref>
+          <Link href='/' as={NextLink}>
             <Image src='/header-logo.svg' alt='VWBL Sample App' h={7} />
           </Link>
           <HStack />
@@ -126,7 +115,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             </HStack>
             {userAddress ? (
               <HStack spacing={6}>
-                <Link href='/account' passHref>
+                <Link href='/account' as={NextLink}>
                   <Button as='a' text='My Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} />
                 </Link>
               </HStack>
@@ -149,7 +138,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 </Stack>
                 {userAddress ? (
                   <VStack spacing={6} alignItems='start'>
-                    <Link href='/account' passHref>
+                    <Link href='/account' as={NextLink}>
                       <Button as='a' text='My Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} isReversed fontSize='2xl' />
                     </Link>
                   </VStack>
