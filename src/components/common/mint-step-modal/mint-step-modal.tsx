@@ -98,8 +98,10 @@ export const MintStepModal: React.FC<Props> = memo(({ isOpen, signature, mintSte
                 </Text>
               </Center>
               <Center>
-                <Link href={`/account/`} replace passHref>
-                  My page
+                <Link href={`/account/`} replace>
+                  <Button color='white' bg='black' w={'90%'}>
+                    My page
+                  </Button>
                 </Link>
               </Center>
             </>

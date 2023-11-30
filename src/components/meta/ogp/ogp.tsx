@@ -1,3 +1,4 @@
+import { FunctionComponent, memo } from 'react';
 
 export const Ogp = () => {
   const title = 'VWBL Demo App';

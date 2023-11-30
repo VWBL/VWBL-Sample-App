@@ -1,5 +1,17 @@
 import { ChangeEvent } from 'react';
-import { FormControl, FormLabel, FormErrorMessage, Container, Input, Checkbox, Heading, Text, Box, Link } from '@chakra-ui/react';
+import Link from 'next/link';
+import {
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  Container,
+  Input,
+  Checkbox,
+  Heading,
+  Text,
+  Box,
+  Link as ChakraLink,
+} from '@chakra-ui/react';
 import { UseFormRegister, UseFormHandleSubmit, FieldErrors } from 'react-hook-form';
 
 import { FormInputs } from './new-nft.container';
@@ -162,8 +174,10 @@ export const NewNFTComponent: React.FC<Props> = ({
 
           <Checkbox mt={8} size='lg' colorScheme='blackAlpha' isChecked={isChecked} onChange={onChangeCheckbox}>
             Agree to the&nbsp;
-            <Link href='https://ango-ya.notion.site/5632a448348b4722b2256e016dcc0cb4' isExternal>
-              terms of serivce
+            <Link href='https://ango-ya.notion.site/5632a448348b4722b2256e016dcc0cb4' passHref>
+              <ChakraLink target='_blank' fontWeight='bold'>
+                terms of serivce
+              </ChakraLink>
             </Link>
           </Checkbox>
 

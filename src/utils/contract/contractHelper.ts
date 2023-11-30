@@ -1,4 +1,6 @@
+import axios from 'axios';
 import VWBLInterface from './VWBL.json';
+import { Metadata } from 'vwbl-sdk';
 import { ethers } from 'ethers';
 
 export const isOwnerOf = async (ethersProvider: ethers.providers.Web3Provider, tokenId: number) => {

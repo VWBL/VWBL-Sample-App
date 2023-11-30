@@ -25,6 +25,7 @@ export const HeroComponent: React.FC = memo(() => {
           </Box>
         </Text>
         <Button text='Try demo' width={{ base: '100%', md: '80%' }} mt={4} onClick={() => router.push('/create')} />
+        <Button text='How to' width={{ base: '100%', md: '80%' }} mt={4} isReversed onClick={() => router.push('/#howto')} />
       </Box>
       <Box mt={{ base: 16, md: 0 }}>
         <Text fontSize='2xl' fontWeight='bold' textAlign='center'>
