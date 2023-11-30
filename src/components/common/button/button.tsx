@@ -1,6 +1,5 @@
 import * as CSS from 'csstype';
 import { Button as ChakraButton, Icon, BorderProps, forwardRef, As, TypographyProps, ButtonProps } from '@chakra-ui/react';
-import { Token } from '@chakra-ui/styled-system/dist/declarations/src/utils';
 import { IconType } from 'react-icons';
 
 type Props = {
@@ -8,7 +7,7 @@ type Props = {
   type?: 'button' | 'submit' | 'reset' | undefined;
   isLoading?: boolean;
   loadingText?: string;
-  width?: Token<CSS.Property.Width | number, 'sizes'>;
+  width?: string | number | { [key: string]: CSS.Property.Width | number };
   height?: string | number;
   fontWeight?: TypographyProps['fontWeight'];
   fontSize?: TypographyProps['fontSize'];

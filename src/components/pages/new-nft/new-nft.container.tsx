@@ -136,13 +136,13 @@ export const NewNFT = () => {
     [vwbl, router],
   );
 
-  const onChangeFile = useCallback((e) => {
+  const onChangeFile = useCallback((e:any) => {
     const file = e.target.files[0];
     setMimeType(file?.type);
     setFile(file);
   }, []);
 
-  const onChangeThumbnail = useCallback((e) => {
+  const onChangeThumbnail = useCallback((e: any) => {
     const thumbnail = e.target.files[0];
     if (!thumbnail?.type.match(VALID_EXTENSIONS.image)) {
       alert('Image mime type is not valid');

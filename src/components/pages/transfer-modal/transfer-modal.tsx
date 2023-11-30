@@ -139,7 +139,7 @@ export const TransferModalComponent: React.FC<Props> = ({
                     <FormErrorMessage>{errors.walletAddress && errors.walletAddress.message}</FormErrorMessage>
                   </FormControl>
                   <Button text='Transfer' type='submit' isLoading={isLoading} loadingText='Transfering Your NFT' width='100%' mt={6} />
-                  <Button text='Cancel' width='100%' onClick={onCloseModal} mt={4} isReversed />
+                  <Button text='Cancel' onClick={onCloseModal} mt={4} isReversed />
                 </form>
               </Stack>
             </Box>
