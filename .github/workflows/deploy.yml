@@ -30,6 +30,9 @@ jobs:
           node-version: ${{ env.node-version }}
           cache: 'yarn'
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: node_modules cache
         uses: actions/cache@v2
         id: cache_node_modules
@@ -57,9 +60,13 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/vwbl-demo-stg-deploy-role
           aws-region: ap-northeast-1
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.node-version }}
+          cache: 'yarn'
+
+      - name: Enable Corepack
+        run: corepack enable
       - name: node_modules cache
         uses: actions/cache@v2
         with:
@@ -109,9 +116,13 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/vwbl-demo-deploy-role
           aws-region: ap-northeast-1
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.node-version }}
+        cache: 'yarn'
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: node_modules cache
         uses: actions/cache@v2
         with:
