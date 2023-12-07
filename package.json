@@ -8,7 +8,8 @@
     "lint": "next lint",
     "format": "npx prettier --write .",
     "prepare": "husky install",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "export": "next export"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.1.1",
@@ -53,5 +54,5 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "eslint --fix --quiet"
   },
-  "packageManager": "yarn@3.0.0"
+  "packageManager": "yarn@4.0.2"
 }
