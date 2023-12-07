@@ -14,7 +14,7 @@ permissions:
 env:
   # バージョン何が使えるのかは以下を参照
   # https://github.com/actions/node-versions/blob/main/versions-manifest.json
-  node-version: '20.x'
+  node-version: '18.x'
 
 jobs:
   setup:
