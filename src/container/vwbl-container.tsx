@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import { useRouter } from 'next/router';
 import { createContainer } from 'unstated-next';
 import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx, VWBLViewer } from 'vwbl-sdk';
 import { ethers } from 'ethers';

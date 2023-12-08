@@ -4,7 +4,6 @@ import {
   Box,
   Flex,
   HStack,
-  Link as ChakraLink,
   VStack,
   useDisclosure,
   Stack,
@@ -31,7 +30,7 @@ type Link = {
   target?: string;
 };
 
-const NavLink = ({ title, to, target }: Link) => {
+const NavLink = ({ title, to }: Link) => {
   const isExternal = to.startsWith('https://');
 
   return (
