@@ -42,7 +42,7 @@ export const FileViewer: React.FC<Props> = ({ nft }) => {
     (nft: FetchedNFT | ExtractMetadata) => {
       if (isExtractMetadata(nft)) {
         if (nft.mimeType.match(VALID_EXTENSIONS.image)) {
-          return <Image src={fileUrl} alt='original data' rounded='md' width='50%' height='50%' objectFit='contain' />;
+          return <Image src={fileUrl} alt='original data' rounded='md' objectFit='contain' p={10}/>;
         } else if (nft.mimeType.match(VALID_EXTENSIONS.video)) {
           return <ReactPlayer url={fileUrl} controls={true} width='100%' height='90%' />;
         } else if (nft.mimeType.match(VALID_EXTENSIONS.audio)) {

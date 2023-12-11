@@ -16,7 +16,17 @@ export const PdfViewer: React.FC<Props> = ({ fileUrl }) => {
   const { numPages, pageNumber, onDocumentLoadSuccess, onClickNextPage, onClickPreviousPage, targetRef, width } = usePdfViewer();
 
   return (
-    <Box w='100%' ref={targetRef} maxH='70vh'>
+    <Box w='100%' ref={targetRef}>
+      <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error}>
+        <Page
+          pageNumber={pageNumber}
+          renderAnnotationLayer={false}
+          renderTextLayer={false}
+          canvasBackground='gray'
+          scale={0.9}
+          width={width / 1.3}
+        />
+      </Document>
       <HStack justifyContent='center' p={6}>
         <IconButton
           aria-label='PreviousPage'
@@ -24,7 +34,7 @@ export const PdfViewer: React.FC<Props> = ({ fileUrl }) => {
           isDisabled={pageNumber === 1 ? true : false}
           onClick={onClickPreviousPage}
         />
-        <Text color='white' px={10}>
+        <Text color='white' px={3}>
           Page {pageNumber} of {numPages}
         </Text>
         <IconButton
@@ -34,9 +44,6 @@ export const PdfViewer: React.FC<Props> = ({ fileUrl }) => {
           onClick={onClickNextPage}
         />
       </HStack>
-      <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error}>
-        <Page pageNumber={pageNumber} renderAnnotationLayer={false} renderTextLayer={false} canvasBackground='gray' width={width / 3} />
-      </Document>
     </Box>
   );
 };
