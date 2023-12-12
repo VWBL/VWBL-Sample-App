@@ -23,8 +23,8 @@ export const PdfViewer: React.FC<Props> = ({ fileUrl }) => {
           renderAnnotationLayer={false}
           renderTextLayer={false}
           canvasBackground='gray'
-          scale={0.9}
-          width={width / 1.3}
+         
+          width={width / 1}
         />
       </Document>
       <HStack justifyContent='center' p={6}>
