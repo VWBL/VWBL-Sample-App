@@ -18,14 +18,7 @@ export const PdfViewer: React.FC<Props> = ({ fileUrl }) => {
   return (
     <Box w='100%' ref={targetRef}>
       <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error}>
-        <Page
-          pageNumber={pageNumber}
-          renderAnnotationLayer={false}
-          renderTextLayer={false}
-          canvasBackground='gray'
-         
-          width={width / 1}
-        />
+        <Page pageNumber={pageNumber} renderAnnotationLayer={false} renderTextLayer={false} canvasBackground='gray' width={width / 1} />
       </Document>
       <HStack justifyContent='center' p={6}>
         <IconButton

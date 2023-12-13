@@ -12,8 +12,7 @@ const useVWBL = () => {
   const [userAddress, setUserAddress] = useState<string>();
   const [errorMessage, setErrorMessage] = useState<string>();
   const [provider, setProvider] = useState<any>();
-  const [ethersProvider, setEthersProvider] = useState<ethers.providers.Web3Provider>();
-
+  const [ethersProvider, setEthersProvider] = useState<ethers.BrowserProvider>();
 
   const refreshState = useCallback(() => {
     setUserAddress('');
@@ -57,14 +56,15 @@ const useVWBL = () => {
 
   const connectWallet = useCallback(async () => {
     try {
-      const metaMaskProvider = await detectEthereumProvider({ mustBeMetaMask: true });
+      const metaMaskProvider = (window as any).ethereum;
+
       if (metaMaskProvider && metaMaskProvider.isMetaMask) {
         setProvider(metaMaskProvider);
         updateVwbl(metaMaskProvider);
-        const ethProvider = new ethers.providers.Web3Provider(metaMaskProvider);
+        const ethProvider = new ethers.BrowserProvider(metaMaskProvider);
         setEthersProvider(ethProvider);
-        await ethProvider.send('eth_requestAccounts', []);
-        const ethSigner = ethProvider.getSigner();
+        await metaMaskProvider.request({ method: 'eth_requestAccounts' });
+        const ethSigner = await ethProvider.getSigner();
         const myAddress = await ethSigner.getAddress();
         if (myAddress) setUserAddress(myAddress);
       } else {
@@ -126,11 +126,11 @@ const useVWBL = () => {
     async (callback: () => void) => {
       if (!provider) return;
 
-      const ethProvider = new ethers.providers.Web3Provider(provider);
-      const ethSigner = ethProvider.getSigner();
-      const connectedChainId = await ethSigner?.getChainId();
+      const ethProvider = new ethers.BrowserProvider(provider);
+      const network = await ethProvider.getNetwork();
+      const connectedChainId = network.chainId;
       const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!);
-      if (connectedChainId !== properChainId) {
+      if (Number(connectedChainId) !== properChainId) {
         callback();
       }
     },
