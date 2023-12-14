@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { createContainer } from 'unstated-next';
 import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx, VWBLViewer } from 'vwbl-sdk';
 import { ethers } from 'ethers';
-import Web3 from 'web3';
+import { Web3 } from 'web3';
 import detectEthereumProvider from '@metamask/detect-provider';
 
 const useVWBL = () => {
@@ -110,7 +110,7 @@ const useVWBL = () => {
     const provider = new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_PROVIDER_URL);
     const web3 = new Web3(provider);
     const vwblViewerInstance = new VWBLViewer({
-      provider: web3,
+      provider: web3 as any,
       dataCollectorAddress: process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS,
     });
     setVwblViewer(vwblViewerInstance);
