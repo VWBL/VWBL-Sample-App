@@ -3,7 +3,6 @@ import { createContainer } from 'unstated-next';
 import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx, VWBLViewer } from 'vwbl-sdk';
 import { ethers } from 'ethers';
 import { Web3 } from 'web3';
-import detectEthereumProvider from '@metamask/detect-provider';
 
 const useVWBL = () => {
   const [vwbl, setVwbl] = useState<VWBLMetaTx>();

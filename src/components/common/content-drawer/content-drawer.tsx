@@ -1,4 +1,4 @@
-import { Drawer, DrawerHeader, DrawerBody, DrawerOverlay, DrawerContent, DrawerCloseButton, Box, Flex } from '@chakra-ui/react';
+import { Drawer, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, Box } from '@chakra-ui/react';
 import { ExtractMetadata } from 'vwbl-sdk';
 import { FetchedNFT } from '../../types';
 import { FileViewer } from '../file-viewer';

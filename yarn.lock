@@ -3262,13 +3262,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metamask/detect-provider@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@metamask/detect-provider@npm:2.0.0"
-  checksum: 4a79113e90493eedbe509b868762da8275d5af420f4b696be3208794dd6f8ed11d74f477147db89e453cfc2737270e35b45d1b2eb0bf3751c2f7077e915b5645
-  languageName: node
-  linkType: hard
-
 "@metamask/json-rpc-engine@npm:^7.1.1":
   version: 7.3.0
   resolution: "@metamask/json-rpc-engine@npm:7.3.0"
@@ -12759,7 +12752,6 @@ __metadata:
     "@chakra-ui/react": "npm:^2.8.2"
     "@emotion/react": "npm:^11.11.1"
     "@emotion/styled": "npm:^11.11.0"
-    "@metamask/detect-provider": "npm:^2.0.0"
     "@metamask/providers": "npm:^14.0.2"
     "@types/crypto-js": "npm:^4.1.1"
     "@types/node": "npm:17.0.17"
