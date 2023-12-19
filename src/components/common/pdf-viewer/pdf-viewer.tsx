@@ -1,5 +1,5 @@
 import { Document, Page, pdfjs } from 'react-pdf';
-import { Box, Text, HStack } from '@chakra-ui/react';
+import { Box, Text, HStack, IconButton } from '@chakra-ui/react';
 import { ChevronRightIcon, ChevronLeftIcon } from '@chakra-ui/icons';
 
 import { usePdfViewer } from '../../../hooks/pdf-viewer';
@@ -18,14 +18,24 @@ export const PdfViewer: React.FC<Props> = ({ fileUrl }) => {
   return (
     <Box w='100%' ref={targetRef}>
       <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error}>
-        <Page pageNumber={pageNumber} renderAnnotationLayer={false} renderTextLayer={false} width={width} />
+        <Page pageNumber={pageNumber} renderAnnotationLayer={false} renderTextLayer={false} canvasBackground='gray' width={width / 1} />
       </Document>
       <HStack justifyContent='center' p={6}>
-        <ChevronLeftIcon w={30} h={30} color={pageNumber === 1 ? 'gray' : 'white'} onClick={onClickPreviousPage} />
-        <Text color='white' px={10}>
+        <IconButton
+          aria-label='PreviousPage'
+          icon={<ChevronLeftIcon />}
+          isDisabled={pageNumber === 1 ? true : false}
+          onClick={onClickPreviousPage}
+        />
+        <Text color='white' px={3}>
           Page {pageNumber} of {numPages}
         </Text>
-        <ChevronRightIcon w={30} h={30} color={pageNumber === numPages ? 'gray' : 'white'} onClick={onClickNextPage} />
+        <IconButton
+          aria-label='NextPage'
+          icon={<ChevronRightIcon />}
+          isDisabled={pageNumber === numPages ? true : false}
+          onClick={onClickNextPage}
+        />
       </HStack>
     </Box>
   );

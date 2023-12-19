@@ -1,10 +1,8 @@
 import { useState, useCallback } from 'react';
-import { useRouter } from 'next/router';
 import { createContainer } from 'unstated-next';
 import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx, VWBLViewer } from 'vwbl-sdk';
 import { ethers } from 'ethers';
-import Web3 from 'web3';
-import detectEthereumProvider from '@metamask/detect-provider';
+import { Web3 } from 'web3';
 
 const useVWBL = () => {
   const [vwbl, setVwbl] = useState<VWBLMetaTx>();
@@ -13,8 +11,7 @@ const useVWBL = () => {
   const [userAddress, setUserAddress] = useState<string>();
   const [errorMessage, setErrorMessage] = useState<string>();
   const [provider, setProvider] = useState<any>();
-  const [ethersProvider, setEthersProvider] = useState<ethers.providers.Web3Provider>();
-
+  const [ethersProvider, setEthersProvider] = useState<ethers.BrowserProvider>();
 
   const refreshState = useCallback(() => {
     setUserAddress('');
@@ -58,14 +55,15 @@ const useVWBL = () => {
 
   const connectWallet = useCallback(async () => {
     try {
-      const metaMaskProvider = await detectEthereumProvider({ mustBeMetaMask: true });
+      const metaMaskProvider = (window as any).ethereum;
+
       if (metaMaskProvider && metaMaskProvider.isMetaMask) {
         setProvider(metaMaskProvider);
         updateVwbl(metaMaskProvider);
-        const ethProvider = new ethers.providers.Web3Provider(metaMaskProvider);
+        const ethProvider = new ethers.BrowserProvider(metaMaskProvider);
         setEthersProvider(ethProvider);
-        await ethProvider.send('eth_requestAccounts', []);
-        const ethSigner = ethProvider.getSigner();
+        await metaMaskProvider.request({ method: 'eth_requestAccounts' });
+        const ethSigner = await ethProvider.getSigner();
         const myAddress = await ethSigner.getAddress();
         if (myAddress) setUserAddress(myAddress);
       } else {
@@ -111,7 +109,7 @@ const useVWBL = () => {
     const provider = new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_PROVIDER_URL);
     const web3 = new Web3(provider);
     const vwblViewerInstance = new VWBLViewer({
-      provider: web3,
+      provider: web3 as any,
       dataCollectorAddress: process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS,
     });
     setVwblViewer(vwblViewerInstance);
@@ -127,11 +125,11 @@ const useVWBL = () => {
     async (callback: () => void) => {
       if (!provider) return;
 
-      const ethProvider = new ethers.providers.Web3Provider(provider);
-      const ethSigner = ethProvider.getSigner();
-      const connectedChainId = await ethSigner?.getChainId();
+      const ethProvider = new ethers.BrowserProvider(provider);
+      const network = await ethProvider.getNetwork();
+      const connectedChainId = network.chainId;
       const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!);
-      if (connectedChainId !== properChainId) {
+      if (Number(connectedChainId) !== properChainId) {
         callback();
       }
     },

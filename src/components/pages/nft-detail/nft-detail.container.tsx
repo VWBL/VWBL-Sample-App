@@ -63,11 +63,13 @@ export const NftDetail = () => {
           encryptLogic: 'base64',
           owner: '',
         };
-        const ethersProvider = new ethers.providers.Web3Provider(provider);
+        const ethersProvider = new ethers.BrowserProvider(provider);
+        const signer = await ethersProvider.getSigner();
+        const signerAddress = await signer.getAddress();
         if (!provider || !(await isOwnerOf(ethersProvider, id))) {
           setLoadedNft(nftWithoutMetadata);
         } else {
-          setLoadedNft({ ...nftWithoutMetadata, owner: await ethersProvider.getSigner().getAddress() });
+          setLoadedNft({ ...nftWithoutMetadata, owner: signerAddress });
         }
       } else {
         setIsOpenNotificationModal(true);
