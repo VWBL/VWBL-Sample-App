@@ -113,3 +113,7 @@
     flex-direction: column;
   }
 }
+
+.react-pdf__Document {
+  align-self: center;
+}
