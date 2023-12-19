@@ -59,7 +59,6 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
         setIsLoading(true);
         if (getAsString(contractAddress).toLowerCase() === process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS!.toLowerCase()) {
           await vwbl.safeTransfer(walletAddress, parseInt(getAsString(tokenId)), process.env.NEXT_PUBLIC_TRANSFER_API_ID!);
-          await vwbl.safeTransfer(walletAddress, parseInt(getAsString(tokenId)), process.env.NEXT_PUBLIC_TRANSFER_API_ID!);
         } else {
           const ethProvider = new ethers.BrowserProvider(provider);
           const signer = await ethProvider.getSigner();
