@@ -54,28 +54,31 @@ const HowToCreate: React.FC = memo(() => {
         <Text fontSize='large' my={4} fontWeight='bold'>
           STEP0 Prepare Wallet
         </Text>
-        <Text fontSize='md' my={10} textAlign='left' whiteSpace='pre-line' w={{ base: '100%', md: '60%' }}>
+        <Text fontSize='md' my={5} textAlign='left' whiteSpace='pre-line' w={{ base: '100%', md: '60%' }}>
           NFTを受け取るには、仮想通貨用のウォレットが必要です。
-          <Link color='gray.500' href='https://metamask.io/download/'>
-            こちらのリンク
+          <br />
+          VWBL Demoでは
+          <Link color='blue.600' href='https://metamask.io/download/' isExternal>
+            MetaMask（メタマスク）
+            <ExternalLinkIcon mx='2px' />
           </Link>
-          から、MetaMaskという1000万人以上に使われているウォレットがインストールできます。{'\n\n'}
+          をご利用ください。{'\n\n'}
           PCの方：Chromeブラウザ {'\n'}
           Mobileの方：Metamask app内ブラウザ {'\n'}
-          でvwbl demo appを開いてください。
+          でVWBL Demoを開いてください。
         </Text>
       </Box>
-      <Divider my={10} />
+      <Divider mt={20} mb={10} />
       <Box>
         <Text fontSize='large' my={4} fontWeight='bold'>
           STEP1 Connect Wallet
         </Text>
-        <Text fontSize='md' my={10} textAlign='left' w={{ base: '100%', md: '60%' }}>
+        <Text fontSize='md' my={5} textAlign='left' w={{ base: '100%', md: '60%' }}>
           メニューの「Connect Wallet」クリックし、Metamask Walletを接続する。
         </Text>
         <Image src='/howto_01.gif' alt='' w={400} border='1px' />
       </Box>
-      <Divider my={10} />
+      <Divider mt={20} mb={10} />
       <Box>
         <Text fontSize='large' my={4} fontWeight='bold'>
           STEP2 Create Item for Free
@@ -86,12 +89,12 @@ const HowToCreate: React.FC = memo(() => {
         </Text>
         <Image src='/howto_02.gif' alt='' w={400} border='1px' />
       </Box>
-      <Divider my={10} />
+      <Divider mt={20} mb={10} />
       <Box>
         <Text fontSize='large' my={4} fontWeight='bold'>
           STEP3 Check your wallet
         </Text>
-        <Text fontSize='md' my={10} textAlign='left' w={{ base: '100%', md: '60%' }}>
+        <Text fontSize='md' my={5} textAlign='left' w={{ base: '100%', md: '60%' }}>
           「My Wallet」をクリックし、保有しているVWBL NFTを表示する。VWBL NFTを選択した後、「View
           Data」をクリックしNFT保有者だけみることができる画像を閲覧する。
         </Text>
@@ -118,47 +121,50 @@ const HowToTransfer: React.FC = memo(() => {
   const router = useRouter();
   return (
     <Container maxW='container.lg' my={10}>
-      <Box w={'100%'}>
+      <Box>
         <Text fontSize='large' my={4} fontWeight='bold'>
           STEP0 Prepare Wallet
         </Text>
-        <Text fontSize='md' my={10} textAlign='left' whiteSpace='pre-line' w={{ base: '100%', md: '60%' }}>
+        <Text fontSize='md' my={5} textAlign='left' whiteSpace='pre-line' w={{ base: '100%', md: '60%' }}>
           NFTを受け取るには、仮想通貨用のウォレットが必要です。
-          <Link color='gray.500' href='https://metamask.io/download/'>
-            こちらのリンク
+          <br />
+          VWBL Demoでは
+          <Link color='blue.600' href='https://metamask.io/download/' isExternal>
+            MetaMask（メタマスク）
+            <ExternalLinkIcon mx='2px' />
           </Link>
-          から、MetaMaskという1000万人以上に使われているウォレットがインストールできます。{'\n\n'}
+          をご利用ください。{'\n\n'}
           PCの方：Chromeブラウザ {'\n'}
           Mobileの方：Metamask app内ブラウザ {'\n'}
-          でvwbl demo appを開いてください。
+          でVWBL Demoを開いてください。
         </Text>
       </Box>
-      <Divider my={10} />
+      <Divider mt={20} mb={10} />
       <Box w={'100%'}>
         <Text fontSize='large' my={4} fontWeight='bold'>
           STEP1 Connect Wallet
         </Text>
-        <Text fontSize='md' my={10} w={{ base: '100%', md: '60%' }} textAlign='left'>
+        <Text fontSize='md' my={5} w={{ base: '100%', md: '60%' }} textAlign='left'>
           メニューの「Connect Wallet」クリックし、メタマスクなどの仮想通貨ウォレットを接続する。
         </Text>
         <Image src='/howto_01.gif' alt='' w={400} border='1px' />
       </Box>
-      <Divider my={10} />
+      <Divider mt={20} mb={10} />
       <Box w={'100%'}>
         <Text fontSize='large' my={4} fontWeight='bold'>
           STEP2 Check your wallet
         </Text>
-        <Text fontSize='md' my={10} textAlign='left' w={{ base: '100%', md: '60%' }}>
+        <Text fontSize='md' my={5} textAlign='left' w={{ base: '100%', md: '60%' }}>
           「My Wallet」をクリックし、保有しているVWBL NFTを表示する。
         </Text>
         <Image src='/howto_03.gif' alt='' w={400} border='1px' />
       </Box>
-      <Divider my={10} />
+      <Divider mt={20} mb={10} />
       <Box w={'100%'}>
         <Text fontSize='large' my={4} fontWeight='bold'>
           STEP3 Transfer
         </Text>
-        <Text fontSize='md' my={10} textAlign='left' w={{ base: '100%', md: '60%' }}>
+        <Text fontSize='md' my={5} textAlign='left' w={{ base: '100%', md: '60%' }}>
           詳細ページに遷移した後、「Transfer」をクリックする。送信先のウォレットアドレスを入力し、送信する。
         </Text>
         <Image src='/howto_04.gif' alt='' w={400} border='1px' />

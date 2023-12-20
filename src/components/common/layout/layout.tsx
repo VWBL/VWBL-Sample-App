@@ -35,9 +35,7 @@ const NavLink = ({ title, to }: Link) => {
 
   return (
     <Link as={!isExternal ? NextLink : undefined} href={to} isExternal={isExternal}>
-      <Text>
-        {title} {isExternal && <ExternalLinkIcon mx='2px' />}
-      </Text>
+      {title} {isExternal && <ExternalLinkIcon mx='2px' />}
     </Link>
   );
 };
@@ -99,7 +97,13 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   return (
     <>
       <Box px={8}>
-        <Flex h='76px' alignItems={'center'} justifyContent={'space-between'} mx='auto' maxW={{ md: '80%' }}>
+        <Flex
+          as='header'
+          h={{ base: '70px', md: '80px' }}
+          alignItems={'center'}
+          justifyContent={'space-between'}
+          px={{ base: '0px', md: '5vw' }}
+        >
           <Link href='/' as={NextLink}>
             <Image src='/header-logo.svg' alt='VWBL Sample App' h={7} />
           </Link>
@@ -138,7 +142,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 {userAddress ? (
                   <VStack spacing={6} alignItems='start'>
                     <Link href='/account' as={NextLink}>
-                      <Button as='a' text='My Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} isReversed fontSize='2xl' />
+                      <Button as='a' text='My Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} height='40px' isReversed />
                     </Link>
                   </VStack>
                 ) : (
@@ -149,7 +153,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                       icon={MdOutlineAccountBalanceWallet}
                       onClick={connectWallet}
                       isReversed
-                      fontSize='2xl'
+                      height='40px'
                     />
                   </HStack>
                 )}
@@ -162,15 +166,19 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
       {/* hidden element to adjust hight */}
       <Box minH='calc(100vh - 160px)'>{children}</Box>
-
-      <Container as='footer' h={{ base: '320px', md: '100px' }} role='contentinfo' px={{ base: '10vw' }} maxW='100%' borderTop='2px'>
+      <Container as='footer' h={{ base: '320px', md: '100px' }} role='contentinfo' maxW='100%' borderTop='2px' px='5vw'>
         <Stack
           justifyContent={{ base: 'center', md: 'space-between' }}
           direction={{ base: 'column', md: 'row' }}
           alignItems={{ base: 'start', md: 'center' }}
           h='100%'
         >
-          <Stack spacing={6} direction={{ base: 'column', md: 'row' }} fontWeight='bold' fontSize={{ base: '3xl', md: 'sm' }}>
+          <Stack
+            spacing={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
+            fontWeight='bold'
+            fontSize={{ base: '2xl', md: 'md' }}
+          >
             {FooterLinks.map((link, i) => (
               <NavLink key={i} title={link.title} to={link.to} />
             ))}

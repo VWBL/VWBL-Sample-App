@@ -14,14 +14,7 @@ export const ContentDrawer: React.FC<Props> = ({ isOpen, onClose, nft }) => {
     <Drawer isOpen={isOpen} size='full' onClose={onClose} placement='top'>
       <DrawerOverlay />
       <DrawerContent>
-        <DrawerHeader
-          borderBottomWidth='1px'
-          px={8}
-          display='flex'
-          alignItems='center'
-          justifyContent='space-between'
-          w='100%'
-        >
+        <DrawerHeader borderBottomWidth='1px' px={8} display='flex' alignItems='center' justifyContent='space-between' w='100%'>
           View Data
           <DrawerCloseButton position='static' justifyContent='space-between' px={2} />
         </DrawerHeader>
