@@ -12,19 +12,6 @@ const useVWBL = () => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [provider, setProvider] = useState<any>();
   const [ethersProvider, setEthersProvider] = useState<ethers.BrowserProvider>();
-
-  const refreshState = useCallback(() => {
-    setUserAddress('');
-  }, []);
-  // TODO: walletconnect v2対応後にdisconnect関数を復活させる
-  // const disconnect = useCallback(async () => {
-  //   await provider.disconnect();
-  //   refreshState();
-  //   clearVwbl();
-  //   setProvider(undefined);
-  //   router.push('/');
-  // }, [refreshState, router]);
-
   const updateVwbl = useCallback((provider: any): void => {
     if (
       !process.env.NEXT_PUBLIC_VWBL_NETWORK_URL ||

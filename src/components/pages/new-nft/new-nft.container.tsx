@@ -136,7 +136,7 @@ export const NewNFT = () => {
     [vwbl, router],
   );
 
-  const onChangeFile = useCallback((e:any) => {
+  const onChangeFile = useCallback((e: any) => {
     const file = e.target.files[0];
     setMimeType(file?.type);
     setFile(file);

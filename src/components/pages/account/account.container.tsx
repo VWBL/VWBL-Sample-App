@@ -25,7 +25,7 @@ export const Account = () => {
         return;
       }
       const ethersProvider = new ethers.BrowserProvider(provider);
-      const userAddress = await (await (ethersProvider.getSigner())).getAddress();
+      const userAddress = await (await ethersProvider.getSigner()).getAddress();
       setWalletAddress(userAddress);
 
       if (!vwblViewer) {
@@ -35,19 +35,22 @@ export const Account = () => {
       try {
         const query = `${process.env.NEXT_PUBLIC_ALCHEMY_NFT_API}/getNFTs?owner=${userAddress}`;
         const result = await axios.get(query);
-        const ownedItems = result.data.ownedNfts.filter((v: any) => {
-          return typeof v.metadata.encrypted_data !== "undefined"
-        }).map((v: any) => {
-          return {
-            id: Number(v.id.tokenId),
-            name: v.metadata.name,
-            description: v.metadata.description,
-            image: v.metadata.image,
-            mimeType: v.metadata.mime_type,
-            encryptLogic: v.metadata.encrypt_logic,
-            address: v.contract.address,
-          } as ExtendedMetadeta
-        }).reverse();
+        const ownedItems = result.data.ownedNfts
+          .filter((v: any) => {
+            return typeof v.metadata.encrypted_data !== 'undefined';
+          })
+          .map((v: any) => {
+            return {
+              id: Number(v.id.tokenId),
+              name: v.metadata.name,
+              description: v.metadata.description,
+              image: v.metadata.image,
+              mimeType: v.metadata.mime_type,
+              encryptLogic: v.metadata.encrypt_logic,
+              address: v.contract.address,
+            } as ExtendedMetadeta;
+          })
+          .reverse();
         setOwnedNfts(ownedItems);
       } catch (err) {
         setIsOpenModal(true);
@@ -56,7 +59,7 @@ export const Account = () => {
 
       try {
         const mintedItems = await vwblViewer.listMintedNFTMetadata(userAddress);
-        setMintedNfts(mintedItems.filter((v) => v).reverse() as ExtendedMetadeta[]);      
+        setMintedNfts(mintedItems.filter((v) => v).reverse() as ExtendedMetadeta[]);
       } catch (err) {
         console.log(err);
       }

@@ -11,8 +11,8 @@ type Props = {
 
 export const ReceiveNFTComponent: React.FC<Props> = ({ onSubmit, isLoading }) => {
   return (
-    <Box w={'100%'} maxW={480} mb='20'>
-      <Heading as='h2' mb={12}>
+    <Box w='100%' maxW={480} mb='20'>
+      <Heading as='h2' mb={12} w='100%'>
         受け取ってみましょう
       </Heading>
 

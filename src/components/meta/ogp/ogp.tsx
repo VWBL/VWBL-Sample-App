@@ -1,4 +1,3 @@
-
 export const Ogp = () => {
   const title = 'VWBL Demo App';
   const description = 'VWBLのコアコンセプト(持っている人だけがコンテンツを視聴できる)が体験できるデモサイトです';

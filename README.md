@@ -24,8 +24,8 @@ Plese set the environmental variables 　 looking at the descriptions below
 | NEXT_PUBLIC_BICONOMY_API_KEY | true | API key created on [Biconomy](https://www.biconomy.io) |
 | NEXT_PUBLIC_MINT_API_ID | true | API ID of NFT mint method which is created on [Biconomy Dashboard](https://dashboard-gasless.biconomy.io/) |
 | NEXT_PUBLIC_TRANSFER_API_ID | true | API ID of NFT transfer method whiich is created on [Biconomy Dashboard](https://dashboard-gasless.biconomy.io/) |
-| NEXT_PUBLIC_FORWARDER_ADDRESS | true | The address of [EIP2771(Trusted Forwarder)](https://docs-gasless.biconomy.io/misc/contract-addresses) Smart Contract | 
-| NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS |true | The address of [Data Collector](https://docs.vwbl-protocol.org/endpoint.html) Contract which support to fetch metadata from multiple contracts |  
+| NEXT_PUBLIC_FORWARDER_ADDRESS | true | The address of [EIP2771(Trusted Forwarder)](https://docs-gasless.biconomy.io/misc/contract-addresses) Smart Contract |
+| NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS |true | The address of [Data Collector](https://docs.vwbl-protocol.org/endpoint.html) Contract which support to fetch metadata from multiple contracts |
 
 ## Start Locally
 
