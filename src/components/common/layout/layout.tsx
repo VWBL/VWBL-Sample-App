@@ -1,15 +1,15 @@
 import { useEffect } from 'react';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import {
   Box,
   Flex,
   HStack,
-  Link as ChakraLink,
   VStack,
   useDisclosure,
   Stack,
   Container,
   Text,
+  Link,
   Drawer,
   DrawerOverlay,
   DrawerContent,
@@ -18,12 +18,11 @@ import {
   Image,
 } from '@chakra-ui/react';
 import { MdOutlineAccountBalanceWallet } from 'react-icons/md';
-import { BsBoxArrowUpRight } from 'react-icons/bs';
-import { TbWalletOff } from 'react-icons/tb';
 import { VwblContainer } from '../../../container/vwbl-container';
 import { Button } from '../button';
 import { hamburgerMenu, closeButton } from './layout.style';
 import { useRouter } from 'next/router';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 type Link = {
   title: string;
@@ -31,27 +30,15 @@ type Link = {
   target?: string;
 };
 
-const NavLink = ({ title, to, target }: Link) => (
-  <Link href={to} passHref>
-    <ChakraLink
-      rounded={'md'}
-      _hover={{
-        opacity: 0.7,
-      }}
-      _focus={{
-        boxShadow: 'none',
-      }}
-      target={target}
-      rel='noopener noreferrer'
-    >
-      <HStack>
-        {target === '_blank' && <BsBoxArrowUpRight />}
-        <Text>{title}</Text>
-      </HStack>
-    </ChakraLink>
-  </Link>
-);
+const NavLink = ({ title, to }: Link) => {
+  const isExternal = to.startsWith('https://');
 
+  return (
+    <Link as={!isExternal ? NextLink : undefined} href={to} isExternal={isExternal}>
+      {title} {isExternal && <ExternalLinkIcon mx='2px' />}
+    </Link>
+  );
+};
 const HamburgerMenu = ({ onClick, sx }: { onClick: () => void; sx: CSSObject }) => {
   return (
     <ChakraButton
@@ -72,7 +59,7 @@ const HamburgerMenu = ({ onClick, sx }: { onClick: () => void; sx: CSSObject }) 
   );
 };
 
-export const Layout: React.FC = ({ children }) => {
+export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { connectWallet, userAddress } = VwblContainer.useContainer();
   const router = useRouter();
@@ -81,20 +68,17 @@ export const Layout: React.FC = ({ children }) => {
     {
       title: 'Explore',
       to: 'https://vwbl-protocol.org/',
-      target: '_blank',
     },
     {
       title: 'Create',
       to: '/create',
     },
   ];
-  
 
   const FooterLinks: Link[] = [
     {
       title: 'Explore',
       to: 'https://vwbl-protocol.org/',
-      target: '_blank',
     },
     {
       title: 'Create',
@@ -113,11 +97,15 @@ export const Layout: React.FC = ({ children }) => {
   return (
     <>
       <Box px={8}>
-        <Flex h='76px' alignItems={'center'} justifyContent={'space-between'} mx='auto' maxW={{ md: '80%' }}>
-          <Link href='/'>
-            <a>
-              <Image src='/header-logo.svg' alt='VWBL Sample App' h={7} />
-            </a>
+        <Flex
+          as='header'
+          h={{ base: '70px', md: '80px' }}
+          alignItems={'center'}
+          justifyContent={'space-between'}
+          px={{ base: '0px', md: '5vw' }}
+        >
+          <Link href='/' as={NextLink}>
+            <Image src='/header-logo.svg' alt='VWBL Sample App' h={7} />
           </Link>
           <HStack />
           <HamburgerMenu onClick={onOpen} sx={hamburgerMenu} />
@@ -130,7 +118,7 @@ export const Layout: React.FC = ({ children }) => {
             </HStack>
             {userAddress ? (
               <HStack spacing={6}>
-                <Link href='/account' passHref>
+                <Link href='/account' as={NextLink}>
                   <Button as='a' text='My Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} />
                 </Link>
               </HStack>
@@ -153,8 +141,8 @@ export const Layout: React.FC = ({ children }) => {
                 </Stack>
                 {userAddress ? (
                   <VStack spacing={6} alignItems='start'>
-                    <Link href='/account' passHref>
-                      <Button as='a' text='My Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} isReversed fontSize='2xl' />
+                    <Link href='/account' as={NextLink}>
+                      <Button as='a' text='My Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} height='40px' isReversed />
                     </Link>
                   </VStack>
                 ) : (
@@ -165,7 +153,7 @@ export const Layout: React.FC = ({ children }) => {
                       icon={MdOutlineAccountBalanceWallet}
                       onClick={connectWallet}
                       isReversed
-                      fontSize='2xl'
+                      height='40px'
                     />
                   </HStack>
                 )}
@@ -178,15 +166,19 @@ export const Layout: React.FC = ({ children }) => {
 
       {/* hidden element to adjust hight */}
       <Box minH='calc(100vh - 160px)'>{children}</Box>
-
-      <Container as='footer' h={{ base: '320px', md: '100px' }} role='contentinfo' px={{ base: '10vw' }} maxW='100%' borderTop='2px'>
+      <Container as='footer' h={{ base: '320px', md: '100px' }} role='contentinfo' maxW='100%' borderTop='2px' px='5vw'>
         <Stack
           justifyContent={{ base: 'center', md: 'space-between' }}
           direction={{ base: 'column', md: 'row' }}
           alignItems={{ base: 'start', md: 'center' }}
           h='100%'
         >
-          <Stack spacing={6} direction={{ base: 'column', md: 'row' }} fontWeight='bold' fontSize={{ base: '3xl', md: 'sm' }}>
+          <Stack
+            spacing={{ base: 4, md: 6 }}
+            direction={{ base: 'column', md: 'row' }}
+            fontWeight='bold'
+            fontSize={{ base: '2xl', md: 'md' }}
+          >
             {FooterLinks.map((link, i) => (
               <NavLink key={i} title={link.title} to={link.to} />
             ))}

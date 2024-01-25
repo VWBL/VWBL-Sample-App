@@ -14,7 +14,7 @@ permissions:
 env:
   # バージョン何が使えるのかは以下を参照
   # https://github.com/actions/node-versions/blob/main/versions-manifest.json
-  node-version: '16.x'
+  node-version: '18.x'
 
 jobs:
   setup:
@@ -23,12 +23,15 @@ jobs:
       #
       # Setup for build
       #
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         id: setup-node
         with:
           node-version: ${{ env.node-version }}
           cache: 'yarn'
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: node_modules cache
         uses: actions/cache@v2
@@ -57,9 +60,13 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/vwbl-demo-stg-deploy-role
           aws-region: ap-northeast-1
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.node-version }}
+          cache: 'yarn'
+
+      - name: Enable Corepack
+        run: corepack enable
       - name: node_modules cache
         uses: actions/cache@v2
         with:
@@ -109,9 +116,13 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/vwbl-demo-deploy-role
           aws-region: ap-northeast-1
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.node-version }}
+          cache: 'yarn'
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: node_modules cache
         uses: actions/cache@v2
         with:

@@ -36,15 +36,15 @@ export const FileViewer: React.FC<Props> = ({ nft }) => {
 
     // unset memory when unmount
     return () => URL.revokeObjectURL(fileUrl);
-  }, []);
+  }, [fileUrl, nft]);
 
   const switchViewer = useCallback(
     (nft: FetchedNFT | ExtractMetadata) => {
       if (isExtractMetadata(nft)) {
         if (nft.mimeType.match(VALID_EXTENSIONS.image)) {
-          return <Image src={fileUrl} alt='original data' rounded='md' width='100%' height='100%' objectFit='contain' />;
+          return <Image src={fileUrl} alt='original data' rounded='md' objectFit='contain' p={10} width='60%' />;
         } else if (nft.mimeType.match(VALID_EXTENSIONS.video)) {
-          return <ReactPlayer url={fileUrl} controls={true} width='100%' height='100%' />;
+          return <ReactPlayer url={fileUrl} controls={true} width='100%' height='90%' />;
         } else if (nft.mimeType.match(VALID_EXTENSIONS.audio)) {
           return <ReactPlayer url={fileUrl} controls={true} height='54px' />;
         } else if (nft.mimeType.includes('pdf')) {
@@ -60,7 +60,7 @@ export const FileViewer: React.FC<Props> = ({ nft }) => {
   );
 
   return (
-    <Box mx='auto' maxH='100%' maxW='100%' display='flex' justifyContent='center' alignItems='center'>
+    <Box mx='auto' maxH='100vh' maxW='100%' display='flex' justifyContent='center' alignItems='center'>
       {switchViewer(nft)}
     </Box>
   );

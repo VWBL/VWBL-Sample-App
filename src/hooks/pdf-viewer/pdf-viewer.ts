@@ -1,12 +1,15 @@
 import { useState, useCallback, useRef } from 'react';
-
 import { useGetElementProperty } from '../get-element-property';
+
+interface PDFLoadSuccess {
+  numPages: number;
+}
 
 export const usePdfViewer = () => {
   const [numPages, setNumPages] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
 
-  const onDocumentLoadSuccess = useCallback(({ numPages }) => {
+  const onDocumentLoadSuccess = useCallback(({ numPages }: PDFLoadSuccess) => {
     setNumPages(numPages);
   }, []);
 

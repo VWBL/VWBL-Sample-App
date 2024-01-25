@@ -10,11 +10,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
       <VwblContainer.Provider>
-        <Layout>
-          <ToastContainer.Provider>
+        <ToastContainer.Provider>
+          <Layout>
             <Component {...pageProps} />
-          </ToastContainer.Provider>
-        </Layout>
+          </Layout>
+        </ToastContainer.Provider>
       </VwblContainer.Provider>
     </ChakraProvider>
   );

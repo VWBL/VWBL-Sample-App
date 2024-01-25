@@ -1,56 +1,56 @@
 {
-  "name": "vwbl-sample-app",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build && next export",
-    "start": "next start",
-    "lint": "next lint",
-    "format": "npx prettier --write .",
-    "prepare": "husky install",
-    "type-check": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@chakra-ui/icons": "^1.1.7",
-    "@chakra-ui/react": "^1.8.3",
-    "@emotion/react": "^11.7.1",
-    "@emotion/styled": "^11.6.0",
-    "@metamask/detect-provider": "^2.0.0",
-    "@types/crypto-js": "^4.1.1",
-    "@types/react-pdf": "^5.7.2",
-    "@types/uuid": "^9.0.0",
-    "axios": "^0.26.0",
-    "dotenv": "^16.0.0",
-    "ethers": "^5.7.2",
-    "framer-motion": "^6.2.6",
-    "next": "^12.0.10",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-hook-form": "^7.27.1",
-    "react-icons": "^4.4.0",
-    "react-pdf": "^5.7.2",
-    "react-player": "^2.10.0",
-    "unstated-next": "^1.1.0",
-    "vwbl-sdk": "^0.1.6",
-    "web3": "^1.8.0"
-  },
-  "devDependencies": {
-    "@types/node": "17.0.17",
-    "@types/react": "17.0.39",
-    "@typescript-eslint/eslint-plugin": "^5.30.0",
-    "@typescript-eslint/parser": "^5.30.0",
-    "eslint": "7.32.0",
-    "eslint-config-next": "12.0.10",
-    "husky": "^8.0.1",
-    "lint-staged": "^13.0.2",
-    "prettier": "^2.5.1",
-    "typescript": "4.5.5"
-  },
-  "resolutions": {
-    "@types/react": "^17.0.2"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "eslint --fix --quiet"
-  },
-  "packageManager": "yarn@3.0.0"
+	"name": "vwbl-sample-app",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint",
+		"format": "npx prettier --write .",
+		"prepare": "husky install",
+		"type-check": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@chakra-ui/icons": "^2.1.1",
+		"@chakra-ui/react": "^2.8.2",
+		"@emotion/react": "^11.11.1",
+		"@emotion/styled": "^11.11.0",
+		"@metamask/providers": "^14.0.2",
+		"@types/crypto-js": "^4.1.1",
+		"@types/react-pdf": "^7.0.0",
+		"@types/uuid": "^9.0.7",
+		"axios": "^1.6.2",
+		"dotenv": "^16.3.1",
+		"ethers": "^6.9.0",
+		"framer-motion": "^10.16.16",
+		"next": "^14.0.3",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"react-hook-form": "^7.27.1",
+		"react-icons": "^4.4.0",
+		"react-pdf": "^7.5.1",
+		"react-player": "^2.10.0",
+		"unstated-next": "^1.1.0",
+		"vwbl-sdk": "^0.1.11",
+		"web3": "^4.0.0"
+	},
+	"devDependencies": {
+		"@types/node": "^20.10.5",
+		"@types/react": "^18.2.45",
+		"@typescript-eslint/eslint-plugin": "^6.15.0",
+		"@typescript-eslint/parser": "^6.15.0",
+		"eslint": "^8.56.0",
+		"eslint-config-next": "^14.0.4",
+		"husky": "^8.0.3",
+		"lint-staged": "^15.2.0",
+		"prettier": "^3.1.1",
+		"typescript": "^5.3.3"
+	},
+	"resolutions": {
+		"@types/react": "^17.0.2"
+	},
+	"lint-staged": {
+		"*.{js,jsx,ts,tsx}": "eslint --fix --quiet"
+	},
+	"packageManager": "yarn@4.0.2"
 }
