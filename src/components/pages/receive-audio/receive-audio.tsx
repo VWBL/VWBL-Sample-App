@@ -1,4 +1,5 @@
 import { Heading, Box, Container, Text, Link } from '@chakra-ui/react';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { sampleAudioNFT } from './receive-audio.container';
 
 import { Button } from '../../common/button';
@@ -51,21 +52,27 @@ export const ReceiveAudioNFTComponent: React.FC<Props> = ({ onSubmit, isLoading 
         </form>
 
         <Text mt={6} textAlign='center'>
-          「Music NFT を無料で受け取る」をクリックすると、
+          NFTを受け取るには、仮想通貨用のウォレットが必要です。
           <br />
-          NFT受取サイトへ移動します。
+          VWBL Demoでは
+          <Link color='blue.600' href='https://metamask.io/download/' isExternal>
+            MetaMask（メタマスク）
+            <ExternalLinkIcon mx='2px' />
+          </Link>
+          をご利用ください。
           <br />
-          受取にはMetaMask（メタマスク）のインストールが必要です。
           <br />
-          ※ これも本当のことです。
+          PCの方：Chromeブラウザ
+          <br />
+          Mobileの方：Metamask app内ブラウザ
+          <br />
+          でVWBL Demoを開いてください。
           <br />
           <br />
-          <Link
-            color='blue.600'
-            href='https://support.metamask.io/hc/ja/articles/360015489531-MetaMask%E3%82%92%E5%A7%8B%E3%82%81%E3%82%8B'
-            isExternal
-          >
-            MetaMaskとは？
+          <br />
+          <Link color='blue.600' href='https://layer2-angoya.studio.site/' isExternal>
+            特設サイトへ戻る
+            <ExternalLinkIcon mx='2px' />
           </Link>
         </Text>
       </Box>
