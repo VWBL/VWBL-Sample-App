@@ -22,8 +22,6 @@ export const ReceiveAudioNFT = () => {
   const { vwbl, checkNetwork, provider } = VwblContainer.useContainer();
   const { openToast } = ToastContainer.useContainer();
 
-  // const isReceived = typeof window !== 'undefined' ? !!localStorage.getItem('is_received') : false;
-
   const onSubmit = useCallback(async () => {
     setIsLoading(true);
     if (!provider) {
