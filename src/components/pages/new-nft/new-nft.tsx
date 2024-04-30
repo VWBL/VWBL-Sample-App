@@ -9,7 +9,7 @@ import { Button } from '../../common/button';
 import { MAX_FILE_SIZE } from '../../../utils';
 import { StepStatus } from 'vwbl-sdk';
 import { ReceiveNFT } from '../../common/receive-nft';
-
+import FileUpload from './FileUpload';
 type Props = {
   onSubmit: (data: FormInputs) => Promise<void>;
   onChangeFile: (e: ChangeEvent<{ value: unknown }>) => void;
@@ -67,10 +67,12 @@ export const NewNFTComponent: React.FC<Props> = ({
   toggleModal,
   isReceived,
 }) => {
+  const accessToken = process.env.NEXT_PUBLIC_NFT_STORAGE_KEY;
   return (
     <Container maxW='container.md' my={12} centerContent>
       {isReceived || <ReceiveNFT />}
-
+      <FileUpload accessToken={accessToken} />
+      {/* <input onChange={(e) => uploadFile(e.target.files)} type='file' /> */}
       <Box w={'100%'} maxW={480}>
         <Heading as='h2' mb={12}>
           Create New Item
