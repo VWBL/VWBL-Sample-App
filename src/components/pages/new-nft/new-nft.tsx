@@ -72,7 +72,6 @@ export const NewNFTComponent: React.FC<Props> = ({
     <Container maxW='container.md' my={12} centerContent>
       {isReceived || <ReceiveNFT />}
       <FileUpload accessToken={accessToken} />
-      {/* <input onChange={(e) => uploadFile(e.target.files)} type='file' /> */}
       <Box w={'100%'} maxW={480}>
         <Heading as='h2' mb={12}>
           Create New Item
