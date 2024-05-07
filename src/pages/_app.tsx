@@ -5,7 +5,7 @@ import { Layout } from '../components/common/layout';
 import { ChakraProvider } from '@chakra-ui/react';
 import { theme } from '../../theme';
 import { VwblContainer, ToastContainer } from '../container';
-
+import '../shared/i18n';
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>

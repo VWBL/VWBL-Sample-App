@@ -1,6 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { Ogp } from '../components/meta';
-
+import '../shared/i18n';
 export default class MyDocument extends Document {
   render() {
     return (

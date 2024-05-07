@@ -23,6 +23,7 @@ import { Button } from '../button';
 import { hamburgerMenu, closeButton } from './layout.style';
 import { useRouter } from 'next/router';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
+import { useTranslation } from 'react-i18next';
 
 type Link = {
   title: string;
@@ -63,25 +64,26 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { connectWallet, userAddress } = VwblContainer.useContainer();
   const router = useRouter();
+  const { t } = useTranslation();
 
   const HeaderLinks: Link[] = [
     {
-      title: 'Explore',
+      title: t('header.nav.0'),
       to: 'https://vwbl-protocol.org/',
     },
     {
-      title: 'Create',
+      title: t('header.nav.1'),
       to: '/create',
     },
   ];
 
   const FooterLinks: Link[] = [
     {
-      title: 'Explore',
+      title: t('footer.nav.0'),
       to: 'https://vwbl-protocol.org/',
     },
     {
-      title: 'Create',
+      title: t('footer.nav.1'),
       to: '/create',
     },
   ];
@@ -119,11 +121,11 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             {userAddress ? (
               <HStack spacing={6}>
                 <Link href='/account' as={NextLink}>
-                  <Button as='a' text='My Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} />
+                  <Button as='a' text={t('header.myWalletButton')} borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} />
                 </Link>
               </HStack>
             ) : (
-              <Button text='Connect Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} onClick={connectWallet} />
+              <Button text={t('header.connectButton')} borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} onClick={connectWallet} />
             )}
           </Flex>
         </Flex>
@@ -142,13 +144,20 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 {userAddress ? (
                   <VStack spacing={6} alignItems='start'>
                     <Link href='/account' as={NextLink}>
-                      <Button as='a' text='My Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} height='40px' isReversed />
+                      <Button
+                        as='a'
+                        text={t('moobileMenu.myWalletButton')}
+                        borderRadius={'3xl'}
+                        icon={MdOutlineAccountBalanceWallet}
+                        height='40px'
+                        isReversed
+                      />
                     </Link>
                   </VStack>
                 ) : (
                   <HStack>
                     <Button
-                      text='Connect Wallet'
+                      text={t('moobileMenu.connectButton')}
                       borderRadius={'3xl'}
                       icon={MdOutlineAccountBalanceWallet}
                       onClick={connectWallet}
@@ -157,7 +166,9 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                     />
                   </HStack>
                 )}
-                <Box fontSize='sm'>＊pcの方はmetamask chrome extention、mobileの方はmetamask appをご利用ください。</Box>
+                <Box fontSize='sm'>
+                  {t('moobileMenu.notice')}
+                </Box>
               </Stack>
             </VStack>
           </DrawerContent>
@@ -186,7 +197,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           </Stack>
           <Box py={6}>
             <Text fontSize='sm' color='#AEAEB2'>
-              &copy; {new Date().getFullYear()} Ango-ya, LLC. All rights reserved.
+              &copy; {new Date().getFullYear()} {t('footer.copyLight')}
             </Text>
           </Box>
         </Stack>

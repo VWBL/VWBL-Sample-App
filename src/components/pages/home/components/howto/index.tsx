@@ -3,10 +3,12 @@ import { Button } from '../../../../common/button';
 import { memo, useCallback, useState } from 'react';
 import { useRouter } from 'next/router';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
+import { useTranslation } from 'react-i18next';
 
 export const HowToComponent: React.FC = memo(() => {
   const tabOptions = [{ name: 'Create' }, { name: 'Transfer' }];
   const [tabIndex, setTabIndex] = useState(0);
+  const { t } = useTranslation();
 
   const handleTabsChange = useCallback((index: number) => {
     setTabIndex(index);
@@ -15,10 +17,10 @@ export const HowToComponent: React.FC = memo(() => {
   return (
     <Box mx='auto' my={16}>
       <Text fontSize={{ base: '3xl', md: '4xl' }} id='howto' fontWeight='bold' textAlign='center'>
-        How to
+        {t('howTo.title')}
       </Text>
       <Text fontSize='md' mt={4} mb={10} px={{ base: 4, md: 0 }} fontWeight='bold' display={'flex'} justifyContent={'center'}>
-        {'"'}VWBL NFT{'"'}の発行・送信方法はこちら！早速試してみよう！
+        {t('howTo.description')}
       </Text>
 
       <Tabs size='md' index={tabIndex} onChange={handleTabsChange} colorScheme='black' variant='line' align='center'>
@@ -48,32 +50,37 @@ HowToComponent.displayName = 'HowToComponent';
 
 const HowToCreate: React.FC = memo(() => {
   const router = useRouter();
+  const { t } = useTranslation();
+
   return (
     <Container maxW='container.lg' my={10}>
       <Box>
         <Text fontSize='large' my={4} fontWeight='bold'>
-          STEP0 Prepare Wallet
+          {t('howTo.create.steps.0.title')}
         </Text>
         <Text fontSize='md' my={5} textAlign='left' whiteSpace='pre-line' w={{ base: '100%', md: '60%' }}>
-          NFTを受け取るには、仮想通貨用のウォレットが必要です。
+          {t('howTo.create.steps.0.description.0')}
           <br />
-          VWBL Demoでは
+          {t('howTo.create.steps.0.description.1')}
           <Link color='blue.600' href='https://metamask.io/download/' isExternal>
-            MetaMask（メタマスク）
+            {t('howTo.create.steps.0.linkText')}
             <ExternalLinkIcon mx='2px' />
           </Link>
-          をご利用ください。{'\n\n'}
-          PCの方：Chromeブラウザ {'\n'}
-          Mobileの方：Metamask app内ブラウザ {'\n'}
-          でVWBL Demoを開いてください。
+        </Text>
+        <Text fontSize='md' textAlign='left' whiteSpace='pre-line' w={{ base: '100%', md: '60%' }}>
+          {t('howTo.create.steps.0.description.2')}
+        </Text>
+        <Text fontSize='md' textAlign='left' whiteSpace='pre-line' w={{ base: '100%', md: '60%' }}>
+          {t('howTo.create.steps.0.description.3')}
         </Text>
       </Box>
       <Divider mt={20} mb={10} />
       <Box>
         <Text fontSize='large' my={4} fontWeight='bold'>
-          STEP1 Connect Wallet
+          {t('howTo.create.steps.1.title')}
         </Text>
         <Text fontSize='md' my={5} textAlign='left' w={{ base: '100%', md: '60%' }}>
+          {t('howTo.create.steps.0.description.0')}
           メニューの「Connect Wallet」クリックし、Metamask Walletを接続する。
         </Text>
         <Image src='/howto_01.gif' alt='' w={400} border='1px' />
@@ -81,34 +88,34 @@ const HowToCreate: React.FC = memo(() => {
       <Divider mt={20} mb={10} />
       <Box>
         <Text fontSize='large' my={4} fontWeight='bold'>
-          STEP2 Create Item for Free
+          {t('howTo.create.steps.2.title')}
         </Text>
         <Text fontSize='md' my={10} textAlign='left' w={{ base: '100%', md: '60%' }}>
-          メニューの「Create」をクリックしVWBL NFT作成ページを開き、デジタルコンテンツの情報を入力する。 <br />
-          全て入力したらページ下部「Create Item」ボタンでVWBL NFTを発行する。 アイテムの作成には数分かかる場合があります。
+          {t('howTo.create.steps.2.description.0')}
+          {t('howTo.create.steps.2.description.1')}
         </Text>
         <Image src='/howto_02.gif' alt='' w={400} border='1px' />
       </Box>
       <Divider mt={20} mb={10} />
       <Box>
         <Text fontSize='large' my={4} fontWeight='bold'>
-          STEP3 Check your wallet
+          {t('howTo.create.steps.3.title')}
         </Text>
         <Text fontSize='md' my={5} textAlign='left' w={{ base: '100%', md: '60%' }}>
-          「My Wallet」をクリックし、保有しているVWBL NFTを表示する。VWBL NFTを選択した後、「View
-          Data」をクリックしNFT保有者だけみることができる画像を閲覧する。
+          {t('howTo.create.steps.3.description.0')}
+          {t('howTo.create.steps.3.description.1')}
         </Text>
         <Image src='/howto_03.gif' alt='' w={400} border='1px' />
       </Box>
       <Box display='flex' alignItems='center' flexDir='column' gap={8}>
-        <Button text='Try demo' width={{ base: '100%', md: '60%' }} mt={10} onClick={() => router.push('/create')} />
+        <Button text={t('howTo.tryDemoButton')} width={{ base: '100%', md: '60%' }} mt={10} onClick={() => router.push('/create')} />
         <Link
           color='blue.600'
           href='https://ango-ya.notion.site/VWBL-NFT-OpenSea-fa6e5766bf3f4a809849e682d65fec8c'
           isExternal
           w={{ base: '100%', md: '60%' }}
         >
-          VWBL NFTをOpenSeaで販売するには？
+          text={t('howTo.extraLinks')}
           <ExternalLinkIcon mx='2px' />
         </Link>
       </Box>
@@ -119,57 +126,66 @@ HowToCreate.displayName = 'HowToCreate';
 
 const HowToTransfer: React.FC = memo(() => {
   const router = useRouter();
+  const { t } = useTranslation();
+
   return (
     <Container maxW='container.lg' my={10}>
       <Box>
         <Text fontSize='large' my={4} fontWeight='bold'>
-          STEP0 Prepare Wallet
+          {t('howTo.transfer.steps.0.title')}
         </Text>
         <Text fontSize='md' my={5} textAlign='left' whiteSpace='pre-line' w={{ base: '100%', md: '60%' }}>
-          NFTを受け取るには、仮想通貨用のウォレットが必要です。
+          {t('howTo.transfer.steps.0.description.0')}
           <br />
-          VWBL Demoでは
+          {t('howTo.transfer.steps.0.description.1')}
           <Link color='blue.600' href='https://metamask.io/download/' isExternal>
-            MetaMask（メタマスク）
+            {t('howTo.create.steps.0.linkText')}
             <ExternalLinkIcon mx='2px' />
           </Link>
-          をご利用ください。{'\n\n'}
-          PCの方：Chromeブラウザ {'\n'}
-          Mobileの方：Metamask app内ブラウザ {'\n'}
-          でVWBL Demoを開いてください。
+          <Text fontSize='md' textAlign='left' whiteSpace='pre-line' w={{ base: '100%', md: '60%' }}>
+            {t('howTo.create.steps.0.description.2')}
+          </Text>
+          <Text fontSize='md' textAlign='left' whiteSpace='pre-line' w={{ base: '100%', md: '60%' }}>
+            {t('howTo.create.steps.0.description.3')}
+          </Text>
         </Text>
       </Box>
       <Divider mt={20} mb={10} />
       <Box w={'100%'}>
         <Text fontSize='large' my={4} fontWeight='bold'>
-          STEP1 Connect Wallet
+          {t('howTo.transfer.steps.1.title')}
         </Text>
         <Text fontSize='md' my={5} w={{ base: '100%', md: '60%' }} textAlign='left'>
-          メニューの「Connect Wallet」クリックし、メタマスクなどの仮想通貨ウォレットを接続する。
+          {t('howTo.transfer.steps.1.description')}
         </Text>
         <Image src='/howto_01.gif' alt='' w={400} border='1px' />
       </Box>
       <Divider mt={20} mb={10} />
       <Box w={'100%'}>
         <Text fontSize='large' my={4} fontWeight='bold'>
-          STEP2 Check your wallet
+          {t('howTo.transfer.steps.2.title')}
         </Text>
         <Text fontSize='md' my={5} textAlign='left' w={{ base: '100%', md: '60%' }}>
-          「My Wallet」をクリックし、保有しているVWBL NFTを表示する。
+          {t('howTo.transfer.steps.2.description')}
         </Text>
         <Image src='/howto_03.gif' alt='' w={400} border='1px' />
       </Box>
       <Divider mt={20} mb={10} />
       <Box w={'100%'}>
         <Text fontSize='large' my={4} fontWeight='bold'>
-          STEP3 Transfer
+          {t('howTo.transfer.steps.3.title')}
         </Text>
         <Text fontSize='md' my={5} textAlign='left' w={{ base: '100%', md: '60%' }}>
-          詳細ページに遷移した後、「Transfer」をクリックする。送信先のウォレットアドレスを入力し、送信する。
+          {t('howTo.transfer.steps.3.description')}
         </Text>
         <Image src='/howto_04.gif' alt='' w={400} border='1px' />
       </Box>
-      <Button text='My Wallet' width={{ base: '100%', md: '60%' }} mt={10} onClick={() => router.push('/account')} />
+      <Button
+        text={t('howTo.transfer.buttonText')}
+        width={{ base: '100%', md: '60%' }}
+        mt={10}
+        onClick={() => router.push('/account')}
+      />
     </Container>
   );
 });

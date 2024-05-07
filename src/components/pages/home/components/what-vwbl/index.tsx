@@ -1,20 +1,23 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { Box, Text, Container, Image, Link } from '@chakra-ui/react';
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const WhatVWBLComponent: React.FC = memo(() => {
+  const { t } = useTranslation();
+
   return (
     <Container maxW='container.lg' my={16}>
       <Box mx='auto'>
         <Text fontSize={{ base: '3xl', md: '4xl' }} fontWeight='bold' textAlign='center'>
-          What&apos;s VWBL demo
+          {t('whatVWBL.title')}
         </Text>
         <Text fontSize='md' mt={4} mb={10} fontWeight='bold' display='center' justifyContent='center'>
-          VWBL demoは{'"'}VWBL NFT{'"'}をミントできるアプリです！
+          {t('whatVWBL.description.0')}
           <br />
-          誰でも無料で使えて、作ったNFTは
+          {t('whatVWBL.description.1')}
           <Link color='blue.600' href='https://ango-ya.notion.site/VWBL-NFT-OpenSea-fa6e5766bf3f4a809849e682d65fec8c' isExternal>
-            openseaなどで売ることもできるよ！
+            {t('whatVWBL.linkText')}
             <ExternalLinkIcon mx='2px' />
           </Link>
         </Text>
