@@ -24,6 +24,7 @@ import { hamburgerMenu, closeButton } from './layout.style';
 import { useRouter } from 'next/router';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../language-switcher/language-switcher';
 
 type Link = {
   title: string;
@@ -109,6 +110,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           <Link href='/' as={NextLink}>
             <Image src='/header-logo.svg' alt='VWBL Sample App' h={7} />
           </Link>
+          <LanguageSwitcher />
           <HStack />
           <HamburgerMenu onClick={onOpen} sx={hamburgerMenu} />
 
@@ -166,9 +168,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                     />
                   </HStack>
                 )}
-                <Box fontSize='sm'>
-                  {t('moobileMenu.notice')}
-                </Box>
+                <Box fontSize='sm'>{t('moobileMenu.notice')}</Box>
               </Stack>
             </VStack>
           </DrawerContent>

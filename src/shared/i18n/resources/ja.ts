@@ -6,7 +6,7 @@ export const ja = {
       image: 'https://demo-app.vwbl-protocol.org/ogp.png',
     },
     header: {
-      nav: ['VWBL サイト', 'NFTを作成', 'まずは試してみて！'],
+      nav: ['VWBL について', 'NFTを作成'],
       connectButton: 'ウォレットを接続',
       myWalletButton: 'ウォレット',
     },
@@ -20,7 +20,7 @@ export const ja = {
       copyLight: 'Ango-ya, LLC. All rights reserved.',
     },
     hero: {
-      title: 'Just try the VWBL NFT.',
+      title: ['Just try', 'the VWBL NFT'],
       description: ['持っている人だけがコンテンツを視聴することができる', 'NFTデジタルメディアプロトコル 「VWBL」', 'まずは試してみて！'],
       button: 'Try demo',
       secondaryText: 'Only you can see it.',
@@ -29,9 +29,9 @@ export const ja = {
       title: "What's VWBL demo",
       description: [
         'VWBL demoは "VWBL NFT" をミントできるアプリです！',
-        '誰でも無料で使えて、作ったNFTは openseaなどで売ることもできるよ！',
+        '誰でも無料で使えて、作ったNFTは OpenSeaなどで売ることもできるよ！',
       ],
-      linkText: 'openseaなどで売ることもできるよ！',
+      linkText: 'OpenSeaでの販売方法',
     },
     howTo: {
       title: 'How to',

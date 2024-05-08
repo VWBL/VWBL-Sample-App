@@ -2,7 +2,8 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
-import { ja } from './resources';
+import { ja, en } from './resources';
+
 
 i18n
   .use(initReactI18next)
@@ -10,10 +11,16 @@ i18n
   .init({
     resources: {
       ja,
+      en,
     },
+    fallbackLng: 'ja',
     lng: 'ja',
     interpolation: {
       escapeValue: false,
+    },
+    detection: {
+      order: ['querystring', 'cookie', 'localStorage', 'navigator', 'htmlTag'],
+      caches: ['cookie'],
     },
   });
 
