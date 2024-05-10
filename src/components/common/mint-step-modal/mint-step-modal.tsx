@@ -3,6 +3,7 @@ import { CheckIcon } from '@chakra-ui/icons';
 import { StepStatus } from 'vwbl-sdk';
 import Link from 'next/link';
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export type Props = {
   isOpen: boolean;
@@ -20,11 +21,13 @@ export type MintStepProps = {
 };
 
 export const MintStepModal: React.FC<Props> = memo(({ isOpen, signature, mintStep, onClose, handleCancelClick, handleMintStart }) => {
+  const { t } = useTranslation();
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent p={5} mx={'a'}>
-        <ModalHeader fontSize={'2xl'}>Follow the steps</ModalHeader>
+        <ModalHeader fontSize={'2xl'}>{t('mintStepModal.header')}</ModalHeader>
 
         <Box my={3}>
           <Flex alignItems={'center'} mb={6} px={6}>
@@ -37,9 +40,9 @@ export const MintStepModal: React.FC<Props> = memo(({ isOpen, signature, mintSte
             </Box>
             <Box>
               <Text fontSize='xl' as='b'>
-                Sign
+                {t('mintStepModal.steps.0.title')}
               </Text>
-              <Text>Sign a message to start using VWBL</Text>
+              <Text>{t('mintStepModal.steps.0.description')}</Text>
             </Box>
           </Flex>
 
@@ -53,9 +56,9 @@ export const MintStepModal: React.FC<Props> = memo(({ isOpen, signature, mintSte
             </Box>
             <Box>
               <Text fontSize='xl' as='b'>
-                Upload
+                {t('mintStepModal.steps.1.title')}
               </Text>
-              <Text>Uploading of all media assets and metadata to IPFS</Text>
+              <Text>{t('mintStepModal.steps.1.description')}</Text>
             </Box>
           </Flex>
 
@@ -69,9 +72,9 @@ export const MintStepModal: React.FC<Props> = memo(({ isOpen, signature, mintSte
             </Box>
             <Box>
               <Text fontSize='xl' as='b'>
-                Mint
+                {t('mintStepModal.steps.2.title')}
               </Text>
-              <Text>Send transaction to create your NFT</Text>
+              <Text>{t('mintStepModal.steps.2.description')}</Text>
             </Box>
           </Flex>
 
@@ -85,21 +88,21 @@ export const MintStepModal: React.FC<Props> = memo(({ isOpen, signature, mintSte
             </Box>
             <Box>
               <Text fontSize='xl' as='b'>
-                Set key
+                {t('mintStepModal.steps.3.title')}
               </Text>
-              <Text>Save decryption key to VWBL Network</Text>
+              <Text>{t('mintStepModal.steps.3.description')}</Text>
             </Box>
           </Flex>
           {mintStep.includes(StepStatus.SET_KEY) ? (
             <>
               <Center mt={10} mb={6}>
                 <Text fontSize={'xl'} as='b'>
-                  You have minted your VWBL NFT! 🎉
+                  {t('mintStepModal.finalMessage')}
                 </Text>
               </Center>
               <Center>
                 <Link href={`/account/`} replace passHref>
-                  My page
+                  {t('mintStepModal.links.myPage')}
                 </Link>
               </Center>
             </>
@@ -107,15 +110,16 @@ export const MintStepModal: React.FC<Props> = memo(({ isOpen, signature, mintSte
             <>
               <Center my={4}>
                 <Button type='submit' color='white' bg='black' w={'90%'} disabled={mintStep.length > 0} onClick={handleMintStart}>
-                  {mintStep.length < 1 && 'Start'}
-                  {mintStep.length > 1 && 'In Progress...'}
-                  {mintStep.includes(StepStatus.SET_KEY) && 'Minted'}
+                  {mintStep.length < 1 && t('mintStepModal.buttons.start')}
+                  {mintStep.length > 1 && t('mintStepModal.buttons.inProgress')}
+                  {mintStep.includes(StepStatus.SET_KEY) && t('mintStepModal.buttons.minted')}
                 </Button>
               </Center>
 
               <Center>
                 <Button color='black' bg='white' variant='outline' onClick={handleCancelClick} w={'90%'}>
                   Cancel
+                  {t('mintStepModal.buttons.Cancel')}
                 </Button>
               </Center>
             </>

@@ -1,34 +1,23 @@
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Text } from '@chakra-ui/react';
-
-type Notification = {
-  title: string;
-  msg: string;
-};
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from '@chakra-ui/react';
 
 type Props = {
-  notification: Notification;
+  title: string;
+  message: string;
   isOpen: boolean;
   onClose: () => void;
   systemMsg?: string;
   onOkButton?: JSX.Element;
   onCancelButton?: JSX.Element;
 };
-export const NotificationModal: React.FC<Props> = ({ notification, isOpen, onClose, onOkButton, onCancelButton }) => {
-  const texts = notification.msg.split('\n');
-
+export const NotificationModal: React.FC<Props> = ({ title, message, isOpen, onClose, onOkButton, onCancelButton }) => {
   return (
     <>
       <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent p={4}>
-          <ModalHeader>{notification.title}</ModalHeader>
+          <ModalHeader>{title}</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            {texts.map((t, i) => {
-              return t ? <Text key={i}>{t}</Text> : <br />;
-            })}
-          </ModalBody>
-
+          <ModalBody>{message}</ModalBody>
           <ModalFooter>
             {onOkButton}
             {onCancelButton}

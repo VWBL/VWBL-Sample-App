@@ -5,6 +5,7 @@ import { ReceiveNFTComponent } from './receive-nft';
 import { VwblContainer, ToastContainer } from '../../../container';
 import { switchChain } from '../../../utils';
 import { ExtendedMetadeta } from 'vwbl-sdk';
+import { useTranslation } from 'react-i18next';
 
 export const sampleNFT: ExtendedMetadeta = {
   id: 1,
@@ -21,14 +22,15 @@ export const ReceiveNFT = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { vwbl, checkNetwork, provider } = VwblContainer.useContainer();
   const { openToast } = ToastContainer.useContainer();
+  const { t } = useTranslation();
 
   const onSubmit = useCallback(async () => {
     setIsLoading(true);
     if (!provider) {
       openToast({
-        title: 'Wallet Not Connected',
+        title: t('receiveNFT.errors.walletNotConnected.title'),
         status: 'error',
-        message: 'Please connect your wallet in order to crete your nft.',
+        message: t('receiveNFT.errors.walletNotConnected.message'),
       });
       setIsLoading(false);
       return;
@@ -61,18 +63,18 @@ export const ReceiveNFT = () => {
       );
 
       openToast({
-        title: 'Successfully received',
+        title: t('receiveNFT.success.title'),
         status: 'success',
-        message: 'you have successfully received NFT',
+        message: t('receiveNFT.success.message'),
       });
       localStorage.setItem('is_received', 'true');
       setTimeout(() => router.push('/account/'), 1000);
     } catch (err: any) {
       if (err.message && err.message.includes('User denied')) {
         openToast({
-          title: 'User Denied Sign',
+          title: t('receiveNFT.errors.userDeniedSign.title'),
           status: 'error',
-          message: 'In order to crete your nft, please sign',
+          message: t('receiveNFT.errors.userDeniedSign.message'),
         });
       }
       console.log(err);

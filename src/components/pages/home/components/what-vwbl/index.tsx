@@ -25,8 +25,8 @@ export const WhatVWBLComponent: React.FC = memo(() => {
           </Link>
         </Box>
         <HStack mt={14} spacing={{ base: '2', md: '10' }}>
-          <Image src='/what-vwbl_01.png' alt='' w={{ base: 40, md: 400 }} />
-          <Image src='/what-vwbl_02.png' alt='' w={{ base: 40, md: 400 }} />
+          <Image src='/what-vwbl_01.png' alt='' w={{ base: 40, md: 80 }} />
+          <Image src='/what-vwbl_02.png' alt='' w={{ base: 40, md: 80 }} />
         </HStack>
       </VStack>
     </Container>

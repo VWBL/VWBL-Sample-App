@@ -3,6 +3,7 @@ import { Box, Tabs, Tab, TabList, TabPanels, TabPanel, Text, Container, Badge, S
 import { ExtendedMetadeta } from 'vwbl-sdk';
 import { ItemList } from '../../common/item-list';
 import { NotificationModal, notifications } from '../../common/notification-modal';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   ownedNfts: ExtendedMetadeta[];
@@ -22,10 +23,16 @@ export const AccountComponent: React.FC<Props> = ({ ownedNfts, mintedNfts, walle
   const handleTabsChange = async (index: number) => {
     setTabIndex(index);
   };
+  const { t } = useTranslation();
 
   return (
     <Box pt={10}>
-      <NotificationModal isOpen={isOpenModal} onClose={onCloseModal} notification={notifications.load_failed} />
+      <NotificationModal
+        isOpen={isOpenModal}
+        onClose={onCloseModal}
+        title={t('notifications.loadFailed.title')}
+        message={t('notifications.loadFailed.message')}
+      />
       <Container borderTop='1px solid black' maxW='container.lg' centerContent>
         <Stack
           direction={{ base: 'column', md: 'row' }}

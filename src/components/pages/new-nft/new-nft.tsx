@@ -1,6 +1,7 @@
 import { ChangeEvent } from 'react';
 import { FormControl, FormLabel, FormErrorMessage, Container, Input, Checkbox, Heading, Text, Box, Link } from '@chakra-ui/react';
 import { UseFormRegister, UseFormHandleSubmit, FieldErrors } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { FormInputs } from './new-nft.container';
 import { FilePreviewer } from '../../common/file-previewer';
@@ -67,22 +68,24 @@ export const NewNFTComponent: React.FC<Props> = ({
   toggleModal,
   isReceived,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <Container maxW='container.md' my={12} centerContent>
       {isReceived || <ReceiveNFT />}
 
       <Box w={'100%'} maxW={480}>
         <Heading as='h2' mb={12}>
-          Create New Item
+          {t('newNFT.createNewItem')}
           <Box as='small' color='red' pl={3}>
-            for Free
+            {t('newNFT.forFree')}
           </Box>
         </Heading>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl isInvalid={!!errors.asset}>
-            <CustomLabel title='Asset' htmlFor='asset' isRequired />
+            <CustomLabel title={t('newNFT.assetLabel')} htmlFor='asset' isRequired />
             <Text color='gray.600' mb={8}>
-              Only those with NFT will be able to view it.
+              {t('newNFT.assetDescription')}
             </Text>
             <FilePreviewer
               url={fileUrl}
@@ -90,12 +93,12 @@ export const NewNFTComponent: React.FC<Props> = ({
               onClear={onClearFile}
               inputId='asset'
               mimeType={mimeType}
-              labelText={'Image, Video, Audio, or PDF'}
+              labelText={t('newNFT.imageVideoAudioPDF')}
               opt={{
                 ...register('asset', {
-                  required: 'Asset is required',
+                  required: t('newNFT.assetRequired'),
                   validate: {
-                    maxFileSize: (f) => f[0].size < MAX_FILE_SIZE || 'uploaded file is too large',
+                    maxFileSize: (f) => f[0].size < MAX_FILE_SIZE || t('newNFT.fileTooLarge'),
                   },
                 }),
               }}
@@ -104,9 +107,9 @@ export const NewNFTComponent: React.FC<Props> = ({
           </FormControl>
 
           <FormControl mt={12} isInvalid={!!errors.thumbnail}>
-            <CustomLabel title='Thumbnail' htmlFor='thumbnail' isRequired />
+            <CustomLabel title={t('newNFT.thumbnailLabel')} htmlFor='thumbnail' isRequired />
             <Text color='gray.600' mb={8}>
-              Anyone can see it. Imagine it as a preview.
+              {t('newNFT.thumbnailDescription')}
             </Text>
             <FilePreviewer
               url={thumbnailUrl}
@@ -115,60 +118,60 @@ export const NewNFTComponent: React.FC<Props> = ({
               onChange={onChangeThumbnail}
               opt={{
                 ...register('thumbnail', {
-                  required: 'Thumbnail is required',
+                  required: t('newNFT.thumbnailRequired'),
                   validate: {
-                    maxFileSize: (f) => f[0].size < MAX_FILE_SIZE || 'uploaded file is too large',
+                    maxFileSize: (f) => f[0].size < MAX_FILE_SIZE || t('newNFT.fileTooLarge'),
                   },
                 }),
               }}
               acceptType='.jpeg,.jpg,.png,.gif'
-              labelText={'Image'}
+              labelText={t('newNFT.image')}
             />
 
             <FormErrorMessage>{errors.thumbnail && errors.thumbnail.message}</FormErrorMessage>
           </FormControl>
 
           <FormControl isInvalid={!!errors.title} mt={12}>
-            <CustomLabel title='Title' htmlFor='title' isRequired />
+            <CustomLabel title={t('newNFT.titleLabel')} htmlFor='title' isRequired />
             <Input
               id='title'
               focusBorderColor='gray.400'
               variant='flushed'
-              placeholder='Enter a title of your item'
+              placeholder={t('newNFT.titlePlaceholder')}
               {...register('title', {
-                required: 'Title is required',
-                minLength: { value: 4, message: 'Minimum length should be 4' },
+                required: t('newNFT.titleRequired'),
+                minLength: { value: 4, message: t('newNFT.minLengthTitle') },
               })}
             />
             <FormErrorMessage>{errors.title && errors.title.message}</FormErrorMessage>
           </FormControl>
 
           <FormControl isInvalid={!!errors.description} mt={12}>
-            <CustomLabel title='Description' htmlFor='description' isRequired />
+            <CustomLabel title={t('newNFT.descriptionLabel')} htmlFor='description' isRequired />
             <Input
               id='description'
               focusBorderColor='gray.400'
               variant='flushed'
-              placeholder='Enter a description of your item'
+              placeholder={t('newNFT.descriptionPlaceholder')}
               {...register('description', {
-                required: 'Description is required',
-                minLength: { value: 4, message: 'Minimum length should be 4' },
+                required: t('newNFT.descriptionRequired'),
+                minLength: { value: 4, message: t('newNFT.minLengthDescription') },
               })}
             />
 
             <FormErrorMessage>{errors.description && errors.description.message}</FormErrorMessage>
           </FormControl>
-          <Text mt={4}>With preserved line-breaks</Text>
+          <Text mt={4}>{t('newNFT.withPreservedLineBreaks')}</Text>
 
           <Checkbox mt={8} size='lg' colorScheme='blackAlpha' isChecked={isChecked} onChange={onChangeCheckbox}>
-            Agree to the&nbsp;
+            {t('newNFT.Agreetothe')}&nbsp;
             <Link href='https://ango-ya.notion.site/5632a448348b4722b2256e016dcc0cb4' isExternal>
-              terms of serivce
+              {t('newNFT.termsOfService')}
             </Link>
           </Checkbox>
 
           <Button
-            text='Create Item for Free'
+            text={t('newNFT.createItemForFree')}
             onClick={toggleModal}
             isLoading={isLoading}
             loadingText='Creating Your NFT'
@@ -178,9 +181,9 @@ export const NewNFTComponent: React.FC<Props> = ({
             mt={8}
           />
           <Text mt={6}>
-            Creating a new item may take a few minutes.
+            {t('newNFT.loadingInstructions.0')}
             <br />
-            Please do not move to another page while loading.
+            {t('newNFT.loadingInstructions.1')}
             <br />
           </Text>
           <MintStepModal

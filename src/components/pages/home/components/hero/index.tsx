@@ -13,6 +13,7 @@ export const HeroComponent: React.FC = memo(() => {
       <Box display={{ md: 'block' }} mx={{ base: '2', md: '10' }}>
         <Text fontSize={{ base: '5xl', md: '6xl' }} fontWeight='bold' lineHeight='1.1'>
           {t('hero.title.0')}
+          <br />
           {t('hero.title.1')}
         </Text>
         <Text fontSize={{ base: 'xl', md: 'xl' }} my={5} fontWeight='bold'>

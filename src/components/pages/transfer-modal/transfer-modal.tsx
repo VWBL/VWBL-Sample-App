@@ -21,6 +21,7 @@ import { BsCheckLg } from 'react-icons/bs';
 import { FormInputs } from './transfer-modal.container';
 import { FileViewer } from '../../common/file-viewer';
 import { Button } from '../../common/button';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   isOpenModal: boolean;
@@ -48,6 +49,8 @@ export const TransferModalComponent: React.FC<Props> = ({
   nft,
 }) => {
   const LoadingModal = () => {
+    const { t } = useTranslation();
+
     return (
       <Modal
         isOpen={isLoading}
@@ -59,11 +62,11 @@ export const TransferModalComponent: React.FC<Props> = ({
       >
         <ModalOverlay />
         <ModalContent p={4} mx={6}>
-          <ModalHeader>Transferring</ModalHeader>
+          <ModalHeader>{t('transferModal.loading.header')}</ModalHeader>
           <ModalBody>
             <HStack>
               <Spinner />
-              <Text>Transferring your NFT</Text>
+              <Text>{t('transferModal.loading.body')}</Text>
             </HStack>
           </ModalBody>
         </ModalContent>
@@ -72,23 +75,29 @@ export const TransferModalComponent: React.FC<Props> = ({
   };
 
   const CompleteModal = () => {
+    const { t } = useTranslation();
+
     return (
       <Modal isOpen={isComplete} onClose={onRefresh} isCentered>
         <ModalOverlay />
         <ModalContent p={4} mx={6}>
-          <ModalHeader>Complete</ModalHeader>
+          <ModalHeader>{t('transferModal.complete.header')}</ModalHeader>
+
           <ModalBody>
             <HStack mb={6}>
               <BsCheckLg />
+              <Text>{t('transferModal.complete.body')}</Text>
+
               <Text>Your NFT was successfully transfered</Text>
             </HStack>
-            <Button text='Close' width='100%' onClick={onRefresh} />
+            <Button text={t('transferModal.complete.button')} width='100%' onClick={onRefresh} />
           </ModalBody>
         </ModalContent>
       </Modal>
     );
   };
 
+  const { t } = useTranslation();
   return (
     <>
       <Modal isOpen={isOpenModal && !isLoading && !isComplete} onClose={onCloseModal} size='lg' closeOnOverlayClick={false}>
@@ -102,18 +111,18 @@ export const TransferModalComponent: React.FC<Props> = ({
             </Box>
             <Box p={10}>
               <Text fontSize='2xl' fontWeight='bold'>
-                Transfer NFT
+                {t('transferModal.main.header')}
               </Text>
               <Stack gap={4} mt={4}>
                 <Stack direction={{ base: 'column', md: 'row' }}>
                   <Text w='85px' mr={4}>
-                    Title
+                    {t('transferModal.main.labels.title')}
                   </Text>
                   <Text fontWeight='bold'>{nft.name}</Text>
                 </Stack>
                 <Stack direction={{ base: 'column', md: 'row' }}>
                   <Text w='85px' mr={4}>
-                    Description
+                    {t('transferModal.main.labels.description')}
                   </Text>
                   <Text>{nft.description}</Text>
                 </Stack>
@@ -121,25 +130,32 @@ export const TransferModalComponent: React.FC<Props> = ({
                   <FormControl isInvalid={!!errors.walletAddress}>
                     <FormLabel htmlFor='walletAddress'>
                       <Text fontWeight='bold' mb={2}>
-                        Wallet Address
+                        {t('transferModal.main.labels.walletAddress')}
                       </Text>
                     </FormLabel>
                     <Input
                       id='walletAddress'
                       placeholder='Wallet Address'
                       focusBorderColor='gray.400'
-                      {...register('walletAddress', {
-                        required: 'Wallet Address is required',
+                      {...register(t('transferModal.main.form.buttons.placeholder'), {
+                        required: t('transferModal.main.form.buttons.required'),
                         pattern: {
                           value: /^0x[a-fA-F0-9]{40}$/,
-                          message: 'Invalid Wallet Address',
+                          message: t('transferModal.main.form.buttons.invalid'),
                         },
                       })}
                     />
                     <FormErrorMessage>{errors.walletAddress && errors.walletAddress.message}</FormErrorMessage>
                   </FormControl>
-                  <Button text='Transfer' type='submit' isLoading={isLoading} loadingText='Transfering Your NFT' width='100%' mt={6} />
-                  <Button text='Cancel' onClick={onCloseModal} mt={4} isReversed />
+                  <Button
+                    text={t('transferModal.main.form.buttons.transfer')}
+                    type='submit'
+                    isLoading={isLoading}
+                    loadingText={t('transferModal.main.form.buttons.transfering')}
+                    width='100%'
+                    mt={6}
+                  />
+                  <Button text={t('transferModal.main.form.buttons.cancel')} onClick={onCloseModal} mt={4} isReversed />
                 </form>
               </Stack>
             </Box>

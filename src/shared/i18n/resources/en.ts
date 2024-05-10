@@ -2,8 +2,7 @@ export const en = {
   translation: {
     meta: {
       title: "'VWBL Demo App",
-      description: 'VWBLのコアコンセプト(持っている人だけがコンテンツを視聴できる)が体験できるデモサイトです',
-      image: 'https://demo-app.vwbl-protocol.org/ogp.png',
+      description: 'This is a demo site where you can experience the core concept of VWBL (only those who have it can view the content)',
     },
     header: {
       nav: ['About VWBL', 'Create NFT'],
@@ -100,6 +99,134 @@ export const en = {
       extraLinks: 'VWBL NFTをOpenSeaで販売するには？',
       tryDemoButton: 'Try demo',
       walletButton: 'My Wallet',
+    },
+    newNFT: {
+      createNewItem: 'Create New Item',
+      forFree: 'for Free',
+      assetLabel: 'Asset',
+      assetDescription: 'Only those with NFT will be able to view it.',
+      imageVideoAudioPDF: 'Image, Video, Audio, or PDF',
+      assetRequired: 'Asset is required',
+      fileTooLarge: 'uploaded file is too large',
+      thumbnailLabel: 'Thumbnail',
+      thumbnailDescription: 'Anyone can see it. Imagine it as a preview.',
+      thumbnailRequired: 'Thumbnail is required',
+      image: 'Image',
+      titleLabel: 'Title',
+      titlePlaceholder: 'Enter a title of your item',
+      titleRequired: 'Title is required',
+      minLengthTitle: 'Minimum length should be 4',
+      descriptionLabel: 'Description',
+      descriptionPlaceholder: 'Enter a description of your item',
+      descriptionRequired: 'Description is required',
+      minLengthDescription: 'Minimum length should be 4',
+      withPreservedLineBreaks: 'With preserved line-breaks',
+      termsOfService: 'terms of service',
+      createItemForFree: 'Create Item for Free',
+      creatingYourNFT: 'Creating Your NFT',
+      loadingInstructions: ['Creating a new item may take a few minutes.', 'Please do not move to another page while loading.'],
+      modalOpen: 'Click cancel',
+      modalCancel: 'Toggle modal',
+    },
+    filePreviewer: {
+      maxSize: 'Max 1.5GB',
+      buttonText: 'Choose FIle',
+    },
+    notifications: {
+      notInstalled: {
+        title: 'Metamask is Required',
+        message: 'Please Install Metamask in Your Browser!',
+      },
+      notConnected: {
+        title: 'Not Connected',
+        message: 'No active connection to Metamask.\n Please connect to continue.',
+      },
+      loadFailed: {
+        title: 'Failed to Load NFTs',
+        message: 'Failed to load NFTs.\n Please reload your browser or try again later.',
+      },
+      decryptFailed: {
+        title: 'Failed to Decrypt Your NFT',
+        message: 'Something went wrong and failed to decrypt your NFT.\n Please try again later.',
+      },
+    },
+    mintStepModal: {
+      header: 'Follow the steps',
+      steps: [
+        {
+          title: 'Sign',
+          description: 'Sign a message to start using VWBL',
+        },
+        {
+          title: 'Upload',
+          description: 'Uploading of all media assets and metadata to IPFS',
+        },
+        {
+          title: 'Mint',
+          description: 'Send transaction to create your NFT',
+        },
+        {
+          title: 'Set key',
+          description: 'Save decryption key to VWBL Network',
+        },
+      ],
+      finalMessage: 'You have minted your VWBL NFT! 🎉',
+      links: {
+        myPage: 'My page',
+      },
+      buttons: {
+        start: 'Start',
+        inProgress: 'In Progress...',
+        minted: 'Minted',
+        cancel: 'Cancel',
+      },
+    },
+    transferModal: {
+      loading: {
+        header: 'Transferring',
+        body: 'Transferring your NFT',
+      },
+      complete: {
+        header: 'Complete',
+        body: 'Your NFT was successfully transfered',
+        button: 'Close',
+      },
+      main: {
+        header: 'Transfer NFT',
+        labels: {
+          title: 'Title',
+          description: 'Description',
+          walletAddress: 'Wallet Address',
+        },
+        form: {
+          walletAddress: {
+            placeholder: 'Wallet Address',
+            required: 'Wallet Address is required',
+            invalid: 'Invalid Wallet Address',
+          },
+          buttons: {
+            transfer: 'Transfer',
+            transfering: 'Transfering Your NFT',
+            cancel: 'Cancel',
+          },
+        },
+      },
+    },
+    receiveNFT: {
+      errors: {
+        walletNotConnected: {
+          title: 'Wallet Not Connected',
+          message: 'Please connect your wallet in order to create your nft.',
+        },
+        userDeniedSign: {
+          title: 'User Denied Sign',
+          message: 'In order to create your nft, please sign',
+        },
+      },
+      success: {
+        title: 'Successfully received',
+        message: 'You have successfully received NFT',
+      },
     },
   },
 };
