@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Box, Tabs, Tab, TabList, TabPanels, TabPanel, Text, Container, Badge, Stack } from '@chakra-ui/react';
 import { ExtendedMetadeta } from 'vwbl-sdk';
 import { ItemList } from '../../common/item-list';
-import { NotificationModal, notifications } from '../../common/notification-modal';
+import { NotificationModal } from '../../common/notification-modal';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   ownedNfts: ExtendedMetadeta[];
@@ -13,9 +14,10 @@ type Props = {
 };
 
 export const AccountComponent: React.FC<Props> = ({ ownedNfts, mintedNfts, walletAddress, isOpenModal, onCloseModal }) => {
+  const { t } = useTranslation();
   const tabOptions = [
-    { name: 'Owned', length: ownedNfts.length },
-    { name: 'Created', length: mintedNfts.length },
+    { name: t('account.owned'), length: ownedNfts.length },
+    { name: t('account.created'), length: mintedNfts.length },
   ];
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -25,7 +27,12 @@ export const AccountComponent: React.FC<Props> = ({ ownedNfts, mintedNfts, walle
 
   return (
     <Box pt={10}>
-      <NotificationModal isOpen={isOpenModal} onClose={onCloseModal} notification={notifications.load_failed} />
+      <NotificationModal
+        isOpen={isOpenModal}
+        onClose={onCloseModal}
+        title={t('notifications.loadFailed.title')}
+        message={t('notifications.loadFailed.message')}
+      />
       <Container borderTop='1px solid black' maxW='container.lg' centerContent>
         <Stack
           direction={{ base: 'column', md: 'row' }}
@@ -37,7 +44,7 @@ export const AccountComponent: React.FC<Props> = ({ ownedNfts, mintedNfts, walle
           overflowWrap='break-word'
           justifyContent='center'
         >
-          <Text>My Wallet</Text>
+          <Text>{t('account.wallet')}</Text>
           <Text>{walletAddress}</Text>
         </Stack>
       </Container>

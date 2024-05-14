@@ -8,7 +8,8 @@ import { TransferModal } from '../transfer-modal';
 import { ExtractMetadata } from 'vwbl-sdk';
 import { Button } from '../../common/button';
 import { CustomLoading } from '../../common/custom-loading';
-import { NotificationModal, notifications } from '../../common/notification-modal';
+import { NotificationModal } from '../../common/notification-modal';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   nft: FetchedNFT | undefined;
@@ -35,6 +36,8 @@ export const NftDetailComponent: React.FC<Props> = ({
   onCloseTransferModal,
   onCloseNotificationModal,
 }) => {
+  const { t } = useTranslation();
+
   if (!nft) {
     return (
       <>
@@ -42,7 +45,8 @@ export const NftDetailComponent: React.FC<Props> = ({
         <NotificationModal
           isOpen={isOpenNotificationModal}
           onClose={onCloseNotificationModal}
-          notification={notifications.decrypt_failed}
+          title={t('notifications.decryptFailed.title')}
+          message={t('notifications.decryptFailed.message')}
         />
       </>
     );
@@ -56,7 +60,12 @@ export const NftDetailComponent: React.FC<Props> = ({
     >
       <ContentDrawer isOpen={isOpenDrawer} onClose={onCloseDrawer} nft={nft} />
       <TransferModal isOpen={isOpenTransferModal} onClose={onCloseTransferModal} nft={nft as ExtractMetadata} />
-      <NotificationModal isOpen={isOpenNotificationModal} onClose={onCloseNotificationModal} notification={notifications.decrypt_failed} />
+      <NotificationModal
+        isOpen={isOpenNotificationModal}
+        onClose={onCloseNotificationModal}
+        title={t('notifications.decryptFailed.title')}
+        message={t('notifications.decryptFailed.message')}
+      />
       <Box bg='black' padding='20px 80px' position='relative' w='100%' minH={{ base: 'calc(60vh - 160px)', lg: '100%' }}>
         <Box
           position='absolute'

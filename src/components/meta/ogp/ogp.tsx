@@ -1,6 +1,10 @@
+import { useTranslation } from 'react-i18next';
+
 export const Ogp = () => {
-  const title = 'VWBL Demo App';
-  const description = 'VWBLのコアコンセプト(持っている人だけがコンテンツを視聴できる)が体験できるデモサイトです';
+  const { t } = useTranslation();
+
+  const title = t('meta.title');
+  const description = t('meta.description');
   const url = 'https://demo-app.vwbl-protocol.org/';
   const imgUrl = 'https://demo-app.vwbl-protocol.org/ogp.png';
   const imgWidth = 2400;

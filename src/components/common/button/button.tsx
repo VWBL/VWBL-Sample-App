@@ -1,7 +1,7 @@
 import * as CSS from 'csstype';
 import { Button as ChakraButton, Icon, BorderProps, forwardRef, As, TypographyProps, ButtonProps } from '@chakra-ui/react';
 import { IconType } from 'react-icons';
-
+import { MouseEvent } from 'react';
 type Props = {
   text: string;
   type?: 'button' | 'submit' | 'reset' | undefined;
@@ -18,7 +18,7 @@ type Props = {
   border?: BorderProps['border'];
   borderRadius?: BorderProps['borderRadius'];
   disalbed?: ButtonProps['disabled'];
-  onClick?: () => void;
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
   isReversed?: boolean;
   icon?: IconType;
   as?: As;

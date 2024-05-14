@@ -2,6 +2,7 @@ import { Box, CloseButton, FormLabel, Input, Image, Text, VStack, AspectRatio } 
 import { ChangeEvent } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import ReactPlayer from 'react-player';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   labelText: string;
@@ -27,6 +28,8 @@ const switchPlayer = (url: string, mimeType?: string) => {
 };
 
 export const FilePreviewer: React.FC<Props> = ({ labelText, url, onClear, inputId, onChange, mimeType, acceptType, opt }) => {
+  const { t } = useTranslation();
+
   return (
     <AspectRatio maxW={480} ratio={1} position={'relative'} bg='black'>
       <Box>
@@ -58,7 +61,7 @@ export const FilePreviewer: React.FC<Props> = ({ labelText, url, onClear, inputI
               <Text color={'white'} fontSize={'sm'} textAlign={'center'}>
                 {labelText}
                 <br />
-                Max 1.5GB
+                {t('filePreviewer.maxSize')}
               </Text>
               <FormLabel
                 display={'flex'}
@@ -75,7 +78,7 @@ export const FilePreviewer: React.FC<Props> = ({ labelText, url, onClear, inputI
                 cursor='pointer'
                 {...opt}
               >
-                Choose File
+                {t('filePreviewer.buttonText')}
                 <Input hidden id={inputId} type='file' {...opt} onChange={onChange} accept={acceptType} />
               </FormLabel>
             </VStack>
