@@ -1,7 +1,7 @@
 export const ja = {
   translation: {
     meta: {
-      title: "'VWBL Demo App",
+      title: 'VWBL Demo App',
       description: 'VWBLのコアコンセプト(持っている人だけがコンテンツを視聴できる)が体験できるデモサイトです',
       image: 'https://demo-app.vwbl-protocol.org/ogp.png',
     },
@@ -18,11 +18,12 @@ export const ja = {
     footer: {
       nav: ['VWBL サイト', 'NFTを作成', 'まずは試してみて！'],
       copyLight: 'Ango-ya, LLC. All rights reserved.',
+      myWalletButton: 'ウォレット',
     },
     hero: {
       title: ['Just try', 'the VWBL NFT'],
       description: ['持っている人だけがコンテンツを視聴することができる', 'NFTデジタルメディアプロトコル 「VWBL」', 'まずは試してみて！'],
-      button: 'Try demo',
+      button: 'VWBL NFTを作成する',
       secondaryText: 'Only you can see it.',
     },
     whatVWBL: {
@@ -44,8 +45,8 @@ export const ja = {
             description: [
               'NFTを受け取るには、仮想通貨用のウォレットが必要です。',
               'VWBL Demoでは MetaMask（メタマスク） をご利用ください。',
-              'PCの方：Chromeブラウザ',
-              'Mobileの方：Metamask app内ブラウザ でVWBL Demoを開いてください。',
+              'PC：Chromeブラウザ',
+              'Mobile：Metamask app内ブラウザ でVWBL Demoを開いてください。',
             ],
             linkText: 'MetaMask（メタマスク）',
           },
@@ -122,7 +123,7 @@ export const ja = {
       descriptionRequired: '必須項目です',
       minLengthDescription: '4文字以上入力してください',
       withPreservedLineBreaks: '改行を保持した場合',
-      Agreetothe: '同意する',
+      Agreetothe: '利用規約に同意する',
       termsOfService: '利用規約',
       createItemForFree: 'VWBL NFT を作成する',
       creatingYourNFT: 'Creating Your NFT',
@@ -228,6 +229,11 @@ export const ja = {
         title: '正常に受信しました',
         message: 'NFTを正常に受信しました',
       },
+    },
+    account: {
+      wallet: '接続中のウォレット',
+      owned: '保有してるNFT',
+      created: '作成したNFT',
     },
   },
 };

@@ -26,6 +26,7 @@ export const MintStepModal: React.FC<Props> = memo(({ isOpen, signature, mintSte
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
+
       <ModalContent p={5} mx={'a'}>
         <ModalHeader fontSize={'2xl'}>{t('mintStepModal.header')}</ModalHeader>
 

@@ -58,26 +58,30 @@ const HowToCreate: React.FC = memo(() => {
 
   return (
     <Container maxW='container.lg' my={10}>
-      <Box>
-        <Text fontSize='large' my={4} fontWeight='bold'>
-          {t('howTo.create.steps.0.title')}
-        </Text>
-        <Text fontSize='md' my={5} textAlign='left' whiteSpace='pre-line' w={{ base: '100%', md: '60%' }}>
-          {t('howTo.create.steps.0.description.0')}
-          <br />
-          {t('howTo.create.steps.0.description.1')}
-        </Text>
-        <Link color='blue.600' href='https://metamask.io/download/' isExternal>
-          {t('howTo.create.steps.0.linkText')}
-          <ExternalLinkIcon mx='2px' />
-        </Link>
-        <Text fontSize='md' textAlign='left' whiteSpace='pre-line' w={{ base: '100%', md: '60%' }}>
-          {t('howTo.create.steps.0.description.2')}
-        </Text>
-        <Text fontSize='md' textAlign='left' whiteSpace='pre-line' w={{ base: '100%', md: '60%' }}>
-          {t('howTo.create.steps.0.description.3')}
-        </Text>
-      </Box>
+      <VStack w='100%'>
+        <Box w={{ base: '100%', md: '60%' }} mb={4}>
+          <Text fontSize='large' my={4} as='b'>
+            {t('howTo.create.steps.0.title')}
+          </Text>
+          <Text fontSize='md' my={2} textAlign='left' whiteSpace='pre-line'>
+            {t('howTo.create.steps.0.description.0')}
+            <br />
+            {t('howTo.create.steps.0.description.1')}
+          </Text>
+          <Link color='blue.600' href='https://metamask.io/download/' isExternal>
+            {t('howTo.create.steps.0.linkText')}
+            <ExternalLinkIcon mx='2px' />
+          </Link>
+        </Box>
+        <Box w={{ base: '100%', md: '60%' }}>
+          <Text fontSize='md' textAlign='left' whiteSpace='pre-line'>
+            {t('howTo.create.steps.0.description.2')}
+          </Text>
+          <Text fontSize='md' textAlign='left' whiteSpace='pre-line'>
+            {t('howTo.create.steps.0.description.3')}
+          </Text>
+        </Box>
+      </VStack>
       <Divider mt={20} mb={10} />
       <Box>
         <Text fontSize='large' my={4} fontWeight='bold'>

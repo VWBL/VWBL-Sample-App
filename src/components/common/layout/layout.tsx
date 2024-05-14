@@ -193,7 +193,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             {FooterLinks.map((link, i) => (
               <NavLink key={i} title={link.title} to={link.to} />
             ))}
-            {userAddress && <NavLink title='My Wallet' to='/account' />}
+            {userAddress && <NavLink title={t('footer.myWalletButton')} to='/account' />}
           </Stack>
           <Box py={6}>
             <Text fontSize='sm' color='#AEAEB2'>

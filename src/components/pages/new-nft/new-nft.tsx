@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react';
-import { FormControl, FormLabel, FormErrorMessage, Container, Input, Checkbox, Heading, Text, Box, Link } from '@chakra-ui/react';
+import { FormControl, FormLabel, FormErrorMessage, Container, Input, Checkbox, Heading, Text, Box, Link, VStack } from '@chakra-ui/react';
 import { UseFormRegister, UseFormHandleSubmit, FieldErrors } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -10,6 +10,7 @@ import { Button } from '../../common/button';
 import { MAX_FILE_SIZE } from '../../../utils';
 import { StepStatus } from 'vwbl-sdk';
 import { ReceiveNFT } from '../../common/receive-nft';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 type Props = {
   onSubmit: (data: FormInputs) => Promise<void>;
@@ -71,11 +72,11 @@ export const NewNFTComponent: React.FC<Props> = ({
   const { t } = useTranslation();
 
   return (
-    <Container maxW='container.md' my={12} centerContent>
+    <Container maxW='container.md' my={20} centerContent>
       {isReceived || <ReceiveNFT />}
 
       <Box w={'100%'} maxW={480}>
-        <Heading as='h2' mb={12}>
+        <Heading as='h2' fontSize={32} mb={20}>
           {t('newNFT.createNewItem')}
           <Box as='small' color='red' pl={3}>
             {t('newNFT.forFree')}
@@ -162,14 +163,15 @@ export const NewNFTComponent: React.FC<Props> = ({
             <FormErrorMessage>{errors.description && errors.description.message}</FormErrorMessage>
           </FormControl>
           <Text mt={4}>{t('newNFT.withPreservedLineBreaks')}</Text>
-
-          <Checkbox mt={8} size='lg' colorScheme='blackAlpha' isChecked={isChecked} onChange={onChangeCheckbox}>
-            {t('newNFT.Agreetothe')}&nbsp;
-            <Link href='https://ango-ya.notion.site/5632a448348b4722b2256e016dcc0cb4' isExternal>
+          <VStack align='left' mt={20}>
+            <Link color='blue.600' href='https://ango-ya.notion.site/5632a448348b4722b2256e016dcc0cb4' isExternal>
               {t('newNFT.termsOfService')}
+              <ExternalLinkIcon mx='2px' mb='2px' />
             </Link>
-          </Checkbox>
-
+            <Checkbox colorScheme='blackAlpha' isChecked={isChecked} onChange={onChangeCheckbox}>
+              {t('newNFT.Agreetothe')}
+            </Checkbox>
+          </VStack>
           <Button
             text={t('newNFT.createItemForFree')}
             onClick={toggleModal}

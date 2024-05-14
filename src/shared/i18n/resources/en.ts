@@ -17,6 +17,7 @@ export const en = {
     footer: {
       nav: ['VWBL サイト', 'NFTを作成', 'まずは試してみて！'],
       copyLight: 'Ango-ya, LLC. All rights reserved.',
+      myWalletButton: 'My Wallet',
     },
     hero: {
       title: ['Just try', 'the VWBL NFT'],
@@ -122,6 +123,7 @@ export const en = {
       minLengthDescription: 'Minimum length should be 4',
       withPreservedLineBreaks: 'With preserved line-breaks',
       termsOfService: 'terms of service',
+      Agreetothe: 'I agree to the Terms of Use',
       createItemForFree: 'Create Item for Free',
       creatingYourNFT: 'Creating Your NFT',
       loadingInstructions: ['Creating a new item may take a few minutes.', 'Please do not move to another page while loading.'],
@@ -227,6 +229,11 @@ export const en = {
         title: 'Successfully received',
         message: 'You have successfully received NFT',
       },
+    },
+    account: {
+      wallet: 'Wallet Address',
+      owned: 'owned',
+      created: 'created',
     },
   },
 };
