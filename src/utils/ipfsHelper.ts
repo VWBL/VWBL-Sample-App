@@ -1,77 +1,106 @@
-import { Blob, File, NFTStorage } from 'nft.storage';
-import { PlainMetadata, EncryptLogic } from 'vwbl-sdk';
+import axios from 'axios';
+import { createRandomKey, encryptString } from 'vwbl-sdk';
 
-export class UploadToIPFS {
-  private client: NFTStorage;
-  constructor(ipfsNftStorageKey: string) {
-    this.client = new NFTStorage({ token: ipfsNftStorageKey });
-  }
+const endpoint = 'https://node.lighthouse.storage/api/v0/add';
 
-  async uploadEncryptedFile(encryptedContent: string | ArrayBuffer): Promise<string> {
-    const encryptedContentData = new Blob([encryptedContent]);
+export const createKey = (): string => {
+  return createRandomKey();
+};
 
-    let cid;
-    try {
-      cid = await this.client.storeBlob(encryptedContentData);
-    } catch (err) {
-      // 'Error' 型を使用してエラーをキャッチ
-      if (err instanceof Error) {
-        throw new Error(err.message);
+export const toBase64FromBlob = async (blob: Blob): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        resolve(reader.result);
+      } else {
+        reject(new Error('ファイルの読み込みに失敗しました'));
       }
-      throw err; // 予期せぬ型のエラーが発生した場合、元のエラーをスロー
-    }
-
-    return `https://nftstorage.link/ipfs/${cid}`;
-  }
-
-  async uploadThumbnail(thumbnailImage: File): Promise<string> {
-    const thumbnailblob = new Blob([thumbnailImage], { type: thumbnailImage.type });
-
-    let cid;
-    try {
-      cid = await this.client.storeBlob(thumbnailblob);
-    } catch (err) {
-      // 'Error' 型を使用してエラーをキャッチ
-      if (err instanceof Error) {
-        throw new Error(err.message);
-      }
-      throw err; // 予期せぬ型のエラーが発生した場合、元のエラーをスロー
-    }
-
-    return `https://nftstorage.link/ipfs/${cid}`;
-  }
-
-  async uploadMetadata(
-    name: string,
-    description: string,
-    previewImageUrl: string,
-    encryptedDataUrls: string[],
-    mimeType: string,
-    encryptLogic: EncryptLogic,
-  ): Promise<string> {
-    const metadata: PlainMetadata = {
-      name,
-      description,
-      image: previewImageUrl,
-      encrypted_data: encryptedDataUrls,
-      mime_type: mimeType,
-      encrypt_logic: encryptLogic,
     };
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(blob);
+  });
+};
 
-    const metadataJSON = JSON.stringify(metadata);
-    const metaDataBlob = new Blob([metadataJSON]);
+export const encryptDataViaBase64 = async (plainData: Blob, key: string): Promise<string> => {
+  const content = await toBase64FromBlob(plainData);
+  return encryptString(content, key);
+};
 
-    let cid;
-    try {
-      cid = await this.client.storeBlob(metaDataBlob);
-    } catch (err) {
-      // 'Error' 型を使用してエラーをキャッチ
-      if (err instanceof Error) {
-        throw new Error(err.message);
-      }
-      throw err; // 予期せぬ型のエラーが発生した場合、元のエラーをスロー
-    }
+export const uploadEncryptedFileCallback = async (encryptedContent: Blob, apiKey: string): Promise<string> => {
+  const formData = new FormData();
+  formData.append('file', encryptedContent);
 
-    return `https://nftstorage.link/ipfs/${cid}`;
-  }
-}
+  const config = {
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'multipart/form-data',
+      Encryption: 'true',
+    },
+    onUploadProgress: (progressEvent: any) => {
+      const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+      console.log(`アップロード進行中: ${progress}%`);
+    },
+  };
+
+  const response = await axios.post(endpoint, formData, config);
+  return `https://gateway.lighthouse.storage/ipfs/${response.data.Hash}`;
+};
+
+export const uploadThumbnailCallback = async (thumbnailImage: File, apiKey: string): Promise<string> => {
+  const formData = new FormData();
+  formData.append('file', thumbnailImage);
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'multipart/form-data',
+    },
+    onUploadProgress: (progressEvent: any) => {
+      const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+      console.log(`アップロード進行中: ${progress}%`);
+    },
+  };
+
+  const response = await axios.post(endpoint, formData, config);
+  return `https://gateway.lighthouse.storage/ipfs/${response.data.Hash}`;
+};
+
+export const uploadMetadataCallback = async (
+  name: string,
+  description: string,
+  previewImageUrl: string,
+  encryptedDataUrls: string[],
+  mimeType: string,
+  encryptLogic: string,
+  apiKey: string,
+): Promise<string> => {
+  const metadata = {
+    name,
+    description,
+    image: previewImageUrl,
+    encrypted_data: encryptedDataUrls,
+    mime_type: mimeType,
+    encrypt_logic: encryptLogic,
+  };
+
+  const metadataJSON = JSON.stringify(metadata);
+  const metadataBlob = new Blob([metadataJSON], { type: 'application/json' });
+
+  const formData = new FormData();
+  formData.append('file', metadataBlob);
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'multipart/form-data',
+    },
+    onUploadProgress: (progressEvent: any) => {
+      const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+      console.log(`アップロード進行中: ${progress}%`);
+    },
+  };
+
+  const response = await axios.post(endpoint, formData, config);
+  return `https://gateway.lighthouse.storage/ipfs/${response.data.Hash}`;
+};

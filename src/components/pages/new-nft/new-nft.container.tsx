@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { ProgressSubscriber, StepStatus } from 'vwbl-sdk';
-
+import { uploadEncryptedFileCallback, uploadThumbnailCallback, uploadMetadataCallback } from '../../../utils/ipfsHelper';
 import { NewNFTComponent } from './new-nft';
 import { VwblContainer, ToastContainer } from '../../../container';
 import { segmentation, MAX_FILE_SIZE, BASE64_MAX_SIZE, VALID_EXTENSIONS, switchChain } from '../../../utils';
@@ -119,6 +119,9 @@ export const NewNFT = () => {
           isBase64 ? 'base64' : 'binary',
           process.env.NEXT_PUBLIC_MINT_API_ID!,
           progressSubscriber,
+          uploadEncryptedFileCallback,
+          uploadThumbnailCallback,
+          uploadMetadataCallback,
         );
       } catch (err: any) {
         if (err.message && err.message.includes('User denied')) {
