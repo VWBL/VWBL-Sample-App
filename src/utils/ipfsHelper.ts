@@ -1,59 +1,20 @@
 import axios from 'axios';
-import { createRandomKey, encryptString } from 'vwbl-sdk';
+import { IPFSConfig } from 'vwbl-sdk';
 
-const endpoint = 'https://node.lighthouse.storage/api/v0/add';
+const lighthouseEndpoint = 'https://node.lighthouse.storage/api/v0/add';
 
-export const createKey = (): string => {
-  return createRandomKey();
-};
+// Encrypted file upload function
+export const uploadEncryptedFileToLighthouse = async (encryptedContent: string | ArrayBuffer, ipfsConfig?: IPFSConfig): Promise<string> => {
+  if (!ipfsConfig || !ipfsConfig.apiKey) {
+    throw new Error('Lighthouse API key is not specified.');
+  }
 
-export const toBase64FromBlob = async (blob: Blob): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        resolve(reader.result);
-      } else {
-        reject(new Error('ファイルの読み込みに失敗しました'));
-      }
-    };
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(blob);
-  });
-};
-
-export const encryptDataViaBase64 = async (plainData: Blob, key: string): Promise<string> => {
-  const content = await toBase64FromBlob(plainData);
-  return encryptString(content, key);
-};
-
-export const uploadEncryptedFileCallback = async (encryptedContent: Blob, apiKey: string): Promise<string> => {
   const formData = new FormData();
-  formData.append('file', encryptedContent);
+  formData.append('file', new Blob([encryptedContent], { type: 'application/octet-stream' }));
 
   const config = {
     headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'multipart/form-data',
-      Encryption: 'true',
-    },
-    onUploadProgress: (progressEvent: any) => {
-      const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-      console.log(`アップロード進行中: ${progress}%`);
-    },
-  };
-
-  const response = await axios.post(endpoint, formData, config);
-  return `https://gateway.lighthouse.storage/ipfs/${response.data.Hash}`;
-};
-
-export const uploadThumbnailCallback = async (thumbnailImage: File, apiKey: string): Promise<string> => {
-  const formData = new FormData();
-  formData.append('file', thumbnailImage);
-
-  const config = {
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${ipfsConfig.apiKey}`,
       'Content-Type': 'multipart/form-data',
     },
     onUploadProgress: (progressEvent: any) => {
@@ -62,19 +23,65 @@ export const uploadThumbnailCallback = async (thumbnailImage: File, apiKey: stri
     },
   };
 
-  const response = await axios.post(endpoint, formData, config);
-  return `https://gateway.lighthouse.storage/ipfs/${response.data.Hash}`;
+  try {
+    const response = await axios.post(lighthouseEndpoint, formData, config);
+    return `https://gateway.lighthouse.storage/ipfs/${response.data.Hash}`;
+  } catch (err: any) {
+    throw new Error(`Lighthouse upload failed: ${err.message}`);
+  }
 };
 
-export const uploadMetadataCallback = async (
+// Thumbnail upload function
+export type FileOrPath = File | string;
+export const uploadThumbnailToLighthouse = async (thumbnailImage: FileOrPath, ipfsConfig?: IPFSConfig): Promise<string> => {
+  if (!ipfsConfig || !ipfsConfig.apiKey) {
+    throw new Error('Lighthouse API key is not specified.');
+  }
+
+  const formData = new FormData();
+
+  // thumbnailImageがFile型かstring型かをチェックして処理
+  if (thumbnailImage instanceof File) {
+    formData.append('file', thumbnailImage);
+  } else {
+    // string型の場合、Blobとして処理
+    const response = await fetch(thumbnailImage);
+    const blob = await response.blob();
+    formData.append('file', new File([blob], 'thumbnail', { type: blob.type }));
+  }
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${ipfsConfig.apiKey}`,
+      'Content-Type': 'multipart/form-data',
+    },
+    onUploadProgress: (progressEvent: any) => {
+      const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+      console.log(`アップロード進行中: ${progress}%`);
+    },
+  };
+
+  try {
+    const response = await axios.post('lighthouseEndpoint', formData, config);
+    return `https://gateway.lighthouse.storage/ipfs/${response.data.Hash}`;
+  } catch (err: any) {
+    throw new Error(`Lighthouse upload failed: ${err.message}`);
+  }
+};
+// Metadata upload function
+export const uploadMetadataToLighthouse = async (
   name: string,
   description: string,
   previewImageUrl: string,
   encryptedDataUrls: string[],
   mimeType: string,
   encryptLogic: string,
-  apiKey: string,
+  ipfsConfig?: IPFSConfig,
 ): Promise<string> => {
+  if (!ipfsConfig || !ipfsConfig.apiKey) {
+    throw new Error('Lighthouse API key is not specified.');
+  }
+
   const metadata = {
     name,
     description,
@@ -92,7 +99,7 @@ export const uploadMetadataCallback = async (
 
   const config = {
     headers: {
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${ipfsConfig.apiKey}`,
       'Content-Type': 'multipart/form-data',
     },
     onUploadProgress: (progressEvent: any) => {
@@ -101,6 +108,10 @@ export const uploadMetadataCallback = async (
     },
   };
 
-  const response = await axios.post(endpoint, formData, config);
-  return `https://gateway.lighthouse.storage/ipfs/${response.data.Hash}`;
+  try {
+    const response = await axios.post(lighthouseEndpoint, formData, config);
+    return `https://gateway.lighthouse.storage/ipfs/${response.data.Hash}`;
+  } catch (err: any) {
+    throw new Error(`Lighthouse upload failed: ${err.message}`);
+  }
 };

@@ -2,7 +2,6 @@ import React, { useState, ChangeEvent } from 'react';
 import axios from 'axios';
 import { Button } from '../../common/button';
 import { Text } from '@chakra-ui/react';
-import { VwblContainer } from '../../../container/vwbl-container';
 import { createRandomKey, encryptString } from 'vwbl-sdk';
 
 interface FileUploadProps {
@@ -36,7 +35,6 @@ const encryptDataViaBase64 = async (plainData: File, key: string): Promise<strin
 const EncryptedFileUpload: React.FC<FileUploadProps> = ({ accessToken }) => {
   const [files, setFiles] = useState<File[]>([]);
   const endpoint = 'https://node.lighthouse.storage/api/v0/add';
-  const { vwbl, checkNetwork, provider } = VwblContainer.useContainer(); // コンポーネント内でフックを呼び出す
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {

@@ -30,7 +30,7 @@ const useVWBL = () => {
       uploadContentType: UploadContentType.IPFS,
       uploadMetadataType: UploadMetadataType.IPFS,
       vwblNetworkUrl: process.env.NEXT_PUBLIC_VWBL_NETWORK_URL,
-      ipfsNftStorageKey: process.env.NEXT_PUBLIC_NFT_STORAGE_KEY,
+      ipfsConfig: { apiKey: process.env.NEXT_PUBLIC_NFT_STORAGE_KEY },
       biconomyConfig: {
         apiKey: process.env.NEXT_PUBLIC_BICONOMY_API_KEY!,
         forwarderAddress: process.env.NEXT_PUBLIC_FORWARDER_ADDRESS!,
