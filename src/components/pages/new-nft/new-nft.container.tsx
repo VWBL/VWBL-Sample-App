@@ -34,19 +34,12 @@ export const NewNFT = () => {
   } = useForm<FormInputs>({ mode: 'onBlur' });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [mintStep] = useState<StepStatus[]>([]);
-
+  const [mintStep, setMintStep] = useState<StepStatus[]>([]);
   const progressSubscriber: ProgressSubscriber = {
     kickStep: (status: StepStatus) => {
-      console.log('kickStep called with status:', status);
-      // ここでステータスを更新する処理を追加します。
-    },
-    kickProgress: () => {
-      console.log('Progress kicked');
-      // 進行状況を更新する処理を追加します。
+      setMintStep((prev) => [...prev, status]);
     },
   };
-
   const isReceived = typeof window !== 'undefined' ? !!localStorage.getItem('is_received') : false;
 
   useEffect(() => {

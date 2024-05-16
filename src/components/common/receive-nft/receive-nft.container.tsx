@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 
 import { ReceiveNFTComponent } from './receive-nft';
 import { VwblContainer, ToastContainer } from '../../../container';
-import { switchChain, uploadEncryptedFileToLighthouse } from '../../../utils';
 import { ExtendedMetadeta } from 'vwbl-sdk';
+import { switchChain, uploadEncryptedFileToLighthouse, uploadThumbnailToLighthouse, uploadMetadataToLighthouse } from '../../../utils';
 
 export const sampleNFT: ExtendedMetadeta = {
   id: 1,
@@ -59,6 +59,8 @@ export const ReceiveNFT = () => {
         'base64',
         process.env.NEXT_PUBLIC_MINT_API_ID!,
         uploadEncryptedFileToLighthouse,
+        uploadThumbnailToLighthouse,
+        uploadMetadataToLighthouse,
       );
 
       openToast({

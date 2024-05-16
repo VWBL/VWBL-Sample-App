@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 
 import { ReceiveAudioNFTComponent } from './receive-audio';
 import { VwblContainer, ToastContainer } from '../../../container';
-import { switchChain, uploadEncryptedFileToLighthouse } from '../../../utils';
+import { switchChain, uploadEncryptedFileToLighthouse, uploadThumbnailToLighthouse, uploadMetadataToLighthouse } from '../../../utils';
 import { ExtendedMetadeta } from 'vwbl-sdk';
 
 export const sampleAudioNFT: ExtendedMetadeta = {
@@ -59,6 +59,8 @@ export const ReceiveAudioNFT = () => {
         'base64',
         process.env.NEXT_PUBLIC_MINT_API_ID!,
         uploadEncryptedFileToLighthouse,
+        uploadThumbnailToLighthouse,
+        uploadMetadataToLighthouse,
       );
 
       openToast({
