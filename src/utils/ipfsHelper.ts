@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { IPFSConfig } from 'vwbl-sdk';
-
 const lighthouseEndpoint = 'https://node.lighthouse.storage/api/v0/add';
 
 // Encrypted file upload function
@@ -19,12 +18,14 @@ export const uploadEncryptedFileToLighthouse = async (encryptedContent: string |
     },
     onUploadProgress: (progressEvent: any) => {
       const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-      console.log(`アップロード進行中: ${progress}%`);
+      console.log(`uploadEncryptedFileToLighthouseアップロード進行中: ${progress}%`);
     },
   };
 
   try {
     const response = await axios.post(lighthouseEndpoint, formData, config);
+    console.log('uploadEncryptedFileToLighthouse', response);
+
     return `https://gateway.lighthouse.storage/ipfs/${response.data.Hash}`;
   } catch (err: any) {
     throw new Error(`Lighthouse upload failed: ${err.message}`);
@@ -57,12 +58,12 @@ export const uploadThumbnailToLighthouse = async (thumbnailImage: FileOrPath, ip
     },
     onUploadProgress: (progressEvent: any) => {
       const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-      console.log(`アップロード進行中: ${progress}%`);
+      console.log(`uploadThumbnailToLighthouseアップロード進行中: ${progress}%`);
     },
   };
 
   try {
-    const response = await axios.post('lighthouseEndpoint', formData, config);
+    const response = await axios.post(lighthouseEndpoint, formData, config);
     return `https://gateway.lighthouse.storage/ipfs/${response.data.Hash}`;
   } catch (err: any) {
     throw new Error(`Lighthouse upload failed: ${err.message}`);
@@ -104,7 +105,7 @@ export const uploadMetadataToLighthouse = async (
     },
     onUploadProgress: (progressEvent: any) => {
       const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-      console.log(`アップロード進行中: ${progress}%`);
+      console.log(`uploadMetadataToLighthouseアップロード進行中: ${progress}%`);
     },
   };
 

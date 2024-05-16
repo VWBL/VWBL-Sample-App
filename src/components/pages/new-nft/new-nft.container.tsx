@@ -48,7 +48,6 @@ export const NewNFT = () => {
   };
 
   const isReceived = typeof window !== 'undefined' ? !!localStorage.getItem('is_received') : false;
-  // ProgressSubscriber を使用してプログレスを更新するラッパー関数
 
   useEffect(() => {
     let fileReaderForFile: FileReader;
