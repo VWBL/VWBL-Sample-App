@@ -15,7 +15,6 @@
 		"@chakra-ui/react": "^2.8.2",
 		"@emotion/react": "^11.11.1",
 		"@emotion/styled": "^11.11.0",
-		"@lighthouse-web3/sdk": "^0.3.2",
 		"@metamask/providers": "^14.0.2",
 		"@types/crypto-js": "^4.1.1",
 		"@types/react-pdf": "^7.0.0",
