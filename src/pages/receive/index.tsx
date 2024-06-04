@@ -1,8 +1,47 @@
-import type { NextPage } from 'next';
-import { ReceiveAudioNFT } from '../../components/pages/receive-audio';
+import { useCallback, useState } from 'react';
+
+import { ReceiveAudio } from '../../components/common/receive-nft/receive-audio';
+import { ReceivePdf } from '../../components/common/receive-nft';
+import { Container, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react';
+import { NextPage } from 'next';
+
+type Props = {
+  isReceived: boolean;
+};
+
+export const ReceivePage: React.FC<Props> = ({}) => {
+  const tabOptions = [{ name: 'PDF' }, { name: 'Music' }];
+  const [tabIndex, setTabIndex] = useState(0);
+
+  const handleTabsChange = useCallback((index: number) => {
+    setTabIndex(index);
+  }, []);
+  return (
+    <Container maxW='100%' my={12} centerContent>
+      <Tabs w='100%' size='md' index={tabIndex} onChange={handleTabsChange} colorScheme='black' variant='line' align='center'>
+        <TabList justifyContent={'center'}>
+          {tabOptions.map((tab, i) => (
+            <Tab px={4} key={i} fontWeight='bold' position='relative'>
+              <Text px={1}>{`${tab.name}`}</Text>
+            </Tab>
+          ))}
+        </TabList>
+
+        <TabPanels mt={6}>
+          <TabPanel>
+            <ReceivePdf />
+          </TabPanel>
+          <TabPanel>
+            <ReceiveAudio />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+    </Container>
+  );
+};
 
 const Page: NextPage = () => {
-  return <ReceiveAudioNFT />;
+  return <ReceivePage isReceived={false} />;
 };
 
 export default Page;

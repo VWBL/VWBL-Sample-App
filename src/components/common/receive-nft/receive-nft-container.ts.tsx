@@ -1,22 +1,31 @@
 import { useState, useCallback } from 'react';
-import { useRouter } from 'next/router';
-
-import { ReceiveNFTComponent } from './receive-nft';
-import { VwblContainer, ToastContainer } from '../../../container';
-import { ExtendedMetadeta } from 'vwbl-sdk';
 import { switchChain, uploadEncryptedFileToLighthouse, uploadThumbnailToLighthouse, uploadMetadataToLighthouse } from '../../../utils';
-
-export const sampleNFT: ExtendedMetadeta = {
-  id: 1,
-  name: 'Ango-ya LLC',
-  description: 'Company Information',
-  image: 'https://nftstorage.link/ipfs/bafybeiefochdgnrz6hgvmww35vmfegchnnf6zqh3b2xzpdqhbzjyqftv3y',
-  mimeType: 'application/pdf',
-  encryptLogic: 'base64',
-  address: '0x9850c4682475ac6bcB9CdA91F927CCc1574781C7',
+import { ExtendedMetadeta } from 'vwbl-sdk';
+import { ToastContainer, VwblContainer } from '../../../container';
+import { ReceiveNFTComponent } from './receive-nft';
+import { useRouter } from 'next/router';
+import { WalletInfo } from './wallet-info';
+import { LoadingModal } from './loading-modal';
+type Props = {
+  nft: ExtendedMetadeta;
+  contents: {
+    title: string;
+    description: string[];
+  };
+  fetchContentUrl: string;
+  fetchThumbnailUrl: string;
+  successMessage: string;
+  redirectUrl: string;
 };
 
-export const ReceiveNFT = () => {
+export const ReceiveNFTContainer: React.FC<Props> = ({
+  nft,
+  contents,
+  fetchContentUrl,
+  fetchThumbnailUrl,
+  successMessage,
+  redirectUrl,
+}) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { vwbl, checkNetwork, provider } = VwblContainer.useContainer();
@@ -28,7 +37,7 @@ export const ReceiveNFT = () => {
       openToast({
         title: 'Wallet Not Connected',
         status: 'error',
-        message: 'Please connect your wallet in order to crete your nft.',
+        message: 'Please connect your wallet in order to create your NFT.',
       });
       setIsLoading(false);
       return;
@@ -44,15 +53,15 @@ export const ReceiveNFT = () => {
     try {
       await vwbl.sign();
 
-      const content = await fetch('/sample-nft-content.pdf');
-      const contentFile = new File([await content.blob()], 'sample-nft-content.pdf', { type: 'application/pdf' });
+      const content = await fetch(fetchContentUrl);
+      const contentFile = new File([await content.blob()], 'sample-nft-content', { type: nft.mimeType });
 
-      const thumbnail = await fetch('https://nftstorage.link/ipfs/bafybeiefochdgnrz6hgvmww35vmfegchnnf6zqh3b2xzpdqhbzjyqftv3y');
+      const thumbnail = await fetch(fetchThumbnailUrl);
       const thumbnailFile = new File([await thumbnail.blob()], 'sample-nft-thumbnail.png', { type: 'image/png' });
 
       await vwbl.managedCreateTokenForIPFS(
-        sampleNFT.name,
-        sampleNFT.description,
+        nft.name,
+        nft.description,
         contentFile,
         thumbnailFile,
         0,
@@ -66,23 +75,35 @@ export const ReceiveNFT = () => {
       openToast({
         title: 'Successfully received',
         status: 'success',
-        message: 'you have successfully received NFT',
+        message: successMessage,
       });
       localStorage.setItem('is_received', 'true');
-      setTimeout(() => router.push('/account/'), 1000);
+      setTimeout(() => router.push(redirectUrl), 1000);
     } catch (err: any) {
       if (err.message && err.message.includes('User denied')) {
         openToast({
           title: 'User Denied Sign',
           status: 'error',
-          message: 'In order to crete your nft, please sign',
+          message: 'In order to create your NFT, please sign',
         });
       }
       console.log(err);
     } finally {
       setIsLoading(false);
     }
-  }, [vwbl, router]);
-
-  return <ReceiveNFTComponent onSubmit={onSubmit} isLoading={isLoading} />;
+  }, [vwbl, router, provider, openToast, fetchContentUrl, fetchThumbnailUrl, nft, successMessage, redirectUrl]);
+  return (
+    <>
+      {isLoading && <LoadingModal isOpen={isLoading} />}
+      <ReceiveNFTComponent
+        onSubmit={onSubmit}
+        contents={contents}
+        isLoading={isLoading}
+        title={contents.title}
+        description={contents.description}
+        nft={nft}
+      />
+      <WalletInfo />
+    </>
+  );
 };

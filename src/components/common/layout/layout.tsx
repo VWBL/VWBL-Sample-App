@@ -73,6 +73,10 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       title: 'Create',
       to: '/create',
     },
+    {
+      title: 'Receive',
+      to: '/receive',
+    },
   ];
 
   const FooterLinks: Link[] = [
