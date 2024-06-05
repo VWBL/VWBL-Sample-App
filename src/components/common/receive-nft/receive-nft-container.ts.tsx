@@ -6,6 +6,9 @@ import { ReceiveNFTComponent } from './receive-nft';
 import { useRouter } from 'next/router';
 import { WalletInfo } from './wallet-info';
 import { LoadingModal } from './loading-modal';
+import { Link, Text, Container } from '@chakra-ui/react';
+import NextLink from 'next/link';
+
 type Props = {
   nft: ExtendedMetadeta;
   contents: {
@@ -30,6 +33,8 @@ export const ReceiveNFTContainer: React.FC<Props> = ({
   const [isLoading, setIsLoading] = useState(false);
   const { vwbl, checkNetwork, provider } = VwblContainer.useContainer();
   const { openToast } = ToastContainer.useContainer();
+  const nftReceivedKey = `nft_received_${nft.name}`;
+  const isReceived = typeof window !== 'undefined' ? localStorage.getItem(nftReceivedKey) === 'true' : false;
 
   const onSubmit = useCallback(async () => {
     setIsLoading(true);
@@ -77,7 +82,7 @@ export const ReceiveNFTContainer: React.FC<Props> = ({
         status: 'success',
         message: successMessage,
       });
-      localStorage.setItem('is_received', 'true');
+      localStorage.setItem(nftReceivedKey, 'true');
       setTimeout(() => router.push(redirectUrl), 1000);
     } catch (err: any) {
       if (err.message && err.message.includes('User denied')) {
@@ -95,15 +100,30 @@ export const ReceiveNFTContainer: React.FC<Props> = ({
   return (
     <>
       {isLoading && <LoadingModal isOpen={isLoading} />}
-      <ReceiveNFTComponent
-        onSubmit={onSubmit}
-        contents={contents}
-        isLoading={isLoading}
-        title={contents.title}
-        description={contents.description}
-        nft={nft}
-      />
-      <WalletInfo />
+      {isReceived ? (
+        <Container maxW='container.md' centerContent>
+          <Text my={2}>NFTを発行済です。</Text>
+          <Text my={2}>
+            NFTは
+            <Link color='blue.600' href='/account' as={NextLink}>
+              My Walletのページ
+            </Link>
+            で閲覧できます。
+          </Text>
+        </Container>
+      ) : (
+        <>
+          <ReceiveNFTComponent
+            onSubmit={onSubmit}
+            contents={contents}
+            isLoading={isLoading}
+            title={contents.title}
+            description={contents.description}
+            nft={nft}
+          />
+          <WalletInfo />
+        </>
+      )}
     </>
   );
 };

@@ -17,7 +17,7 @@ export const ReceivePage: React.FC<Props> = ({}) => {
     setTabIndex(index);
   }, []);
   return (
-    <Container maxW='100%' my={12} centerContent>
+    <Container maxW='100%' mt={10} mb={16} centerContent>
       <Tabs w='100%' size='md' index={tabIndex} onChange={handleTabsChange} colorScheme='black' variant='line' align='center'>
         <TabList justifyContent={'center'}>
           {tabOptions.map((tab, i) => (

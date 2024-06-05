@@ -35,7 +35,7 @@ const NavLink = ({ title, to }: Link) => {
 
   return (
     <Link as={!isExternal ? NextLink : undefined} href={to} isExternal={isExternal}>
-      {title} {isExternal && <ExternalLinkIcon mx='2px' />}
+      {title} {isExternal && <ExternalLinkIcon mb='4px' mx='2px' />}
     </Link>
   );
 };
@@ -87,6 +87,10 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     {
       title: 'Create',
       to: '/create',
+    },
+    {
+      title: 'Receive',
+      to: '/receive',
     },
   ];
 

@@ -19,7 +19,7 @@ type Props = {
 export const ReceiveNFTComponent: React.FC<Props> = ({ title, description, nft, onSubmit, isLoading }) => {
   return (
     <Container maxW='container.md' my={12} centerContent>
-      <Heading as='h2' mb={8} w='100%' textAlign='center' size='lg'>
+      <Heading as='h2' mb={5} w='100%' textAlign='center' size='lg'>
         {title}
       </Heading>
       <VStack spacing={0} align='center'>
