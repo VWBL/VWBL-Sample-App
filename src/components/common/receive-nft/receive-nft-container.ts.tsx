@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { switchChain, uploadEncryptedFileToLighthouse, uploadThumbnailToLighthouse, uploadMetadataToLighthouse } from '../../../utils';
+import { switchChain } from '../../../utils';
 import { ExtendedMetadeta } from 'vwbl-sdk';
 import { ToastContainer, VwblContainer } from '../../../container';
 import { ReceiveNFTComponent } from './receive-nft';
@@ -11,6 +11,10 @@ import NextLink from 'next/link';
 
 type Props = {
   nft: ExtendedMetadeta;
+  nftKey: {
+    metadataUrl: string;
+    key: string;
+  };
   contents: {
     title: string;
     description: string[];
@@ -21,14 +25,22 @@ type Props = {
   redirectUrl: string;
 };
 
-export const ReceiveNFTContainer: React.FC<Props> = ({
-  nft,
-  contents,
-  fetchContentUrl,
-  fetchThumbnailUrl,
-  successMessage,
-  redirectUrl,
-}) => {
+export const mintTokenAndSetKey = async (vwbl: any, metadataUrl: string, key: string, mintApiId: string) => {
+  if (!vwbl.signature) {
+    throw new Error('Please sign first.');
+  }
+  try {
+    const tokenId = await vwbl.mintTokenForIPFS(metadataUrl, 0, mintApiId);
+    await vwbl.setKey(tokenId, key);
+    console.log('Key set successfully for token ID:', tokenId);
+    return tokenId;
+  } catch (error) {
+    console.error('Error in minting token and setting key:', error);
+    throw error;
+  }
+};
+
+export const ReceiveNFTContainer: React.FC<Props> = ({ nft, nftKey, contents, successMessage, redirectUrl }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { vwbl, checkNetwork, provider } = VwblContainer.useContainer();
@@ -57,26 +69,12 @@ export const ReceiveNFTContainer: React.FC<Props> = ({
 
     try {
       await vwbl.sign();
+      nft;
+      const metadataUrl = nftKey.metadataUrl;
+      const key = nftKey.key;
 
-      const content = await fetch(fetchContentUrl);
-      const contentFile = new File([await content.blob()], 'sample-nft-content', { type: nft.mimeType });
-
-      const thumbnail = await fetch(fetchThumbnailUrl);
-      const thumbnailFile = new File([await thumbnail.blob()], 'sample-nft-thumbnail.png', { type: 'image/png' });
-
-      await vwbl.managedCreateTokenForIPFS(
-        nft.name,
-        nft.description,
-        contentFile,
-        thumbnailFile,
-        0,
-        'base64',
-        process.env.NEXT_PUBLIC_MINT_API_ID!,
-        uploadEncryptedFileToLighthouse,
-        uploadThumbnailToLighthouse,
-        uploadMetadataToLighthouse,
-      );
-
+      const tokenId = await mintTokenAndSetKey(vwbl, metadataUrl, key, process.env.NEXT_PUBLIC_MINT_API_ID!);
+      console.log(tokenId);
       openToast({
         title: 'Successfully received',
         status: 'success',
@@ -92,11 +90,12 @@ export const ReceiveNFTContainer: React.FC<Props> = ({
           message: 'In order to create your NFT, please sign',
         });
       }
-      console.log(err);
+      console.error(err);
     } finally {
       setIsLoading(false);
     }
-  }, [vwbl, router, provider, openToast, fetchContentUrl, fetchThumbnailUrl, nft, successMessage, redirectUrl]);
+  }, [vwbl, router, provider, openToast, successMessage, redirectUrl]);
+
   return (
     <>
       {isLoading && <LoadingModal isOpen={isLoading} />}

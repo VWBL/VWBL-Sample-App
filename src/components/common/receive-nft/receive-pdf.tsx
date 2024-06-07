@@ -16,10 +16,16 @@ export const nft: ExtendedMetadeta = {
   address: '0x9850c4682475ac6bcB9CdA91F927CCc1574781C7',
 };
 
+export const nftKey = {
+  metadataUrl: process.env.NEXT_PUBLIC_COMPANY_INFORMATION_URL || 'defaultEncryptionKey',
+  key: process.env.NEXT_PUBLIC_COMPANY_INFORMATION_KEY || 'defaultEncryptionKey',
+};
+
 export const ReceivePdf: React.FC = () => {
   return (
     <ReceiveNFTContainer
       nft={nft}
+      nftKey={nftKey}
       contents={contents}
       fetchContentUrl='/sample-nft-content.pdf'
       fetchThumbnailUrl='https://nftstorage.link/ipfs/bafybeiefochdgnrz6hgvmww35vmfegchnnf6zqh3b2xzpdqhbzjyqftv3y'
