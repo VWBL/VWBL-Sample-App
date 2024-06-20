@@ -3,7 +3,6 @@ import { Readable } from 'stream';
 import { IPFSConfig } from 'vwbl-sdk';
 const lighthouseEndpoint: string = 'https://node.lighthouse.storage/api/v0/add';
 
-// configObject
 const createLighthouseConfig = (ipfsConfig?: IPFSConfig) => {
   if (!ipfsConfig || !ipfsConfig.apiKey) {
     throw new Error('Lighthouse API key is not specified.');
@@ -21,7 +20,6 @@ const createLighthouseConfig = (ipfsConfig?: IPFSConfig) => {
   };
 };
 
-// upload
 const uploadToLighthouse = async (formData: FormData, ipfsConfig?: IPFSConfig): Promise<string> => {
   const config = createLighthouseConfig(ipfsConfig);
 
@@ -32,7 +30,7 @@ const uploadToLighthouse = async (formData: FormData, ipfsConfig?: IPFSConfig): 
     throw new Error(`Lighthouse upload failed: ${err.message}`);
   }
 };
-// Encrypted file upload function
+
 export const uploadEncryptedFileToLighthouse = async (
   encryptedContent: string | Uint8Array | Readable,
   ipfsConfig?: IPFSConfig,
@@ -56,7 +54,7 @@ export const uploadEncryptedFileToLighthouse = async (
   return await uploadToLighthouse(formData, ipfsConfig);
 };
 
-// Thumbnail upload function
+
 type FileOrPath = string | Blob | File;
 export const uploadThumbnailToLighthouse = async (thumbnailImage: FileOrPath, ipfsConfig?: IPFSConfig): Promise<string> => {
   if (!ipfsConfig || !ipfsConfig.apiKey) {
@@ -68,18 +66,16 @@ export const uploadThumbnailToLighthouse = async (thumbnailImage: FileOrPath, ip
   if (thumbnailImage instanceof File) {
     formData.append('file', thumbnailImage);
   } else if (typeof thumbnailImage === 'string') {
-    // string型の場合、fetchを使用
     const response = await fetch(thumbnailImage);
     const blob = await response.blob();
     formData.append('file', new File([blob], 'thumbnail', { type: blob.type }));
   } else if (thumbnailImage instanceof Blob) {
-    // Blob型の場合、そのままFormDataに追加
     formData.append('file', thumbnailImage);
   }
 
   return await uploadToLighthouse(formData, ipfsConfig);
 };
-// Metadata upload function
+
 export const uploadMetadataToLighthouse = async (
   name: string,
   description: string,
