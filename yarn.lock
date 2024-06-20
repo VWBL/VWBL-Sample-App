@@ -9980,14 +9980,14 @@ __metadata:
     react-player: "npm:^2.10.0"
     typescript: "npm:^5.3.3"
     unstated-next: "npm:^1.1.0"
-    vwbl-sdk: "npm:^0.1.18"
+    vwbl-sdk: "npm:^0.1.19"
     web3: "npm:^4.0.0"
   languageName: unknown
   linkType: soft
 
-"vwbl-sdk@npm:^0.1.18":
-  version: 0.1.18
-  resolution: "vwbl-sdk@npm:0.1.18"
+"vwbl-sdk@npm:^0.1.19":
+  version: 0.1.19
+  resolution: "vwbl-sdk@npm:0.1.19"
   dependencies:
     "@aws-sdk/client-s3": "npm:^3.338.0"
     "@aws-sdk/credential-providers": "npm:^3.338.0"
@@ -10003,7 +10003,7 @@ __metadata:
     mime-types: "npm:^2.1.35"
     uuid: "npm:^8.3.2"
     web3: "npm:^4.3.0"
-  checksum: 8fedacafb13d3be9e353e26c58c17a01b43ddee43b54557f638695b93ddadab0af1e58984e24e7b9004488deba1eae71c42a2e9cce2c699f688736ac1e8d9eda
+  checksum: d01676181b274f44a76985a806d36d2351a56025140c00ceba521e4ecd9eb03ced8a24a5912b525a407726662377fc444370bd647c4b7593012c80aed85d8ef7
   languageName: node
   linkType: hard
 
