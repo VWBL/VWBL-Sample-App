@@ -1,38 +1,47 @@
-import { Heading, Box } from '@chakra-ui/react';
-import { sampleNFT } from './receive-nft.container';
-
-import { Button } from '../button';
-import { NFTItem } from '../nft-item';
+import { Heading, Box, Container, Text, VStack, FormControl } from '@chakra-ui/react';
+import { Button } from '../../common/button';
+import { NFTItem } from '../../common/nft-item';
+import { ExtendedMetadeta } from 'vwbl-sdk';
 
 type Props = {
+  title: string;
+  description: string[];
+  nft: ExtendedMetadeta;
+  contents: {
+    title: string;
+    description: string[];
+  };
   onSubmit: () => Promise<void>;
   isLoading: boolean;
+  extraInfo?: React.ReactNode;
 };
 
-export const ReceiveNFTComponent: React.FC<Props> = ({ onSubmit, isLoading }) => {
+export const ReceiveNFTComponent: React.FC<Props> = ({ title, description, nft, onSubmit, isLoading }) => {
   return (
-    <Box w='100%' maxW={480} mb='20'>
-      <Heading as='h2' mb={12} w='100%'>
-        受け取ってみましょう
+    <Container maxW='container.md' my={12} centerContent>
+      <Heading as='h2' mb={5} w='100%' textAlign='center' size='lg'>
+        {title}
       </Heading>
-
-      <Box display='flex' justifyContent='center'>
-        <NFTItem nft={sampleNFT} disabled={true} />
-      </Box>
-
-      <form>
-        <Box display='flex' justifyContent='center'>
+      <VStack spacing={0} align='center'>
+        <Text align='center'>
+          {description.map((text, i) => (
+            <Box as='span' display='block' key={i} m={0}>{`${text}`}</Box>
+          ))}
+        </Text>
+        <Box>
+          <NFTItem nft={nft} disabled={true} />
+        </Box>
+        <FormControl w='100%'>
           <Button
-            text='Receive'
+            width='300px'
+            text='NFT を無料で受け取る'
             isLoading={isLoading}
             loadingText='Creating Your NFT'
-            width='80%'
             fontWeight='bold'
-            mt={8}
             onClick={onSubmit}
           />
-        </Box>
-      </form>
-    </Box>
+        </FormControl>
+      </VStack>
+    </Container>
   );
 };

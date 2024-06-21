@@ -24,7 +24,15 @@ export const HeroComponent: React.FC = memo(() => {
             まずは試してみて！
           </Box>
         </Text>
-        <Button text='Try demo' width={{ base: '100%', md: '80%' }} mt={4} onClick={() => router.push('/create')} />
+        <Button text='NFTを作成する' width={{ base: '100%', md: '80%' }} height={12} mt={8} onClick={() => router.push('/create')} />
+        <Button
+          text='NFTを受け取る'
+          width={{ base: '100%', md: '80%' }}
+          height={12}
+          mt={5}
+          isReversed
+          onClick={() => router.push('/receive')}
+        />
       </Box>
       <Box mt={{ base: 16, md: 0 }}>
         <Text fontSize='2xl' fontWeight='bold' textAlign='center'>

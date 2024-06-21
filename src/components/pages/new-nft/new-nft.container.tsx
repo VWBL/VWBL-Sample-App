@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { ProgressSubscriber, StepStatus } from 'vwbl-sdk';
-
+import { uploadEncryptedFileToLighthouse, uploadThumbnailToLighthouse, uploadMetadataToLighthouse } from '../../../utils/ipfsHelper';
 import { NewNFTComponent } from './new-nft';
 import { VwblContainer, ToastContainer } from '../../../container';
 import { segmentation, MAX_FILE_SIZE, BASE64_MAX_SIZE, VALID_EXTENSIONS, switchChain } from '../../../utils';
@@ -40,7 +40,6 @@ export const NewNFT = () => {
       setMintStep((prev) => [...prev, status]);
     },
   };
-
   const isReceived = typeof window !== 'undefined' ? !!localStorage.getItem('is_received') : false;
 
   useEffect(() => {
@@ -86,7 +85,7 @@ export const NewNFT = () => {
         openToast({
           title: 'Wallet Not Connected',
           status: 'error',
-          message: 'Please connect your wallet in order to crete your nft.',
+          message: 'Please connect your wallet in order to create your NFT.',
         });
         setIsLoading(false);
         return;
@@ -106,10 +105,10 @@ export const NewNFT = () => {
         }
         await vwbl.sign();
 
-        // NOTE: MAX_FILE_SIZE > BASE64_MAX_SIZE
         const isLarge = asset[0].size > MAX_FILE_SIZE;
         const isBase64 = asset[0].size < BASE64_MAX_SIZE;
         const plainFile = isLarge ? segmentation(asset[0], MAX_FILE_SIZE) : asset[0];
+
         await vwbl.managedCreateTokenForIPFS(
           title,
           description,
@@ -118,6 +117,9 @@ export const NewNFT = () => {
           0,
           isBase64 ? 'base64' : 'binary',
           process.env.NEXT_PUBLIC_MINT_API_ID!,
+          uploadEncryptedFileToLighthouse,
+          uploadThumbnailToLighthouse,
+          uploadMetadataToLighthouse,
           progressSubscriber,
         );
       } catch (err: any) {
@@ -125,7 +127,7 @@ export const NewNFT = () => {
           openToast({
             title: 'User Denied Sign',
             status: 'error',
-            message: 'In order to crete your nft, please sign',
+            message: 'In order to create your NFT, please sign.',
           });
         }
         console.log(err);
