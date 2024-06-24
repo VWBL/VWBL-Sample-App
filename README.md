@@ -1,4 +1,4 @@
-# VWBL-Sample-App  
+# VWBL-Sample-App
 
 ## Install Packages
 
@@ -20,7 +20,7 @@ Plese set the environmental variables 　 looking at the descriptions below
 | NEXT_PUBLIC_NFT_CONTRACT_ADDRESS | true | The address of Smart Contract inherits VWBL Protocol |
 | NEXT_PUBLIC_VWBL_NETWORK_URL | true | The URL of VWBL Key Management Network 　（No need to change）|
 | NEXT_PUBLIC_CHAIN_ID | true | The ID of the blockchain network you want to connect |
-| NEXT_PUBLIC_NFT_STORAGE_KEY | true | API key created on [NFT.Storage](https://nft.storage/) |
+| NEXT_PUBLIC_LIGHT_HOUSE_KEY | true | API key created on [LIGHTHOUSE](https://www.lighthouse.storage/) |
 | NEXT_PUBLIC_BICONOMY_API_KEY | true | API key created on [Biconomy](https://www.biconomy.io) |
 | NEXT_PUBLIC_MINT_API_ID | true | API ID of NFT mint method which is created on [Biconomy Dashboard](https://dashboard-gasless.biconomy.io/) |
 | NEXT_PUBLIC_TRANSFER_API_ID | true | API ID of NFT transfer method whiich is created on [Biconomy Dashboard](https://dashboard-gasless.biconomy.io/) |

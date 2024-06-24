@@ -31,14 +31,14 @@
 		"react-pdf": "^7.5.1",
 		"react-player": "^2.10.0",
 		"unstated-next": "^1.1.0",
-		"vwbl-sdk": "^0.1.11",
+		"vwbl-sdk": "^0.1.19",
 		"web3": "^4.0.0"
 	},
 	"devDependencies": {
 		"@types/node": "^20.10.5",
 		"@types/react": "^18.2.45",
-		"@typescript-eslint/eslint-plugin": "^6.15.0",
-		"@typescript-eslint/parser": "^6.15.0",
+		"@typescript-eslint/eslint-plugin": "^7.9.0",
+		"@typescript-eslint/parser": "^7.9.0",
 		"eslint": "^8.56.0",
 		"eslint-config-next": "^14.0.4",
 		"husky": "^8.0.3",
