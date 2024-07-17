@@ -29,10 +29,10 @@ export const ReceivePage: React.FC<Props> = ({}) => {
 
         <TabPanels mt={6}>
           <TabPanel>
-            <ReceivePdf />
+            <ReceiveAudio />
           </TabPanel>
           <TabPanel>
-            <ReceiveAudio />
+            <ReceivePdf />
           </TabPanel>
         </TabPanels>
       </Tabs>
