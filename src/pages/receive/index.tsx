@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const ReceivePage: React.FC<Props> = ({}) => {
-  const tabOptions = [{ name: 'PDF' }, { name: 'Music' }];
+  const tabOptions = [ { name: 'Music' },{ name: 'PDF' }];
   const [tabIndex, setTabIndex] = useState(0);
 
   const handleTabsChange = useCallback((index: number) => {
