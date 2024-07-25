@@ -2,48 +2,60 @@ import React, { useState } from 'react';
 import { GachaMachineComponent } from './gacha-machine';
 import axios from 'axios';
 
-import { signToProtocol } from 'vwbl-sdk';
 import { VwblContainer } from '../../../container';
-import Web3 from 'web3';
 const items = ['/thumbnail_a.jpeg', '/thumbnail_b.png', '/thumbnail_c.png'];
 
 export const GachaMachine: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentItem, setCurrentItem] = useState<string | null>(null);
   const [fetchedData, setFetchedData] = useState<any>(null);
-  const { provider } = VwblContainer.useContainer();
-  const message = 'Sign Message: Get VWBL Gacha';
-  console.log('GachaMachineContainer rendered');
+  const { vwbl } = VwblContainer.useContainer();
 
   const fetchData = async () => {
     console.log('sign...');
-    const web3 = new Web3(provider);
+    if (vwbl) await vwbl.sign();
+    const signature = vwbl?.signature;
     console.log('Fetching data...');
-    const signature = await signToProtocol(web3, message);
-    console.log('Signature:', signature);
 
-    console.log('Fetching data...');
-    try {
-      const response = await axios.post(
-        'https://x92s8btj0m.execute-api.ap-northeast-1.amazonaws.com/pro/mint',
-        {
-          ethSig: signature,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
+    const maxRetries = 3;
+    const retryDelay = 1000; // 1秒 = 1000ミリ秒
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_GATYA_API_HOST}/pro/mint`,
+          {
+            ethSig: signature,
           },
-        },
-      );
-      console.log('Fetched data:', response.data);
-      setFetchedData(response.data);
-    } catch (error: any) {
-      if (error.response) {
-        console.error('Error fetching data:', error.response.status, error.response.data);
-      } else if (error.request) {
-        console.error('Error fetching data: No response received');
-      } else {
-        console.error('Error fetching data:', error.message);
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+
+        console.log('Fetched data:', response.data);
+        setFetchedData(response.data);
+        return; // 成功したら関数を終了
+      } catch (error: any) {
+        if (error.response) {
+          if (error.response.status === 400) {
+            console.error('Error 400, not retrying:', error.response.data);
+            return;
+          }
+          console.error('Error fetching data:', error.response.status, error.response.data);
+        } else if (error.request) {
+          console.error('Error fetching data: No response received');
+        } else {
+          console.error('Error fetching data:', error.message);
+        }
+
+        if (attempt < maxRetries) {
+          console.log(`Retrying in ${retryDelay}ms... (Attempt ${attempt} of ${maxRetries})`);
+          await new Promise((resolve) => setTimeout(resolve, retryDelay));
+        } else {
+          console.error('Max retries reached. Giving up.');
+        }
       }
     }
   };
