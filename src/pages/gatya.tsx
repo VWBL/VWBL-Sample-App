@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import GachaMachine from '../components/common/gacha-machine/gacha-machine';
+import { GachaMachine } from '../components/common/gacha-machine';
 
 const Page: NextPage = () => {
   return <GachaMachine />;

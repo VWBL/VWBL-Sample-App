@@ -1,1 +1,1 @@
-export * from './gacha-machine';
+export * from './gacha-machine.container';

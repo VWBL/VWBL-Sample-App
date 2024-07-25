@@ -1,27 +1,17 @@
-import React, { useState } from 'react';
-import styles from './gacha-machine.module.css';
+import React from 'react';
 import { Button, Container, Image, VStack } from '@chakra-ui/react';
+import styles from './gacha-machine.module.css';
 
-const items = ['/sample1.png', '/sample2.png', '/sample3.png'];
+type GachaMachineComponentProps = {
+  isPlaying: boolean;
+  currentItem: string | null;
+  playGacha: () => void;
+  fetchData: () => void;
+  fetchedData: any;
+};
 
-const GachaMachine: React.FC = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentItem, setCurrentItem] = useState<string | null>(null);
-
-  const playGacha = () => {
-    setIsPlaying(true);
-    setCurrentItem(null);
-
-    setTimeout(() => {
-      const randomItem = items[Math.floor(Math.random() * items.length)];
-      setCurrentItem(randomItem);
-    }, 1500);
-
-    setTimeout(() => {
-      setIsPlaying(false);
-    }, 2000);
-  };
-
+export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({ isPlaying, currentItem, playGacha, fetchData, fetchedData }) => {
+  console.log('GachaMachine rendered'); // デバッグ用のログ
   return (
     <div className={styles.gachaMachine}>
       <VStack>
@@ -30,7 +20,16 @@ const GachaMachine: React.FC = () => {
           <Button colorScheme='purple' size='lg' color='white' display='flex' onClick={playGacha} disabled={isPlaying}>
             ガチャを回す
           </Button>
+          <Button colorScheme='blue' size='lg' color='white' display='flex' onClick={fetchData}>
+            データ取得
+          </Button>
         </Container>
+        {fetchedData && (
+          <div>
+            <h2>Fetched Data:</h2>
+            <pre>{JSON.stringify(fetchedData, null, 2)}</pre>
+          </div>
+        )}
       </VStack>
       <div className={`${styles.capsule} ${isPlaying ? styles.playing : ''}`}>
         <div className={`${styles.lid} ${currentItem ? styles.open : ''}`}></div>
@@ -39,5 +38,3 @@ const GachaMachine: React.FC = () => {
     </div>
   );
 };
-
-export default GachaMachine;
