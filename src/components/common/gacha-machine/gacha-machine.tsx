@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Container, Image, VStack } from '@chakra-ui/react';
+import { Button, Container, Heading, Image, VStack } from '@chakra-ui/react';
 import styles from './gacha-machine.module.css';
+import Link from 'next/link';
 
 type GachaMachineComponentProps = {
   isPlaying: boolean;
@@ -10,24 +11,25 @@ type GachaMachineComponentProps = {
   fetchedData: any;
 };
 
-export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({ isPlaying, currentItem, playGacha, fetchData, fetchedData }) => {
-  console.log('GachaMachine rendered'); // デバッグ用のログ
+export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({ isPlaying, currentItem, fetchData, fetchedData }) => {
   return (
     <div className={styles.gachaMachine}>
       <VStack>
         <Container maxW='md' bg='purple.50' color='white' centerContent p={10} gap={6}>
           <Image src='/gachagacha.png' alt='' w={200} />
-          <Button colorScheme='purple' size='lg' color='white' display='flex' onClick={playGacha} disabled={isPlaying}>
+          <Button colorScheme='purple' size='lg' color='white' display='flex' onClick={fetchData}>
             ガチャを回す
-          </Button>
-          <Button colorScheme='blue' size='lg' color='white' display='flex' onClick={fetchData}>
-            データ取得
           </Button>
         </Container>
         {fetchedData && (
           <div>
-            <h2>Fetched Data:</h2>
-            <pre>{JSON.stringify(fetchedData, null, 2)}</pre>
+            <Heading as='h2' size='md' mr={6}>
+              ガチャの中身を見る
+            </Heading>
+
+            <Link color='blue.600' href='/account'>
+              My Walletのページへ
+            </Link>
           </div>
         )}
       </VStack>

@@ -3,6 +3,7 @@ import { GachaMachineComponent } from './gacha-machine';
 import axios from 'axios';
 
 import { VwblContainer } from '../../../container';
+
 const items = ['/thumbnail_a.jpeg', '/thumbnail_b.png', '/thumbnail_c.png'];
 
 export const GachaMachine: React.FC = () => {
@@ -23,7 +24,7 @@ export const GachaMachine: React.FC = () => {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_GATYA_API_HOST}/pro/mint`,
+          `${process.env.NEXT_PUBLIC_GATYA_API_URL}/pro/mint`,
           {
             ethSig: signature,
           },
@@ -36,7 +37,16 @@ export const GachaMachine: React.FC = () => {
 
         console.log('Fetched data:', response.data);
         setFetchedData(response.data);
-        return; // 成功したら関数を終了
+
+        // gachaId に基づいてアイテムを選択
+        const gachaId = response.data.gachaId;
+        if (gachaId >= 0 && gachaId < items.length) {
+          setCurrentItem(items[gachaId - 1]);
+        } else {
+          console.error('Invalid gachaId:', gachaId);
+        }
+
+        return;
       } catch (error: any) {
         if (error.response) {
           if (error.response.status === 400) {
@@ -63,12 +73,6 @@ export const GachaMachine: React.FC = () => {
   const playGacha = () => {
     console.log('Playing gacha...');
     setIsPlaying(true);
-    setCurrentItem(null);
-
-    setTimeout(() => {
-      const randomItem = items[Math.floor(Math.random() * items.length)];
-      setCurrentItem(randomItem);
-    }, 1500);
 
     setTimeout(() => {
       setIsPlaying(false);
