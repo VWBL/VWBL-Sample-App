@@ -30,7 +30,6 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
     formState: { errors },
   } = useForm<FormInputs>({ mode: 'onBlur' });
   const router = useRouter();
-
   const { vwbl, provider, userAddress, checkNetwork } = VwblContainer.useContainer();
   const { openToast } = ToastContainer.useContainer();
   const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
@@ -72,7 +71,6 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
         } else if (lowerCaseContractAddress === nftGatyaContractAddress) {
           apiKey = process.env.NEXT_PUBLIC_GATYA_BICONOMY_API_KEY!;
           transferApiId = process.env.NEXT_PUBLIC_GATYA_TRANSFER_API_ID!;
-
           const provider = (window as any).ethereum;
           const vwblInstance = new VWBLMetaTx({
             bcProvider: provider,
