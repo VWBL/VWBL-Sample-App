@@ -1,7 +1,6 @@
 import React from 'react';
-import { Alert, AlertIcon, Button, Container, Heading, Image, Spinner, Text, VStack } from '@chakra-ui/react';
+import { Alert, Button, Container, Heading, Image, Spinner, Text, VStack, Link } from '@chakra-ui/react';
 import styles from './gacha-machine.module.css';
-import Link from 'next/link';
 
 type GachaMachineComponentProps = {
   isPlaying: boolean;
@@ -30,36 +29,43 @@ export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({
             ガチャを回す
           </Button>
         </Container>
+
         {isLoading && (
           <VStack mt={4}>
             <Spinner size='xl' color='purple.500' />
-            <Text>ガチャ実行中...</Text>
-            <Text>ページ遷移せずに10秒ほどお待ち下さい。</Text>
+            <Heading as='h2' size='lg' my={4}>
+              ガチャ実行中...
+            </Heading>
+            <Text fontSize='xl'>ページ遷移せずに10秒ほどお待ち下さい。</Text>
           </VStack>
         )}
         {error && (
           <Alert status='error'>
-            <AlertIcon />
-            {error}
+            <Heading as='h2' size='lg' my={4}>
+              ガチャがまわせませんでした
+            </Heading>
+            <Text fontSize='xl'> {error}</Text>
           </Alert>
         )}
         {fetchedData && (
-          <VStack mt={10}>
-            <Heading as='h2' size='md' mr={6}>
+          <VStack mt={10} px={{ base: 4, md: 10 }}>
+            <Heading as='h2' size='lg' my={4}>
               ガチャの中身を見る
             </Heading>
-            <Text>
-              ガチャの中身は
-              <Link href='/account'>My Walletのページ</Link>
-              で見られます
+            <Text fontSize={{ base: 'lg', md: 'xl' }}>ガチャで獲得したアイテムは</Text>
+            <Text fontSize={{ base: 'lg', md: 'xl' }}>
+              <Link href='/account' color='blue.600'>
+                My Walletのページ
+              </Link>
+              で確認できます。
             </Text>
+            <div className={`${styles.capsule} ${isPlaying ? styles.playing : ''}`}>
+              <div className={`${styles.lid} ${currentItem ? styles.open : ''}`}></div>
+              {currentItem && <img className={styles.item} src={currentItem} alt='ガチャアイテム' />}
+            </div>
           </VStack>
         )}
       </VStack>
-      <div className={`${styles.capsule} ${isPlaying ? styles.playing : ''}`}>
-        <div className={`${styles.lid} ${currentItem ? styles.open : ''}`}></div>
-        {currentItem && <img className={styles.item} src={currentItem} alt='ガチャアイテム' />}
-      </div>
     </div>
   );
 };

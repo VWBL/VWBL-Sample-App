@@ -104,7 +104,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
   return (
     <>
-      <Box px={8}>
+      <Box px={{ base: 6, md: 8 }}>
         <Flex
           as='header'
           h={{ base: '70px', md: '80px' }}
@@ -174,7 +174,15 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
       {/* hidden element to adjust hight */}
       <Box minH='calc(100vh - 160px)'>{children}</Box>
-      <Container as='footer' h={{ base: '320px', md: '100px' }} role='contentinfo' maxW='100%' borderTop='2px' px='5vw'>
+      <Container
+        as='footer'
+        pt={{ base: 8, md: 10 }}
+        pb={{ base: 6, md: 10 }}
+        role='contentinfo'
+        maxW='100%'
+        borderTop='2px'
+        px={{ base: 6, md: 8 }}
+      >
         <Stack
           justifyContent={{ base: 'center', md: 'space-between' }}
           direction={{ base: 'column', md: 'row' }}
@@ -184,6 +192,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           <Stack
             spacing={{ base: 4, md: 6 }}
             direction={{ base: 'column', md: 'row' }}
+            pb={{ base: 8, md: 0 }}
             fontWeight='bold'
             fontSize={{ base: '2xl', md: 'md' }}
           >
@@ -192,11 +201,10 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             ))}
             {userAddress && <NavLink title='My Wallet' to='/account' />}
           </Stack>
-          <Box py={6}>
-            <Text fontSize='sm' color='#AEAEB2'>
-              &copy; {new Date().getFullYear()} Ango-ya, LLC. All rights reserved.
-            </Text>
-          </Box>
+
+          <Text fontSize='sm' color='#AEAEB2'>
+            &copy; {new Date().getFullYear()} Ango-ya, LLC. All rights reserved.
+          </Text>
         </Stack>
       </Container>
     </>

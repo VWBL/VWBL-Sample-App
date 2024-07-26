@@ -24,7 +24,6 @@
 .lid {
   width: 100%;
   height: 50%;
-
   background-color: #e9eaf5;
   position: absolute;
   top: 0;
@@ -37,9 +36,11 @@
 }
 
 .item {
-  width: 150px;
-  height: 150px;
+  width: 200px;
+  height: 200px;
   margin: 25px;
+  object-fit: contain;
+
 }
 
 .gachaMachine button {
