@@ -60,7 +60,7 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
         setIsLoading(true);
         const lowerCaseContractAddress = getAsString(contractAddress).toLowerCase();
         const nftContractAddress = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS!.toLowerCase();
-        const nftGatyaContractAddress = process.env.NEXT_PUBLIC_GATYA_NFT_CONTRACT_ADDRESS!.toLowerCase();
+        const nftGachaContractAddress = process.env.NEXT_PUBLIC_GACHA_NFT_CONTRACT_ADDRESS!.toLowerCase();
 
         let apiKey: string | undefined, transferApiId: string | undefined;
 
@@ -68,13 +68,13 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
           apiKey = process.env.NEXT_PUBLIC_BICONOMY_API_KEY;
           transferApiId = process.env.NEXT_PUBLIC_TRANSFER_API_ID!;
           await vwbl.safeTransfer(walletAddress, parseInt(getAsString(tokenId)), transferApiId);
-        } else if (lowerCaseContractAddress === nftGatyaContractAddress) {
-          apiKey = process.env.NEXT_PUBLIC_GATYA_BICONOMY_API_KEY!;
-          transferApiId = process.env.NEXT_PUBLIC_GATYA_TRANSFER_API_ID!;
+        } else if (lowerCaseContractAddress === nftGachaContractAddress) {
+          apiKey = process.env.NEXT_PUBLIC_GACHA_BICONOMY_API_KEY!;
+          transferApiId = process.env.NEXT_PUBLIC_GACHA_TRANSFER_API_ID!;
           const provider = (window as any).ethereum;
           const vwblInstance = new VWBLMetaTx({
             bcProvider: provider,
-            contractAddress: process.env.NEXT_PUBLIC_GATYA_NFT_CONTRACT_ADDRESS!,
+            contractAddress: process.env.NEXT_PUBLIC_GACHA_NFT_CONTRACT_ADDRESS!,
             manageKeyType: ManageKeyType.VWBL_NETWORK_SERVER,
             uploadContentType: UploadContentType.IPFS,
             uploadMetadataType: UploadMetadataType.IPFS,
