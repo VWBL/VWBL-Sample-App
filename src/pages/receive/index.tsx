@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const ReceivePage: React.FC<Props> = ({}) => {
-  const tabOptions = [{ name: 'PDF' }, { name: 'Music' }];
+  const tabOptions = [ { name: 'Music' },{ name: 'PDF' }];
   const [tabIndex, setTabIndex] = useState(0);
 
   const handleTabsChange = useCallback((index: number) => {
@@ -29,10 +29,10 @@ export const ReceivePage: React.FC<Props> = ({}) => {
 
         <TabPanels mt={6}>
           <TabPanel>
-            <ReceivePdf />
+            <ReceiveAudio />
           </TabPanel>
           <TabPanel>
-            <ReceiveAudio />
+            <ReceivePdf />
           </TabPanel>
         </TabPanels>
       </Tabs>

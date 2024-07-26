@@ -93,6 +93,10 @@ jobs:
           NEXT_PUBLIC_COMPANY_INFORMATION_URL: 'https://gateway.lighthouse.storage/ipfs/QmR7GxwQYoptci6RyQthVftCHoJ7WkydWisUA2ynXUtbXo'
           NEXT_PUBLIC_BLOCKCHAIN_PARTY_KEY: ${{ secrets.BLOCKCHAIN_PARTY_KEY }}
           NEXT_PUBLIC_BLOCKCHAIN_PARTY_URL: 'https://gateway.lighthouse.storage/ipfs/QmWScRUXNf4PWU9ESYs6HCHkGSbhcU4JfWAS63BbLcdFFK'
+          NEXT_PUBLIC_GACHA_NFT_CONTRACT_ADDRESS: ${{ secrets.GACHA_NFT_CONTRACT_ADDRESS }}
+          NEXT_PUBLIC_GACHA_API_URL: ${{ secrets.GACHA_API_URL }}
+          NEXT_PUBLIC_GACHA_TRANSFER_API_ID: ${{ secrets.GACHA_TRANSFER_API_ID }}
+          NEXT_PUBLIC_GACHA_BICONOMY_API_KEY: ${{ secrets.GACHA_BICONOMY_API_KEY }}
 
         run: |
           yarn build
@@ -154,6 +158,10 @@ jobs:
           NEXT_PUBLIC_COMPANY_INFORMATION_URL: 'https://gateway.lighthouse.storage/ipfs/QmR7GxwQYoptci6RyQthVftCHoJ7WkydWisUA2ynXUtbXo'
           NEXT_PUBLIC_BLOCKCHAIN_PARTY_KEY: ${{ secrets.BLOCKCHAIN_PARTY_KEY }}
           NEXT_PUBLIC_BLOCKCHAIN_PARTY_URL: 'https://gateway.lighthouse.storage/ipfs/QmWScRUXNf4PWU9ESYs6HCHkGSbhcU4JfWAS63BbLcdFFK'
+          NEXT_PUBLIC_GACHA_NFT_CONTRACT_ADDRESS: ${{ secrets.GACHA_NFT_CONTRACT_ADDRESS }}
+          NEXT_PUBLIC_GACHA_API_URL: ${{ secrets.GACHA_API_URL }}
+          NEXT_PUBLIC_GACHA_TRANSFER_API_ID: ${{ secrets.GACHA_TRANSFER_API_ID }}
+          NEXT_PUBLIC_GACHA_BICONOMY_API_KEY: ${{ secrets.GACHA_BICONOMY_API_KEY }}
         run: |
           yarn build
       - name: Deploy to s3
