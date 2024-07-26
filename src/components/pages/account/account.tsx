@@ -24,20 +24,26 @@ export const AccountComponent: React.FC<Props> = ({ ownedNfts, mintedNfts, walle
   };
 
   return (
-    <Box pt={10}>
+    <Box >
       <NotificationModal isOpen={isOpenModal} onClose={onCloseModal} notification={notifications.load_failed} />
-      <Container borderTop='1px solid black' maxW='container.lg' centerContent>
+      <Container
+        borderTop='1px solid black'
+        maxW='container.lg'
+        centerContent
+        pt={{ base: '6', md: '8' }}
+        pb={{ base: '12', md: '12' }}
+        px={{ base: '6', md: '10' }}
+      >
         <Stack
           direction={{ base: 'column', md: 'row' }}
-          w={{ base: 'xs', md: 'xl' }}
-          spacing={6}
-          py={10}
+          w='100%'
+          spacing={{ base: '3', md: '6' }}
           fontWeight='bold'
           fontSize='md'
           overflowWrap='break-word'
           justifyContent='center'
         >
-          <Text>My Wallet</Text>
+          <Text fontSize='lg'>My Wallet</Text>
           <Text>{walletAddress}</Text>
         </Stack>
       </Container>
@@ -54,12 +60,11 @@ export const AccountComponent: React.FC<Props> = ({ ownedNfts, mintedNfts, walle
           ))}
         </TabList>
 
-        <TabPanels mt={6} maxW='container.lg'>
-          <TabPanel>
+        <TabPanels mt={10} mb={20} maxW='container.lg'>
+          <TabPanel p={0}>
             <ItemList nfts={ownedNfts} />
           </TabPanel>
-
-          <TabPanel>
+          <TabPanel p={0}>
             <ItemList nfts={mintedNfts} />
           </TabPanel>
         </TabPanels>

@@ -13,22 +13,22 @@ export const NFTItemComponent: React.FC<Props> = ({ nft, disabled }) => {
       <VStack
         bg={useColorModeValue('white', 'gray.800')}
         width={300}
-        py={8}
-        gap={4}
+        pt={8}
+        pb={5}
+        gap={6}
         style={{ pointerEvents: disabled ? 'none' : undefined }}
       >
         <Box padding={'40px 30px'} bgColor='black' minHeight={426} width='100%' display='flex' alignItems='center' justifyContent='center'>
           <Image src={nft.image} alt={`Picture of ${nft.name}`} />
         </Box>
-
-        <Box width='100%'>
-          <Text fontSize='md' fontWeight='bold'>
+        <VStack align='start' w='100%'>
+          <Text fontSize='lg' fontWeight='bold' justifyContent='flex-start' textAlign='left' w='100%'>
             {nft.name}
           </Text>
-          <Text fontSize='sm' noOfLines={3}>
+          <Text fontSize='sm' noOfLines={3} textAlign='left'>
             {nft.description}
           </Text>
-        </Box>
+        </VStack>
       </VStack>
     </Link>
   );
