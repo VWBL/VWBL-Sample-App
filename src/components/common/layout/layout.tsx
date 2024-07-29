@@ -121,7 +121,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             {userAddress ? (
               <HStack spacing={6}>
                 <Link href='/account' as={NextLink}>
-                  <Button as='a' text='My Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} />
+                  <Button text='My Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} />
                 </Link>
               </HStack>
             ) : (

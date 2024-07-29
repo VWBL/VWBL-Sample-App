@@ -40,11 +40,13 @@ export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({
           </VStack>
         )}
         {error && (
-          <Alert status='error'>
-            <Heading as='h2' size='lg' my={4}>
-              ガチャがまわせませんでした
-            </Heading>
-            <Text fontSize='xl'> {error}</Text>
+          <Alert status='error' mt={4}>
+            <VStack mt={4}>
+              <Heading as='h2' size='lg' my={4}>
+                ガチャがまわせませんでした。
+              </Heading>
+              <Text fontSize='xl'>{error}</Text>
+            </VStack>
           </Alert>
         )}
         {fetchedData && (

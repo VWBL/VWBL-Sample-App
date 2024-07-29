@@ -20,7 +20,7 @@ export const NotificationModal: React.FC<Props> = ({ notification, isOpen, onClo
     <>
       <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
-        <ModalContent p={4}>
+        <ModalContent p={4} mx={{ base: '6', md: '8' }}>
           <ModalHeader>{notification.title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
