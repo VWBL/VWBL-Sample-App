@@ -41,7 +41,7 @@ export const GachaMachine: React.FC = () => {
 
         // gachaId に基づいてアイテム選択
         const gachaId = response.data.gachaId;
-        if (gachaId >= 1 && gachaId < items.length+1) {
+        if (gachaId >= 1 && gachaId < items.length + 1) {
           setCurrentItem(items[gachaId - 1]);
         } else {
           console.error('Invalid gachaId:', gachaId);

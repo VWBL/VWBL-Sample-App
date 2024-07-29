@@ -122,7 +122,7 @@ export const TransferModalComponent: React.FC<Props> = ({
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <FormControl isInvalid={!!errors.walletAddress}>
                     <FormLabel htmlFor='walletAddress'>
-                      <Text fontSize='sm'  fontWeight='bold' mb={2}>
+                      <Text fontSize='sm' fontWeight='bold' mb={2}>
                         Wallet Address
                       </Text>
                     </FormLabel>
