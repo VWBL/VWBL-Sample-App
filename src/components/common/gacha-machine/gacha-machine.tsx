@@ -22,7 +22,7 @@ export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({
 }) => {
   return (
     <div className={styles.gachaMachine}>
-      <VStack>
+      <VStack px={{ base: '6', md: '10' }} py={{ base: '6', md: '10' }}>
         <Container maxW='md' bg='purple.50' color='white' centerContent p={10} gap={6}>
           <Image src='/gachagacha.png' alt='' w={200} />
           <Button colorScheme='purple' size='lg' color='white' display='flex' onClick={fetchData}>
@@ -31,27 +31,27 @@ export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({
         </Container>
 
         {isLoading && (
-          <VStack mt={4}>
+          <Container mt={4} maxW='md' bg='gray.50' p={10}>
             <Spinner size='xl' color='purple.500' />
-            <Heading as='h2' size='lg' my={4}>
+            <Heading as='h2' size='md' my={4}>
               ガチャ実行中...
             </Heading>
-            <Text fontSize='xl'>ページ遷移せずに10秒ほどお待ち下さい。</Text>
-          </VStack>
+            <Text fontSize='md'>ページ遷移せずに10秒ほどお待ち下さい。</Text>
+          </Container>
         )}
         {error && (
-          <Alert status='error' mt={4}>
-            <VStack mt={4}>
-              <Heading as='h2' size='lg' my={4}>
+          <Alert status='error' maxW='md' mt={4} mb={20}>
+            <Container maxW='md' my={8} p={0}>
+              <Heading as='h2' size='md' mb={2}>
                 ガチャがまわせませんでした。
               </Heading>
-              <Text fontSize='xl'>{error}</Text>
-            </VStack>
+              <Text fontSize='md'>{error}</Text>
+            </Container>
           </Alert>
         )}
         {fetchedData && (
           <VStack mt={10} px={{ base: 4, md: 10 }}>
-            <Heading as='h2' size='lg' my={4}>
+            <Heading as='h2' size='md' my={4}>
               ガチャの中身を見る
             </Heading>
             <Text fontSize={{ base: 'lg', md: 'xl' }}>ガチャで獲得したアイテムは</Text>
