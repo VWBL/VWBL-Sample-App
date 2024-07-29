@@ -96,31 +96,33 @@ export const TransferModalComponent: React.FC<Props> = ({
         <ModalContent maxW='480px' mx={6} p={0}>
           <ModalBody p={0}>
             <Box bg='black' w='100%' h='300px' position='relative'>
-              <Box position='absolute' top='50%' left='50%' transform='translate(-50%, -50%)' w='60%'>
+              <Box position='absolute' top='50%' left='50%' transform='translate(-50%, -50%)' w='100%'>
                 <FileViewer nft={nft} />
               </Box>
             </Box>
-            <Box p={10}>
+            <Box px={{ base: '6', md: '10' }} py={{ base: '8', md: '10' }}>
               <Text fontSize='2xl' fontWeight='bold'>
                 Transfer NFT
               </Text>
               <Stack gap={4} mt={4}>
                 <Stack direction={{ base: 'column', md: 'row' }}>
-                  <Text w='85px' mr={4}>
+                  <Text fontSize='sm' w='85px' mr={4}>
                     Title
                   </Text>
-                  <Text fontWeight='bold'>{nft.name}</Text>
+                  <Text fontSize='sm' fontWeight='bold'>
+                    {nft.name}
+                  </Text>
                 </Stack>
                 <Stack direction={{ base: 'column', md: 'row' }}>
-                  <Text w='85px' mr={4}>
+                  <Text fontSize='sm' w='85px' mr={4}>
                     Description
                   </Text>
-                  <Text>{nft.description}</Text>
+                  <Text fontSize='sm'>{nft.description}</Text>
                 </Stack>
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <FormControl isInvalid={!!errors.walletAddress}>
                     <FormLabel htmlFor='walletAddress'>
-                      <Text fontWeight='bold' mb={2}>
+                      <Text fontSize='sm' fontWeight='bold' mb={2}>
                         Wallet Address
                       </Text>
                     </FormLabel>
@@ -139,7 +141,7 @@ export const TransferModalComponent: React.FC<Props> = ({
                     <FormErrorMessage>{errors.walletAddress && errors.walletAddress.message}</FormErrorMessage>
                   </FormControl>
                   <Button text='Transfer' type='submit' isLoading={isLoading} loadingText='Transfering Your NFT' width='100%' mt={6} />
-                  <Button text='Cancel' onClick={onCloseModal} mt={4} isReversed />
+                  <Button text='Cancel' onClick={onCloseModal} mt={4} width='100%' isReversed />
                 </form>
               </Stack>
             </Box>

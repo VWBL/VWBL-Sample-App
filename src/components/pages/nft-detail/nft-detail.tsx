@@ -52,7 +52,7 @@ export const NftDetailComponent: React.FC<Props> = ({
     <Stack
       minH={{ md: 'calc(100vh - 160px - 3rem)', lg: 'calc(100vh - 160px)' }}
       direction={{ base: 'column', lg: 'row' }}
-      mb={{ base: 12, lg: 0 }}
+      mb={{ base: 20, lg: 0 }}
     >
       <ContentDrawer isOpen={isOpenDrawer} onClose={onCloseDrawer} nft={nft} />
       <TransferModal isOpen={isOpenTransferModal} onClose={onCloseTransferModal} nft={nft as ExtractMetadata} />
@@ -72,18 +72,18 @@ export const NftDetailComponent: React.FC<Props> = ({
           <Image src={nft.image} alt='picture of thumbnail' maxW='100%' maxH='100%' />
         </Box>
       </Box>
-      <Box paddingX='40px' w={{ base: '100%', lg: '30vw' }}>
+      <Box px={{ base: 6, md: 10 }} w={{ base: '100%', lg: '30vw' }}>
         <VStack justifyContent={{ base: 'center', lg: 'space-between' }} minH={{ base: 'calc(40vh - 3rem)', lg: '100%' }}>
           <Box py={6} w='100%'>
-            <Text fontSize='4xl' fontWeight='bold'>
+            <Text fontSize='2xl' fontWeight='bold'>
               {nft.name}
             </Text>
-            <Text fontSize='md' mt={6}>
+            <Text fontSize='sm' mt={6}>
               {nft.description}
             </Text>
             <Box display='flex' alignItems='center' color={'gray.500'} mt={6}>
               <RiUserFill size={40} />
-              <Box fontSize='xs' alignItems='start' ml={2} w='80%'>
+              <Box fontSize='xs' alignItems='start' ml={2}>
                 <Text color='black'>{nft.owner}</Text>
                 <Text>Owner</Text>
               </Box>
