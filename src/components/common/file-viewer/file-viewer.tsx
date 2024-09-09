@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useCallback, useEffect } from 'react';
 import { Image, Box, Button } from '@chakra-ui/react';
 import ReactPlayer from 'react-player';

@@ -1,5 +1,6 @@
+'use client';
 import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { NftDetailComponent } from './nft-detail';
 import { VwblContainer } from '../../../container';
@@ -20,7 +21,14 @@ export const NftDetail = () => {
   const { vwbl, vwblViewer, userAddress, provider, initVwbl, updateVwbl, initVWBLViewer, checkNetwork } = VwblContainer.useContainer();
 
   const loadNFTByTokenId = useCallback(async () => {
-    const { contractAddress, tokenId } = router.query;
+    const searchParams = useSearchParams();
+    if (!searchParams) {
+      console.log('エラー: パラメータが見つかりません。');
+      return; // JSX要素ではなく、voidを返す
+    }
+
+    const contractAddress = searchParams.get('contractAddress');
+    const tokenId = searchParams.get('tokenId');
     if (!contractAddress || !tokenId) return;
     if (!vwbl) {
       if (!provider) {
@@ -76,7 +84,7 @@ export const NftDetail = () => {
         throw err;
       }
     }
-  }, [router.query, initVwbl, updateVwbl, provider, vwbl, userAddress]);
+  }, [initVwbl, updateVwbl, provider, vwbl, userAddress]);
 
   const onCloseNotificationModal = useCallback(() => {
     router.back();

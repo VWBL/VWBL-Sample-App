@@ -1,7 +1,10 @@
+'use client';
+
 import { ChangeEvent } from 'react';
-import { FormControl, FormLabel, FormErrorMessage, Container, Input, Checkbox, Heading, Text, Box, Link } from '@chakra-ui/react';
+import { FormControl, FormLabel, FormErrorMessage, Container, Input, Checkbox, Heading, Text, Box } from '@chakra-ui/react';
 import { UseFormRegister, UseFormHandleSubmit, FieldErrors } from 'react-hook-form';
 
+import { Link } from '@chakra-ui/next-js';
 import { FormInputs } from './new-nft.container';
 import { FilePreviewer } from '../../common/file-previewer';
 import { MintStepModal } from '../../common/mint-step-modal';

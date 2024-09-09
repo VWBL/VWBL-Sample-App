@@ -1,4 +1,6 @@
-import { Text, Link, VStack } from '@chakra-ui/react';
+import { Text, VStack } from '@chakra-ui/react';
+import { Link } from '@chakra-ui/next-js';
+
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 export const WalletInfo: React.FC = () => {

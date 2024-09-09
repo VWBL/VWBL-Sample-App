@@ -1,7 +1,8 @@
 import { Modal, ModalContent, ModalHeader, ModalOverlay, Text, Box, Button, CircularProgress, Flex, Center } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
 import { StepStatus } from 'vwbl-sdk';
-import Link from 'next/link';
+import { Link } from '@chakra-ui/next-js';
+
 import { memo } from 'react';
 
 export type Props = {
@@ -98,7 +99,7 @@ export const MintStepModal: React.FC<Props> = memo(({ isOpen, signature, mintSte
                 </Text>
               </Center>
               <Center>
-                <Link href={`/account/`} replace passHref>
+                <Link href={`/account/`} replace>
                   My page
                 </Link>
               </Center>

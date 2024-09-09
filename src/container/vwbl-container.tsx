@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useCallback } from 'react';
 import { createContainer } from 'unstated-next';
 import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx, VWBLViewer } from 'vwbl-sdk';
@@ -144,3 +146,4 @@ const useVWBL = () => {
 };
 
 export const VwblContainer = createContainer(useVWBL);
+// export const { Provider: VwblProvider, useContainer: useVwbl } = createContainer(useVWBL);

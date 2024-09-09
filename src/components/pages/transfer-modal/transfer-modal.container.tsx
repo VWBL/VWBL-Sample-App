@@ -1,6 +1,8 @@
+'use client';
+
 import { useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { TransferModalComponent } from './transfer-modal';
 import { ExtractMetadata, ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx } from 'vwbl-sdk';
@@ -36,14 +38,20 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
 
   const onSubmit = useCallback(
     async (data: FormInputs) => {
-      const { contractAddress, tokenId } = router.query;
+      const searchParams = useSearchParams();
+      if (!searchParams) {
+        console.log('エラー: パラメータが見つかりません。');
+        return; // JSX要素ではなく、voidを返す
+      }
+      const contractAddress = searchParams.get('contractAddress');
+      const tokenId = searchParams.get('tokenId');
+
       if (!contractAddress || !tokenId) return;
       const { walletAddress } = data;
       if (!walletAddress) {
         console.log('something went wrong');
         return;
       }
-
       await checkNetwork(() =>
         openToast({
           title: 'Please switch to ' + NETWORKS[properChainId],
@@ -109,7 +117,8 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
   const onRefresh = async () => {
     await router.push('/account');
     setIsComplete(false);
-    router.reload();
+    router.replace('/account');
+    router.refresh();
   };
 
   return (

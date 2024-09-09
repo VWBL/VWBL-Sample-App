@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { Box, Tabs, Tab, TabList, TabPanels, TabPanel, Text, Container, Badge, Stack } from '@chakra-ui/react';
 import { ExtendedMetadeta } from 'vwbl-sdk';
@@ -24,7 +26,7 @@ export const AccountComponent: React.FC<Props> = ({ ownedNfts, mintedNfts, walle
   };
 
   return (
-    <Box >
+    <Box>
       <NotificationModal isOpen={isOpenModal} onClose={onCloseModal} notification={notifications.load_failed} />
       <Container
         borderTop='1px solid black'

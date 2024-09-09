@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect, useCallback } from 'react';
 import { ExtendedMetadeta } from 'vwbl-sdk';
 import { NFTListComponent } from './nft-list';

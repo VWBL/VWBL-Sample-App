@@ -1,7 +1,9 @@
-import { Box, Container, Text, Tabs, TabList, Tab, TabPanels, TabPanel, Image, Divider, Link } from '@chakra-ui/react';
+import { Box, Container, Text, Tabs, TabList, Tab, TabPanels, TabPanel, Image, Divider } from '@chakra-ui/react';
+import { Link } from '@chakra-ui/next-js';
+
 import { Button } from '../../../../common/button';
 import { memo, useCallback, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 export const HowToComponent: React.FC = memo(() => {
