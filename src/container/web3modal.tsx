@@ -55,7 +55,7 @@ const ethersConfig = defaultConfig({
 // 5. Create a AppKit instance
 createWeb3Modal({
   ethersConfig,
-  chains: [polygon, amoy],
+  chains: [mainnet, polygon, amoy],
   projectId,
   enableAnalytics: true, // Optional - defaults to your Cloud configuration
 });

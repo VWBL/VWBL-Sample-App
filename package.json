@@ -37,11 +37,12 @@
 		"web3": "^4.12.0"
 	},
 	"devDependencies": {
+		"@eslint/eslintrc": "^3.1.0",
 		"@types/node": "^22.5.0",
 		"@types/react": "^18.3.4",
-		"@typescript-eslint/eslint-plugin": "^8.2.0",
-		"@typescript-eslint/parser": "^8.2.0",
-		"eslint": "^9.9.0",
+		"@typescript-eslint/eslint-plugin": "8.x",
+		"@typescript-eslint/parser": "8.x",
+		"eslint": "8.x",
 		"eslint-config-next": "^14.2.8",
 		"eslint-define-config": "^2.1.0",
 		"husky": "^9.1.5",
@@ -52,8 +53,10 @@
 	"resolutions": {
 		"@types/react": "^17.0.2"
 	},
- "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "eslint --fix"
-  },
+	"lint-staged": {
+		"*.{js,jsx,ts,tsx}": [
+			"eslint --fix --config eslint.config.mjs"
+		]
+	},
 	"packageManager": "yarn@4.0.2"
 }

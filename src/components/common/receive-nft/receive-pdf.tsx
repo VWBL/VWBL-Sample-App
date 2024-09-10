@@ -1,3 +1,4 @@
+'use client';
 import { ExtendedMetadeta } from 'vwbl-sdk';
 import { ReceiveNFTContainer } from './receive-nft-container.ts';
 

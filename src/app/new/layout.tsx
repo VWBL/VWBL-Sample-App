@@ -1,5 +1,3 @@
-import { Box, ChakraProvider, Container } from '@chakra-ui/react';
-// import { VwblContainer, ToastContainer } from '../../container';
 import Header from '../../components/common/header/header';
 import Footer from '../../components/common/footer/footer';
 import { ChakraProviders } from '../providers/chakra-provider';

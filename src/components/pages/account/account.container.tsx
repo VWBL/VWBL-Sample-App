@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import { AccountComponent } from './account';
 import { VwblContainer } from '../../../container';

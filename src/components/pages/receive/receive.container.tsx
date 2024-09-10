@@ -9,7 +9,7 @@ type Props = {
   isReceived: boolean;
 };
 
-const ReceivePage: React.FC<Props> = ({ isReceived }) => {
+const ReceivePage: React.FC<Props> = ({}) => {
   const tabOptions = [{ name: 'Music' }, { name: 'PDF' }];
   const [tabIndex, setTabIndex] = useState(0);
 

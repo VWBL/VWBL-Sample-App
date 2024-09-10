@@ -3,11 +3,11 @@ import { switchChain } from '../../../utils';
 import { ExtendedMetadeta } from 'vwbl-sdk';
 import { ToastContainer, VwblContainer } from '../../../container';
 import { ReceiveNFTComponent } from './receive-nft';
-import { useRouter } from 'next/router';
 import { WalletInfo } from './wallet-info';
 import { LoadingModal } from './loading-modal';
 import { Link, Text, Container } from '@chakra-ui/react';
 import NextLink from 'next/link';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   nft: ExtendedMetadeta;
@@ -69,7 +69,6 @@ export const ReceiveNFTContainer: React.FC<Props> = ({ nft, nftKey, contents, su
 
     try {
       await vwbl.sign();
-      nft;
       const metadataUrl = nftKey.metadataUrl;
       const key = nftKey.key;
 

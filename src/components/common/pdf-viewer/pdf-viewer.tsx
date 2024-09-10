@@ -2,10 +2,9 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import { Box, Text, HStack, IconButton } from '@chakra-ui/react';
 import { ChevronRightIcon, ChevronLeftIcon } from '@chakra-ui/icons';
 import { usePdfViewer } from '../../../hooks/pdf-viewer';
-import workerSrc from '../../../../pdf-worker';
-
-pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
-
+// import workerSrc from '../../../../pdf-worker.mjs';
+// pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
+pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 type Props = {
   fileUrl: string;
 };

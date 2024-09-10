@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, CloseButton, FormLabel, Input, Image, Text, VStack, AspectRatio } from '@chakra-ui/react';
 import { ChangeEvent } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';

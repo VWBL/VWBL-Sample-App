@@ -19,10 +19,8 @@ import {
 import { MdOutlineAccountBalanceWallet } from 'react-icons/md';
 
 import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { useEffect, useState } from 'react';
 import { Button } from '../button';
 import { closeButton, hamburgerMenu } from './header.style';
-import { useRouter } from 'next/navigation';
 import { VwblContainer } from '../../../container';
 
 const NavLink = ({ title, to }: { title: string; to: string }) => {
@@ -55,7 +53,6 @@ const HamburgerMenu = ({ onClick, sx }: { onClick: () => void; sx: CSSObject }) 
 const Header: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { vwbl, connectWallet } = VwblContainer.useContainer();
-  const router = useRouter();
 
   const HeaderLinks = [
     { title: 'Explore', to: 'https://vwbl-protocol.org/' },

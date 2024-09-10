@@ -1,11 +1,13 @@
+'use client';
+
 import { useState, useCallback, useEffect } from 'react';
-import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { ProgressSubscriber, StepStatus } from 'vwbl-sdk';
 import { uploadEncryptedFileToLighthouse, uploadThumbnailToLighthouse, uploadMetadataToLighthouse } from '../../../utils/ipfsHelper';
 import { NewNFTComponent } from './new-nft';
 import { VwblContainer, ToastContainer } from '../../../container';
 import { segmentation, MAX_FILE_SIZE, BASE64_MAX_SIZE, VALID_EXTENSIONS, switchChain } from '../../../utils';
+import { useRouter } from 'next/navigation';
 
 export type FormInputs = {
   asset: FileList;

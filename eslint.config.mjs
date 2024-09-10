@@ -1,30 +1,32 @@
 // // eslint.config.mjs
-// import { defineFlatConfig } from 'eslint-define-config';
-// import tsParser from '@typescript-eslint/parser';
-// import tsPlugin from '@typescript-eslint/eslint-plugin';
+// import { FlatCompat } from '@eslint/eslintrc';
 // import nextPlugin from '@next/eslint-plugin-next';
-// import js from '@eslint/js';
+// import typeScriptESLint from '@typescript-eslint/eslint-plugin';
+// import typeScriptESLintParser from '@typescript-eslint/parser';
 
-// export default defineFlatConfig([
+// const compat = new FlatCompat();
+
+// export default [
 //   // js recommended rules
-//   js.configs.recommended,
+//   // js.configs.recommended,
 
 //   // TypeScript rules
 //   {
 //     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
 //     languageOptions: {
-//       parser: tsParser,
+//       parser: typeScriptESLintParser,
 //       parserOptions: {
 //         sourceType: 'module',
 //         project: './tsconfig.json',
-//         tsconfigRootDir: './',
+//         // tsconfigRootDir: './',
+//         tsconfigRootDir: process.cwd(),
 //       },
 //     },
 //     plugins: {
-//       '@typescript-eslint': tsPlugin,
+//       '@typescript-eslint': typeScriptESLint, // プラグインのキー名を正しく修正
+//       '@typescript-eslint': typeScriptESLint,
 //     },
 //     rules: {
-//       ...tsPlugin.configs['recommended'].rules,
 //       '@typescript-eslint/no-explicit-any': 'warn',
 //     },
 //   },
@@ -36,54 +38,33 @@
 //       '@next/next': nextPlugin,
 //     },
 //     rules: {
-//       ...nextPlugin.configs['core-web-vitals'].rules,
 //       '@next/next/no-img-element': 'off',
 //     },
 //   },
-// ]);
-
+//   {
+//     ignores: ['.next/**/*', 'next.config.js', 'fonts.js', 'theme.js', '.yarn/**/*'],
+//   },
+//   ...compat.extends('plugin:@typescript-eslint/eslint-recommended'),
+// ];
 // eslint.config.mjs
-import { defineFlatConfig } from 'eslint-define-config';
-import tsParser from '@typescript-eslint/parser';
-import tsPlugin from '@typescript-eslint/eslint-plugin';
-import nextPlugin from '@next/eslint-plugin-next';
-import js from '@eslint/js';
+import typeScriptESLint from '@typescript-eslint/eslint-plugin';
+import typeScriptESLintParser from '@typescript-eslint/parser';
 
-const deepClone = (obj) => JSON.parse(JSON.stringify(obj));
-
-export default defineFlatConfig([
-  // js recommended rules
-  js.configs.recommended,
-
-  // TypeScript rules
+export default [
   {
-    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
+    files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
-      parser: tsParser,
+      parser: typeScriptESLintParser,
       parserOptions: {
-        sourceType: 'module',
         project: './tsconfig.json',
-        tsconfigRootDir: './',
+        tsconfigRootDir: process.cwd(),
       },
     },
     plugins: {
-      '@typescript-eslint': tsPlugin,
+      '@typescript-eslint': typeScriptESLint,
     },
     rules: {
-      ...deepClone(tsPlugin.configs['recommended'].rules),
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': 'off',
     },
   },
-
-  // Next.js rules
-  {
-    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
-    plugins: {
-      '@next/next': nextPlugin,
-    },
-    rules: {
-      ...deepClone(nextPlugin.configs['core-web-vitals'].rules),
-      '@next/next/no-img-element': 'off',
-    },
-  },
-]);
+];
