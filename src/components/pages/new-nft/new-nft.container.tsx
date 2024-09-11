@@ -27,6 +27,7 @@ export const NewNFT = () => {
   const [isChecked, setIsChecked] = useState(false);
 
   const { vwbl, checkNetwork, provider } = VwblContainer.useContainer();
+
   const { openToast } = ToastContainer.useContainer();
 
   const {

@@ -32,22 +32,23 @@ export const AccountComponent: React.FC<Props> = ({ ownedNfts, mintedNfts, walle
         borderTop='1px solid black'
         maxW='container.lg'
         centerContent
+        mt={{ base: '8', md: '20' }}
         pt={{ base: '6', md: '8' }}
         pb={{ base: '12', md: '12' }}
         px={{ base: '6', md: '10' }}
+        fontSize='md'
+        fontWeight='bold'
+        display={'flex'}
+        flexDirection={{ base: 'column', md: 'row' }}
+        alignItems={{ base: 'start', md: 'center' }}
+        justifyContent={{ base: 'start', md: 'center' }}
+        gap={{ base: '3', md: '6' }}
+        overflowWrap='break-word'
       >
-        <Stack
-          direction={{ base: 'column', md: 'row' }}
-          w='100%'
-          spacing={{ base: '3', md: '6' }}
-          fontWeight='bold'
-          fontSize='md'
-          overflowWrap='break-word'
-          justifyContent='center'
-        >
-          <Text fontSize='lg'>My Wallet</Text>
-          <Text>{walletAddress}</Text>
-        </Stack>
+        <Text fontSize='lg'>My Wallet</Text>
+        <Text overflowWrap='break-word' maxW='100%'>
+          {walletAddress}
+        </Text>
       </Container>
 
       <Tabs size='md' index={tabIndex} onChange={handleTabsChange} colorScheme='black' variant='line' align='center'>

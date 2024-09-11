@@ -15,9 +15,11 @@ const useVWBL = () => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [provider, setProvider] = useState<any>();
   const [ethersProvider, setEthersProvider] = useState<ethers.BrowserProvider>();
+
+  // useWeb3Modalをフック外で呼び出し、必要な関数を取得
   const { open } = useWeb3Modal();
 
-  const initializeVwbl = useCallback((instanceProvider: any) => {
+  const updateVwbl = useCallback((provider: any): void => {
     if (
       !process.env.NEXT_PUBLIC_VWBL_NETWORK_URL ||
       !process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS ||
@@ -28,9 +30,8 @@ const useVWBL = () => {
     ) {
       throw new Error('missing setting');
     }
-
     const vwblInstance = new VWBLMetaTx({
-      bcProvider: instanceProvider,
+      bcProvider: provider,
       contractAddress: process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS,
       manageKeyType: ManageKeyType.VWBL_NETWORK_SERVER,
       uploadContentType: UploadContentType.IPFS,
@@ -45,13 +46,12 @@ const useVWBL = () => {
       },
       dataCollectorAddress: process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS,
     });
-
     setVwbl(vwblInstance);
   }, []);
 
   const connectWallet = useCallback(async () => {
     try {
-      await open();
+      await open(); // ウォレット接続のためのWeb3Modalを開く
       const instance = (window as any).ethereum as ethers.Eip1193Provider;
 
       if (!instance) {
@@ -59,26 +59,29 @@ const useVWBL = () => {
       }
 
       const ethProvider = new ethers.BrowserProvider(instance);
+
       setProvider(instance);
       setEthersProvider(ethProvider);
-      initializeVwbl(instance);
+      updateVwbl(instance);
 
       const ethSigner = await ethProvider.getSigner();
       const myAddress = await ethSigner.getAddress();
-      setUserAddress(myAddress);
+      if (myAddress) setUserAddress(myAddress);
     } catch (err) {
-      console.error('Wallet connection failed:', err);
+      console.log('Wallet connection failed:', err);
       setErrorMessage('Wallet connection failed');
     }
-  }, [initializeVwbl, open]);
+  }, [updateVwbl, open]);
 
   useEffect(() => {
-    const instance = (window as any).ethereum;
-    if (!provider && instance) {
-      setProvider(instance);
-      const ethProvider = new ethers.BrowserProvider(instance);
-      setEthersProvider(ethProvider);
-      initializeVwbl(instance);
+    if (!provider) {
+      const instance = (window as any).ethereum;
+      if (instance) {
+        setProvider(instance);
+        const ethProvider = new ethers.BrowserProvider(instance);
+        setEthersProvider(ethProvider);
+        updateVwbl(instance);
+      }
     }
 
     const handleAccountsChanged = () => {
@@ -89,12 +92,13 @@ const useVWBL = () => {
     };
 
     window.addEventListener('accountsChanged', handleAccountsChanged);
+
     return () => {
       window.removeEventListener('accountsChanged', handleAccountsChanged);
     };
-  }, [provider, initializeVwbl]);
+  }, [provider, updateVwbl]);
 
-  const initVwbl = useCallback(() => {
+  const initVwbl = useCallback((): void => {
     if (
       !process.env.NEXT_PUBLIC_VWBL_NETWORK_URL ||
       !process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS ||
@@ -116,18 +120,18 @@ const useVWBL = () => {
     setVwbl(vwblInstance);
   }, [provider]);
 
-  const initVWBLViewer = useCallback(() => {
+  const initVWBLViewer = () => {
     if (!process.env.NEXT_PUBLIC_PROVIDER_URL || !process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS) {
       throw new Error('missing setting');
     }
-    const web3Provider = new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_PROVIDER_URL);
-    const web3 = new Web3(web3Provider);
+    const provider = new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_PROVIDER_URL);
+    const web3 = new Web3(provider);
     const vwblViewerInstance = new VWBLViewer({
       provider: web3 as any,
       dataCollectorAddress: process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS,
     });
     setVwblViewer(vwblViewerInstance);
-  }, []);
+  };
 
   const clearVwbl = useCallback(() => {
     setVwbl(undefined);
@@ -142,8 +146,7 @@ const useVWBL = () => {
       const ethProvider = new ethers.BrowserProvider(provider);
       const network = await ethProvider.getNetwork();
       const connectedChainId = network.chainId;
-      const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!, 10);
-
+      const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!);
       if (Number(connectedChainId) !== properChainId) {
         callback();
       }
@@ -153,18 +156,18 @@ const useVWBL = () => {
 
   return {
     vwbl,
+    updateVwbl,
     vwblViewer,
+    initVWBLViewer,
+    clearVwbl,
+    errorMessage,
+    setErrorMessage,
     userSignature,
     userAddress,
-    errorMessage,
     provider,
     ethersProvider,
     connectWallet,
     initVwbl,
-    initVWBLViewer,
-    updateVwbl: initializeVwbl,
-    clearVwbl,
-    setErrorMessage,
     checkNetwork,
   };
 };

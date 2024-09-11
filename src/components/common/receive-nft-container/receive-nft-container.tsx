@@ -2,12 +2,13 @@ import { useState, useCallback } from 'react';
 import { switchChain } from '../../../utils';
 import { ExtendedMetadeta } from 'vwbl-sdk';
 import { ToastContainer, VwblContainer } from '../../../container';
-import { ReceiveNFTComponent } from './receive-nft';
-import { WalletInfo } from './wallet-info';
-import { LoadingModal } from './loading-modal';
+import { ReceiveNFTComponent } from '../receive-nft';
+
+import { LoadingModal } from '../../pages/receive/components/loading-modal';
 import { Link, Text, Container } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
+import { WalletInfo } from '../../pages/receive/components/wallet-info';
 
 type Props = {
   nft: ExtendedMetadeta;

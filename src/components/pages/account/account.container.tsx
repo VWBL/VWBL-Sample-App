@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { AccountComponent } from './account';
 import { VwblContainer } from '../../../container';
 import { ExtendedMetadeta } from 'vwbl-sdk';
@@ -16,33 +16,28 @@ export const Account = () => {
 
   const { vwblViewer, initVWBLViewer, provider, connectWallet, checkNetwork } = VwblContainer.useContainer();
 
-  useEffect(() => {
-    checkNetwork(() => switchChain(provider));
-  }, [checkNetwork, provider]);
+  const setup = useCallback(async () => {
+    if (!provider) {
+      await connectWallet();
+      return;
+    }
+    const ethersProvider = new ethers.BrowserProvider(provider);
+    const userAddress = await (await ethersProvider.getSigner()).getAddress();
+    setWalletAddress(userAddress);
 
-  useEffect(() => {
-    const setup = async () => {
-      if (!provider) {
-        await connectWallet();
-        return;
-      }
-      const ethersProvider = new ethers.BrowserProvider(provider);
-      const userAddress = await (await ethersProvider.getSigner()).getAddress();
-      setWalletAddress(userAddress);
+    if (!vwblViewer) {
+      initVWBLViewer();
+      return;
+    }
 
-      if (!vwblViewer) {
-        initVWBLViewer();
-        return;
-      }
-      try {
-        const query = `${process.env.NEXT_PUBLIC_ALCHEMY_NFT_API}/getNFTs?owner=${userAddress}`;
-        const result = await axios.get(query);
-        const ownedItems = result.data.ownedNfts
-          .filter((v: any) => {
-            return typeof v.metadata.encrypted_data !== 'undefined';
-          })
-          .map((v: any) => {
-            return {
+    // ownedItemsとmintedItemsの取得を並行して実行
+    const [ownedItems, mintedItems] = await Promise.all([
+      axios
+        .get(`${process.env.NEXT_PUBLIC_ALCHEMY_NFT_API}/getNFTs?owner=${userAddress}`)
+        .then((result) =>
+          result.data.ownedNfts
+            .filter((v: any) => typeof v.metadata.encrypted_data !== 'undefined')
+            .map((v: any) => ({
               id: Number(v.id.tokenId),
               name: v.metadata.name,
               description: v.metadata.description,
@@ -50,24 +45,34 @@ export const Account = () => {
               mimeType: v.metadata.mime_type,
               encryptLogic: v.metadata.encrypt_logic,
               address: v.contract.address,
-            } as ExtendedMetadeta;
-          })
-          .reverse();
-        setOwnedNfts(ownedItems);
-      } catch (err) {
-        setIsOpenModal(true);
-        console.log(err);
-      }
+            }))
+            .reverse(),
+        )
+        .catch((err) => {
+          setIsOpenModal(true);
+          console.log(err);
+          return [];
+        }),
+      vwblViewer
+        .listMintedNFTMetadata(userAddress)
+        .then((mintedItems) => mintedItems.filter((v) => v).reverse() as ExtendedMetadeta[])
+        .catch((err) => {
+          console.log(err);
+          return [];
+        }),
+    ]);
 
-      try {
-        const mintedItems = await vwblViewer.listMintedNFTMetadata(userAddress);
-        setMintedNfts(mintedItems.filter((v) => v).reverse() as ExtendedMetadeta[]);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+    setOwnedNfts(ownedItems);
+    setMintedNfts(mintedItems);
+  }, [provider, vwblViewer, connectWallet, initVWBLViewer]);
+
+  useEffect(() => {
+    checkNetwork(() => switchChain(provider));
+  }, [checkNetwork, provider]);
+
+  useEffect(() => {
     setup();
-  }, [vwblViewer, provider]);
+  }, [setup]);
 
   return (
     <AccountComponent

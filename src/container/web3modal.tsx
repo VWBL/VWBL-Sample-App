@@ -7,14 +7,6 @@ import { ReactNode } from 'react';
 const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT!;
 
 // 2. Set chains
-const mainnet = {
-  chainId: 1,
-  name: 'Ethereum',
-  currency: 'ETH',
-  explorerUrl: 'https://etherscan.io',
-  rpcUrl: 'https://cloudflare-eth.com',
-};
-
 const amoy = {
   chainId: 80002,
   name: 'Amoy',
@@ -55,7 +47,7 @@ const ethersConfig = defaultConfig({
 // 5. Create a AppKit instance
 createWeb3Modal({
   ethersConfig,
-  chains: [mainnet, polygon, amoy],
+  chains: [polygon, amoy],
   projectId,
   enableAnalytics: true, // Optional - defaults to your Cloud configuration
 });

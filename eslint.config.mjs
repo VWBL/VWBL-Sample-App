@@ -47,24 +47,31 @@
 //   ...compat.extends('plugin:@typescript-eslint/eslint-recommended'),
 // ];
 // eslint.config.mjs
-import typeScriptESLint from '@typescript-eslint/eslint-plugin';
-import typeScriptESLintParser from '@typescript-eslint/parser';
+import tseslint from '@typescript-eslint/eslint-plugin';
+import tseslintParser from '@typescript-eslint/parser';
+import nextPlugin from '@next/eslint-plugin-next';
 
 export default [
   {
     files: ['**/*.ts', '**/*.tsx'],
+    plugins: {
+      '@typescript-eslint': tseslint,
+      '@next/next': nextPlugin,
+    },
     languageOptions: {
-      parser: typeScriptESLintParser,
+      parser: tseslintParser,
       parserOptions: {
+        sourceType: 'module',
         project: './tsconfig.json',
-        tsconfigRootDir: process.cwd(),
+        tsconfigRootDir: './',
       },
     },
-    plugins: {
-      '@typescript-eslint': typeScriptESLint,
-    },
     rules: {
+      '@next/next/no-img-element': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
     },
+  },
+  {
+    ignores: ['.next/**/*', 'next.config.js', 'fonts.js', 'theme.js', '.yarn/**/*'],
   },
 ];

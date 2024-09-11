@@ -1,18 +1,16 @@
 'use client';
 
 import { Flex, Stack, Container, Text } from '@chakra-ui/react';
-import { Link } from '@chakra-ui/next-js';
 import { VwblContainer } from '../../../container';
-
-const NavLink = ({ title, to }: { title: string; to: string }) => <Link href={to}>{title}</Link>;
+import { NavLink } from '../nav-link';
 
 const Footer: React.FC = () => {
   const { vwbl } = VwblContainer.useContainer();
 
   const FooterLinks = [
-    { title: 'Explore', to: 'https://vwbl-protocol.org/' },
-    { title: 'Create', to: '/create' },
-    { title: 'Receive', to: '/receive' },
+    { title: 'Explore', to: 'https://vwbl-protocol.org/', isExternal: true },
+    { title: 'Create', to: '/create', isExternal: false },
+    { title: 'Receive', to: '/receive', isExternal: false },
   ];
 
   return (
@@ -20,22 +18,20 @@ const Footer: React.FC = () => {
       as='footer'
       pt={{ base: 8, md: 10 }}
       pb={{ base: 6, md: 10 }}
+      px={{ base: 6, md: 8 }}
       role='contentinfo'
       maxW='100%'
       borderTop='2px'
-      px={{ base: 6, md: 8 }}
     >
       <Flex
         justifyContent={{ base: 'center', md: 'space-between' }}
         direction={{ base: 'column', md: 'row' }}
         alignItems={{ base: 'start', md: 'center' }}
         h='100%'
+        w='100%'
         maxW='container.lg'
         mx='auto'
       >
-        {FooterLinks.map((link, i) => (
-          <Link key={i} title={link.title} href={link.to} />
-        ))}
         <Stack
           spacing={{ base: 4, md: 6 }}
           direction={{ base: 'column', md: 'row' }}
@@ -44,11 +40,10 @@ const Footer: React.FC = () => {
           fontSize={{ base: '2xl', md: 'md' }}
         >
           {FooterLinks.map((link, i) => (
-            <Link key={i} title={link.title} href={link.to} />
+            <NavLink key={i} title={link.title} to={link.to} isExternal={link.isExternal} />
           ))}
-          {vwbl && <NavLink title='My Wallet' to='/account' />}
+          {vwbl && <NavLink title='My Wallet' to='/account' isExternal={false} />}
         </Stack>
-
         <Text fontSize='sm' color='#AEAEB2'>
           &copy; {new Date().getFullYear()} Ango-ya, LLC. All rights reserved.
         </Text>

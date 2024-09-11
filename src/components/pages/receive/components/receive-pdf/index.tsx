@@ -1,6 +1,6 @@
 'use client';
 import { ExtendedMetadeta } from 'vwbl-sdk';
-import { ReceiveNFTContainer } from './receive-nft-container.ts';
+import { ReceiveNFTContainer } from '../../../../common/receive-nft-container';
 
 const contents = {
   title: 'PDFのNFT を無料で受け取る',

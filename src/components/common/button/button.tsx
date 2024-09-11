@@ -15,6 +15,7 @@ type Props = {
   mb?: string | number;
   mr?: string | number;
   ml?: string | number;
+  px?: string | number;
   border?: BorderProps['border'];
   borderRadius?: BorderProps['borderRadius'];
   disalbed?: ButtonProps['disabled'];
@@ -39,6 +40,7 @@ export const Button: React.FC<Props> = forwardRef(
       mb,
       mr,
       ml,
+      px,
       border,
       borderRadius,
       disalbed,
@@ -64,6 +66,7 @@ export const Button: React.FC<Props> = forwardRef(
         mb={mb}
         mr={mr}
         ml={ml}
+        px={px}
         borderRadius={borderRadius}
         fontSize={fontSize}
         border={isReversed ? '1px solid' : border}

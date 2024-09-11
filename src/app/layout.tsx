@@ -1,7 +1,7 @@
-import Header from '../../components/common/header/header';
-import Footer from '../../components/common/footer/footer';
+import Header from '../components/common/header/header';
+import Footer from '../components/common/footer/footer';
 import { ChakraProviders } from '../providers/chakra-provider';
-import { Web3Wallet } from '../../container/web3modal';
+import { Web3Wallet } from '../container/web3modal';
 import { ToastProvider } from '../providers/toast-provider';
 import { VwblProvider } from '../providers/vwbl-provider';
 
