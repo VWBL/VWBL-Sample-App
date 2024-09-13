@@ -21,6 +21,8 @@ type Props = {
   onOpenTransferModal: () => void;
   onCloseTransferModal: () => void;
   onCloseNotificationModal: () => void;
+  contractAddress: string | null;
+  tokenId: string | null;
 };
 
 export const NftDetailComponent: React.FC<Props> = ({
@@ -34,6 +36,8 @@ export const NftDetailComponent: React.FC<Props> = ({
   onOpenTransferModal,
   onCloseTransferModal,
   onCloseNotificationModal,
+  contractAddress,
+  tokenId,
 }) => {
   if (!nft) {
     return (
@@ -55,7 +59,13 @@ export const NftDetailComponent: React.FC<Props> = ({
       mb={{ base: 20, lg: 0 }}
     >
       <ContentDrawer isOpen={isOpenDrawer} onClose={onCloseDrawer} nft={nft} />
-      <TransferModal isOpen={isOpenTransferModal} onClose={onCloseTransferModal} nft={nft as ExtractMetadata} />
+      <TransferModal
+        isOpen={isOpenTransferModal}
+        onClose={onCloseTransferModal}
+        nft={nft as ExtractMetadata}
+        tokenId={tokenId}
+        contractAddress={contractAddress}
+      />
       <NotificationModal isOpen={isOpenNotificationModal} onClose={onCloseNotificationModal} notification={notifications.decrypt_failed} />
       <Box bg='black' padding='20px 80px' position='relative' w='100%' minH={{ base: 'calc(60vh - 160px)', lg: '100%' }}>
         <Box

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Alert, Button, Container, Heading, Image, Spinner, Text, VStack } from '@chakra-ui/react';
 import { Link } from '@chakra-ui/next-js';
 import styles from './gacha-machine.module.css';

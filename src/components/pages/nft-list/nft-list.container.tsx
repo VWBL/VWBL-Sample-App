@@ -43,18 +43,21 @@ export const NFTList = () => {
   }, [sortType, nfts]);
 
   useEffect(() => {
-    if (!vwblViewer) {
-      initVWBLViewer();
-      return;
-    }
-    try {
-      loadNFTs();
-    } catch (err) {
-      setIsOpenModal(true);
-      console.log(err);
-    }
-  }, [vwblViewer]);
+    const initializeViewer = async () => {
+      if (!vwblViewer) {
+        try {
+          await initVWBLViewer();
+        } catch (initError) {
+          setIsOpenModal(true);
+          console.log('Error during initialization:', initError);
+          return;
+        }
+      }
+      await loadNFTs();
+    };
 
+    initializeViewer();
+  }, [vwblViewer, initVWBLViewer, loadNFTs]);
   return (
     <NFTListComponent
       nfts={sortedNFTs}

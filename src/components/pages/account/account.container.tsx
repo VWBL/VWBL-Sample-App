@@ -30,7 +30,6 @@ export const Account = () => {
       return;
     }
 
-    // ownedItemsとmintedItemsの取得を並行して実行
     const [ownedItems, mintedItems] = await Promise.all([
       axios
         .get(`${process.env.NEXT_PUBLIC_ALCHEMY_NFT_API}/getNFTs?owner=${userAddress}`)

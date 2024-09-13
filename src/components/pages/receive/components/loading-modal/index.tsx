@@ -1,4 +1,3 @@
-import React from 'react';
 import { Modal, Text, ModalOverlay, ModalContent, ModalHeader, ModalBody, Spinner, Flex } from '@chakra-ui/react';
 
 type LoadingModalProps = {
