@@ -1,1 +1,1 @@
-export * from './receive-nft';
+export * from './receive-nft.container';

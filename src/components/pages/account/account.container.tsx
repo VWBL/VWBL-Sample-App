@@ -13,6 +13,7 @@ export const Account = () => {
   const [mintedNfts, setMintedNfts] = useState<ExtendedMetadeta[]>([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');
+  const [tabIndex, setTabIndex] = useState(0);
 
   const { vwblViewer, initVWBLViewer, provider, connectWallet, checkNetwork } = VwblContainer.useContainer();
 
@@ -73,13 +74,23 @@ export const Account = () => {
     setup();
   }, [setup]);
 
+  const handleCloseModal = useCallback(() => {
+    setIsOpenModal(false);
+  }, []);
+
+  const handleTabChange = useCallback((index: number) => {
+    setTabIndex(index);
+  }, []);
+
   return (
     <AccountComponent
       ownedNfts={ownedNfts}
       mintedNfts={mintedNfts}
       walletAddress={walletAddress}
       isOpenModal={isOpenModal}
-      onCloseModal={() => setIsOpenModal(false)}
+      onCloseModal={handleCloseModal}
+      tabIndex={tabIndex}
+      onTabChange={handleTabChange}
     />
   );
 };

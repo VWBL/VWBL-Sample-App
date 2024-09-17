@@ -1,6 +1,6 @@
 'use client';
 import { ExtendedMetadeta } from 'vwbl-sdk';
-import { ReceiveNFTContainer } from '../../../../common/receive-nft-container';
+import { ReceiveNFT } from '../../../../common/receive-nft';
 
 const contents = {
   title: 'PDFのNFT を無料で受け取る',
@@ -24,12 +24,10 @@ export const nftKey = {
 
 export const ReceivePdf: React.FC = () => {
   return (
-    <ReceiveNFTContainer
+    <ReceiveNFT
       nft={nft}
       nftKey={nftKey}
       contents={contents}
-      fetchContentUrl='/sample-nft-content.pdf'
-      fetchThumbnailUrl='https://nftstorage.link/ipfs/bafybeiefochdgnrz6hgvmww35vmfegchnnf6zqh3b2xzpdqhbzjyqftv3y'
       successMessage='You have successfully received the PDF NFT'
       redirectUrl='/account/'
     />

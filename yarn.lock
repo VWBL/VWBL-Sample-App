@@ -5572,6 +5572,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@wojtekmaj/react-hooks@npm:^1.21.0":
+  version: 1.21.0
+  resolution: "@wojtekmaj/react-hooks@npm:1.21.0"
+  peerDependencies:
+    "@types/react": ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 3862b1b5917f9e69ed161547ba9e08bfdd2ef7afa78b0f510111ababa07a5cf950814d9c84f8044e66d95057bf5a37d02ad4399880744ec0a28ad84315752c37
+  languageName: node
+  linkType: hard
+
 "@zag-js/dom-query@npm:0.16.0":
   version: 0.16.0
   resolution: "@zag-js/dom-query@npm:0.16.0"
@@ -12243,6 +12256,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:8.x"
     "@typescript-eslint/parser": "npm:8.x"
     "@web3modal/ethers": "npm:^5.1.6"
+    "@wojtekmaj/react-hooks": "npm:^1.21.0"
     axios: "npm:^1.7.4"
     dotenv: "npm:^16.4.5"
     eslint: "npm:8.x"

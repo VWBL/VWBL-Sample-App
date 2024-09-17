@@ -1,6 +1,3 @@
-'use client';
-
-import { useState } from 'react';
 import { Box, Tabs, Tab, TabList, TabPanels, TabPanel, Text, Container, Badge, Stack } from '@chakra-ui/react';
 import { ExtendedMetadeta } from 'vwbl-sdk';
 import { ItemList } from '../../common/item-list';
@@ -12,18 +9,23 @@ type Props = {
   walletAddress: string;
   isOpenModal: boolean;
   onCloseModal: () => void;
+  tabIndex: number;
+  onTabChange: (index: number) => void;
 };
 
-export const AccountComponent: React.FC<Props> = ({ ownedNfts, mintedNfts, walletAddress, isOpenModal, onCloseModal }) => {
+export const AccountComponent: React.FC<Props> = ({
+  ownedNfts,
+  mintedNfts,
+  walletAddress,
+  isOpenModal,
+  onCloseModal,
+  tabIndex,
+  onTabChange,
+}) => {
   const tabOptions = [
     { name: 'Owned', length: ownedNfts.length },
     { name: 'Created', length: mintedNfts.length },
   ];
-  const [tabIndex, setTabIndex] = useState(0);
-
-  const handleTabsChange = async (index: number) => {
-    setTabIndex(index);
-  };
 
   return (
     <Box>
@@ -51,7 +53,7 @@ export const AccountComponent: React.FC<Props> = ({ ownedNfts, mintedNfts, walle
         </Text>
       </Container>
 
-      <Tabs size='md' index={tabIndex} onChange={handleTabsChange} colorScheme='black' variant='line' align='center'>
+      <Tabs size='md' index={tabIndex} onChange={onTabChange} colorScheme='black' variant='line' align='center'>
         <TabList justifyContent={'center'}>
           {tabOptions.map((tab, i) => (
             <Tab px={4} key={i} fontWeight='bold' position='relative'>

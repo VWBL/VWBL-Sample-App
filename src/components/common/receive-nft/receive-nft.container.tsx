@@ -1,14 +1,11 @@
+'use client';
+
 import { useState, useCallback } from 'react';
 import { switchChain } from '../../../utils';
 import { ExtendedMetadeta } from 'vwbl-sdk';
 import { ToastContainer, VwblContainer } from '../../../container';
-import { ReceiveNFTComponent } from '../receive-nft';
-
-import { LoadingModal } from '../../pages/receive/components/loading-modal';
-import { Link, Text, Container } from '@chakra-ui/react';
-import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
-import { WalletInfo } from '../../pages/receive/components/wallet-info';
+import { ReceiveNFTComponent } from './receive-nft';
 
 type Props = {
   nft: ExtendedMetadeta;
@@ -20,34 +17,32 @@ type Props = {
     title: string;
     description: string[];
   };
-  fetchContentUrl: string;
-  fetchThumbnailUrl: string;
   successMessage: string;
   redirectUrl: string;
 };
 
-export const mintTokenAndSetKey = async (vwbl: any, metadataUrl: string, key: string, mintApiId: string) => {
-  if (!vwbl.signature) {
-    throw new Error('Please sign first.');
-  }
-  try {
-    const tokenId = await vwbl.mintTokenForIPFS(metadataUrl, 0, mintApiId);
-    await vwbl.setKey(tokenId, key);
-    console.log('Key set successfully for token ID:', tokenId);
-    return tokenId;
-  } catch (error) {
-    console.error('Error in minting token and setting key:', error);
-    throw error;
-  }
-};
-
-export const ReceiveNFTContainer: React.FC<Props> = ({ nft, nftKey, contents, successMessage, redirectUrl }) => {
+export const ReceiveNFT: React.FC<Props> = ({ nft, nftKey, contents, successMessage, redirectUrl }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { vwbl, checkNetwork, provider } = VwblContainer.useContainer();
   const { openToast } = ToastContainer.useContainer();
   const nftReceivedKey = `nft_received_${nft.name}`;
   const isReceived = typeof window !== 'undefined' ? localStorage.getItem(nftReceivedKey) === 'true' : false;
+
+  const mintTokenAndSetKey = async (vwbl: any, metadataUrl: string, key: string, mintApiId: string) => {
+    if (!vwbl.signature) {
+      throw new Error('Please sign first.');
+    }
+    try {
+      const tokenId = await vwbl.mintTokenForIPFS(metadataUrl, 0, mintApiId);
+      await vwbl.setKey(tokenId, key);
+      console.log('Key set successfully for token ID:', tokenId);
+      return tokenId;
+    } catch (error) {
+      console.error('Error in minting token and setting key:', error);
+      throw error;
+    }
+  };
 
   const onSubmit = useCallback(async () => {
     setIsLoading(true);
@@ -96,33 +91,5 @@ export const ReceiveNFTContainer: React.FC<Props> = ({ nft, nftKey, contents, su
     }
   }, [vwbl, router, provider, openToast, successMessage, redirectUrl]);
 
-  return (
-    <>
-      {isLoading && <LoadingModal isOpen={isLoading} />}
-      {isReceived ? (
-        <Container maxW='container.md' centerContent>
-          <Text my={2}>NFTを発行済です。</Text>
-          <Text my={2}>
-            NFTは
-            <Link color='blue.600' href='/account' as={NextLink}>
-              My Walletのページ
-            </Link>
-            で閲覧できます。
-          </Text>
-        </Container>
-      ) : (
-        <>
-          <ReceiveNFTComponent
-            onSubmit={onSubmit}
-            contents={contents}
-            isLoading={isLoading}
-            title={contents.title}
-            description={contents.description}
-            nft={nft}
-          />
-          <WalletInfo />
-        </>
-      )}
-    </>
-  );
+  return <ReceiveNFTComponent onSubmit={onSubmit} contents={contents} isLoading={isLoading} isReceived={isReceived} nft={nft} />;
 };

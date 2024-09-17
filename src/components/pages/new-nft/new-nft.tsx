@@ -1,7 +1,5 @@
-'use client';
-
 import { ChangeEvent } from 'react';
-import { FormControl, FormLabel, FormErrorMessage, Container, Input, Checkbox, Heading, Text, Box } from '@chakra-ui/react';
+import { FormControl, FormErrorMessage, Container, Input, Checkbox, Heading, Text, Box } from '@chakra-ui/react';
 import { UseFormRegister, UseFormHandleSubmit, FieldErrors } from 'react-hook-form';
 
 import { Link } from '@chakra-ui/next-js';
@@ -11,6 +9,8 @@ import { MintStepModal } from '../../common/mint-step-modal';
 import { Button } from '../../common/button';
 import { MAX_FILE_SIZE } from '../../../utils';
 import { StepStatus } from 'vwbl-sdk';
+import { CustomLabel } from './components/custom-label';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 type Props = {
   onSubmit: (data: FormInputs) => Promise<void>;
@@ -33,22 +33,6 @@ type Props = {
   isReceived: boolean;
 };
 
-type LabelProps = {
-  title: string;
-  htmlFor: string;
-  isRequired: boolean;
-};
-
-const CustomLabel: React.FC<LabelProps> = ({ title, htmlFor, isRequired }) => {
-  return (
-    <FormLabel display='flex' h={6} mb={4} htmlFor={htmlFor}>
-      <Heading as='h3' size='md' mr={6}>
-        {title} {isRequired ? '*' : '(Optional)'}
-      </Heading>
-    </FormLabel>
-  );
-};
-
 export const NewNFTComponent: React.FC<Props> = ({
   onSubmit,
   onChangeFile,
@@ -69,9 +53,9 @@ export const NewNFTComponent: React.FC<Props> = ({
   toggleModal,
 }) => {
   return (
-    <Container maxW='container.md' my={12} centerContent>
+    <Container maxW='container.md' my={20} centerContent>
       <Box w={'100%'} maxW={480}>
-        <Heading as='h2' mb={12}>
+        <Heading as='h2' mb={12} fontSize='3xl'>
           Create New Item
           <Box as='small' color='red' pl={3}>
             for Free
@@ -159,13 +143,13 @@ export const NewNFTComponent: React.FC<Props> = ({
           </FormControl>
           <Text mt={4}>With preserved line-breaks</Text>
 
-          <Checkbox mt={8} size='lg' colorScheme='blackAlpha' isChecked={isChecked} onChange={onChangeCheckbox}>
-            Agree to the&nbsp;
-            <Link href='https://ango-ya.notion.site/5632a448348b4722b2256e016dcc0cb4' isExternal>
-              terms of serivce
-            </Link>
+          <Checkbox mt={8} size='md' colorScheme='blackAlpha' isChecked={isChecked} onChange={onChangeCheckbox} display='flex'>
+            <Text fontSize='sm'>Agree to the&nbsp; terms of serivce</Text>
           </Checkbox>
-
+          <Link fontSize='sm' color='blue.600' href='https://ango-ya.notion.site/5632a448348b4722b2256e016dcc0cb4' isExternal>
+            Terms of Serivce
+            <ExternalLinkIcon mx='2px' />
+          </Link>
           <Button
             text='Create Item for Free'
             onClick={toggleModal}

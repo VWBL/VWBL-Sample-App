@@ -1,5 +1,3 @@
-'use client';
-
 import { StepStatus } from 'vwbl-sdk';
 import { MintStepModal as MintStepModalComponent } from './mint-step-modal';
 import { VwblContainer } from '../../../container';

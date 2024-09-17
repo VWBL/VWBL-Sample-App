@@ -1,7 +1,7 @@
 'use client';
 
 import { ExtendedMetadeta } from 'vwbl-sdk';
-import { ReceiveNFTContainer } from '../../../../common/receive-nft-container';
+import { ReceiveNFT } from '../../../../common/receive-nft';
 
 const contents = {
   title: 'Music NFT を無料で受け取る',
@@ -25,12 +25,10 @@ export const nftKey = {
 
 export const ReceiveAudio: React.FC = () => {
   return (
-    <ReceiveNFTContainer
+    <ReceiveNFT
       nft={nft}
       nftKey={nftKey}
       contents={contents}
-      fetchContentUrl='/sample-nft-audio-content.mp3'
-      fetchThumbnailUrl='https://nftstorage.link/ipfs/bafybeicobxejm5fflfl4jauk3fh6anqrt3laahd54ydzscbdnnao4yq6t4'
       successMessage='You have successfully received the Music NFT'
       redirectUrl='/account/'
     />
