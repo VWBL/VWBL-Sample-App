@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { ProgressSubscriber, StepStatus } from 'vwbl-sdk';
 import { uploadEncryptedFileToLighthouse, uploadThumbnailToLighthouse, uploadMetadataToLighthouse } from '../../../utils/ipfsHelper';
@@ -25,10 +25,13 @@ export const NewNFT = () => {
   const [mimeType, setMimeType] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [mintStep, setMintStep] = useState<StepStatus[]>([]);
 
   const { vwbl, checkNetwork, provider } = VwblContainer.useContainer();
-
   const { openToast } = ToastContainer.useContainer();
+
+  const isWalletConnected = useMemo(() => !!provider, [provider]);
 
   const {
     register,
@@ -36,75 +39,72 @@ export const NewNFT = () => {
     formState: { errors },
   } = useForm<FormInputs>({ mode: 'onBlur' });
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [mintStep, setMintStep] = useState<StepStatus[]>([]);
   const progressSubscriber: ProgressSubscriber = {
     kickStep: (status: StepStatus) => {
       setMintStep((prev) => [...prev, status]);
     },
   };
-  const isReceived = typeof window !== 'undefined' ? !!localStorage.getItem('is_received') : false;
 
   useEffect(() => {
     let fileReaderForFile: FileReader;
     let fileReaderForThumbnail: FileReader;
     let isCancel = false;
-    if (file) {
-      fileReaderForFile = new FileReader();
-      fileReaderForFile.onload = () => {
-        const result = fileReaderForFile.result;
+
+    const readFile = (file: File, setUrl: (url: string) => void) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result;
         if (result && !isCancel) {
-          setFileUrl(result as string);
+          setUrl(result as string);
         }
       };
-      fileReaderForFile.readAsDataURL(file);
+      reader.readAsDataURL(file);
+      return reader;
+    };
+
+    if (file) {
+      fileReaderForFile = readFile(file, setFileUrl);
     }
     if (thumbnail) {
-      fileReaderForThumbnail = new FileReader();
-      fileReaderForThumbnail.onload = () => {
-        const result = fileReaderForThumbnail.result;
-        if (result && !isCancel) {
-          setThumbnailUrl(result as string);
-        }
-      };
-      fileReaderForThumbnail.readAsDataURL(thumbnail);
+      fileReaderForThumbnail = readFile(thumbnail, setThumbnailUrl);
     }
+
     return () => {
       isCancel = true;
-      if (fileReaderForFile && fileReaderForFile.readyState === 1) {
-        fileReaderForFile.abort();
-      }
-      if (fileReaderForThumbnail && fileReaderForThumbnail.readyState === 1) {
-        fileReaderForThumbnail.abort();
-      }
+      [fileReaderForFile, fileReaderForThumbnail].forEach((reader) => {
+        if (reader && reader.readyState === 1) {
+          reader.abort();
+        }
+      });
     };
   }, [file, thumbnail]);
 
   const onSubmit = useCallback(
     async (data: FormInputs) => {
-      setIsLoading(true);
-      const { title, description, asset, thumbnail } = data;
-      if (!provider) {
+      if (!isWalletConnected) {
         openToast({
           title: 'Wallet Not Connected',
           status: 'error',
           message: 'Please connect your wallet in order to create your NFT.',
         });
-        setIsLoading(false);
         return;
       }
+      const { title, description, asset, thumbnail } = data;
 
+      setIsLoading(true);
+      if (!title || !description || !asset || !thumbnail) {
+        throw new Error('Required fields are missing');
+      }
       if (!vwbl) {
         setIsLoading(false);
         return;
       }
 
-      checkNetwork(() => switchChain(provider));
+      checkNetwork(() => switchChain(provider!));
 
       try {
         if (!title || !description || !asset || !thumbnail) {
-          console.log('Something went wrong.');
-          return;
+          throw new Error('Required fields are missing');
         }
         await vwbl.sign();
 
@@ -132,29 +132,46 @@ export const NewNFT = () => {
             status: 'error',
             message: 'In order to create your NFT, please sign.',
           });
+        } else {
+          openToast({
+            title: 'Error',
+            status: 'error',
+            message: err.message || 'An unexpected error occurred',
+          });
         }
-        console.log(err);
+        console.error(err);
       } finally {
         setIsLoading(false);
       }
     },
-    [vwbl, router],
+    [vwbl, router, isWalletConnected, openToast, checkNetwork, provider],
   );
 
-  const onChangeFile = useCallback((e: any) => {
-    const file = e.target.files[0];
-    setMimeType(file?.type);
-    setFile(file);
-  }, []);
+  const onChangeFile = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
 
-  const onChangeThumbnail = useCallback((e: any) => {
-    const thumbnail = e.target.files[0];
-    if (!thumbnail?.type.match(VALID_EXTENSIONS.image)) {
-      alert('Image mime type is not valid');
-      return;
+    const file = e.target.files?.[0];
+    if (file) {
+      setMimeType(file.type);
+      setFile(file);
     }
-    setThumbnail(thumbnail);
   }, []);
+  const onChangeThumbnail = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const thumbnail = e.target.files?.[0];
+      if (thumbnail) {
+        if (!thumbnail.type.match(VALID_EXTENSIONS.image)) {
+          openToast({
+            title: 'Invalid Image Type',
+            status: 'error',
+            message: 'Please upload a valid image file.',
+          });
+          return;
+        }
+        setThumbnail(thumbnail);
+      }
+    },
+    [openToast],
+  );
 
   const onClearFile = useCallback(() => {
     setFileUrl('');
@@ -185,7 +202,7 @@ export const NewNFT = () => {
       onChangeCheckbox={(e) => setIsChecked(e.target.checked)}
       isModalOpen={isModalOpen}
       toggleModal={() => setIsModalOpen((prev) => !prev)}
-      isReceived={isReceived}
+      isWalletConnected={isWalletConnected}
     />
   );
 };

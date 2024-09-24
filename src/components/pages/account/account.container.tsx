@@ -50,14 +50,12 @@ export const Account = () => {
         )
         .catch((err) => {
           setIsOpenModal(true);
-          console.log(err);
           return [];
         }),
       vwblViewer
         .listMintedNFTMetadata(userAddress)
         .then((mintedItems) => mintedItems.filter((v) => v).reverse() as ExtendedMetadeta[])
         .catch((err) => {
-          console.log(err);
           return [];
         }),
     ]);

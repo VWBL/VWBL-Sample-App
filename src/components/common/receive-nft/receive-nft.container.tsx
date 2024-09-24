@@ -36,7 +36,6 @@ export const ReceiveNFT: React.FC<Props> = ({ nft, nftKey, contents, successMess
     try {
       const tokenId = await vwbl.mintTokenForIPFS(metadataUrl, 0, mintApiId);
       await vwbl.setKey(tokenId, key);
-      console.log('Key set successfully for token ID:', tokenId);
       return tokenId;
     } catch (error) {
       console.error('Error in minting token and setting key:', error);
@@ -69,7 +68,6 @@ export const ReceiveNFT: React.FC<Props> = ({ nft, nftKey, contents, successMess
       const key = nftKey.key;
 
       const tokenId = await mintTokenAndSetKey(vwbl, metadataUrl, key, process.env.NEXT_PUBLIC_MINT_API_ID!);
-      console.log(tokenId);
       openToast({
         title: 'Successfully received',
         status: 'success',

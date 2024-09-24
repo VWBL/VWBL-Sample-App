@@ -42,16 +42,12 @@ export const TransferModal: React.FC<Props> = ({ isOpen, nft, contractAddress, t
 
   const onSubmit = useCallback(
     async (data: FormInputs) => {
-      console.log('Start>>>');
-      console.log('contractAddress>>>', contractAddress);
-      console.log('tokenId>>>', tokenId);
 
       if (!contractAddress || !tokenId) return;
 
       const { walletAddress } = data;
 
       if (!walletAddress) {
-        console.log('something went wrong');
         return;
       }
       await checkNetwork(() =>
@@ -63,8 +59,6 @@ export const TransferModal: React.FC<Props> = ({ isOpen, nft, contractAddress, t
       );
 
       if (!vwbl) return;
-      console.log('vwbl>>>', vwbl);
-
       if (!vwbl?.signature) {
         await vwbl?.sign();
       }

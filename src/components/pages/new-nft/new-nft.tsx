@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react';
-import { FormControl, FormErrorMessage, Container, Input, Checkbox, Heading, Text, Box } from '@chakra-ui/react';
+import { FormControl, FormErrorMessage, Container, Input, Checkbox, Heading, Text, Box, useToast } from '@chakra-ui/react';
 import { UseFormRegister, UseFormHandleSubmit, FieldErrors } from 'react-hook-form';
 
 import { Link } from '@chakra-ui/next-js';
@@ -14,8 +14,8 @@ import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 type Props = {
   onSubmit: (data: FormInputs) => Promise<void>;
-  onChangeFile: (e: ChangeEvent<{ value: unknown }>) => void;
-  onChangeThumbnail: (e: ChangeEvent<{ value: unknown }>) => void;
+  onChangeFile: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChangeThumbnail: (e: ChangeEvent<HTMLInputElement>) => void;
   onClearFile: () => void;
   onClearThumbnail: () => void;
   fileUrl: string;
@@ -30,7 +30,7 @@ type Props = {
   mintStep: StepStatus[];
   isModalOpen: boolean;
   toggleModal: () => void;
-  isReceived: boolean;
+  isWalletConnected: boolean;
 };
 
 export const NewNFTComponent: React.FC<Props> = ({
@@ -51,20 +51,37 @@ export const NewNFTComponent: React.FC<Props> = ({
   mintStep,
   isModalOpen,
   toggleModal,
+  isWalletConnected,
 }) => {
+  const toast = useToast();
+
+  const handleCreateItem = () => {
+    if (!isWalletConnected) {
+      toast({
+        title: 'Wallet Not Connected',
+        description: 'Please connect your wallet to create an NFT.',
+        status: 'warning',
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+    toggleModal();
+  };
+
   return (
     <Container maxW='container.md' my={20} centerContent>
       <Box w={'100%'} maxW={480}>
-        <Heading as='h2' mb={12} fontSize='3xl'>
+        <Heading as='h1' mb={12} fontSize='3xl'>
           Create New Item
           <Box as='small' color='red' pl={3}>
             for Free
           </Box>
         </Heading>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl isInvalid={!!errors.asset}>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          <FormControl isInvalid={!!errors.asset} mb={12}>
             <CustomLabel title='Asset' htmlFor='asset' isRequired />
-            <Text color='gray.600' mb={8}>
+            <Text color='gray.600' mb={4}>
               Only those with NFT will be able to view it.
             </Text>
             <FilePreviewer
@@ -78,7 +95,7 @@ export const NewNFTComponent: React.FC<Props> = ({
                 ...register('asset', {
                   required: 'Asset is required',
                   validate: {
-                    maxFileSize: (f) => f[0].size < MAX_FILE_SIZE || 'uploaded file is too large',
+                    maxFileSize: (f) => !f[0] || f[0].size < MAX_FILE_SIZE || 'Uploaded file is too large',
                   },
                 }),
               }}
@@ -86,9 +103,9 @@ export const NewNFTComponent: React.FC<Props> = ({
             <FormErrorMessage>{errors.asset && errors.asset.message}</FormErrorMessage>
           </FormControl>
 
-          <FormControl mt={12} isInvalid={!!errors.thumbnail}>
+          <FormControl isInvalid={!!errors.thumbnail} mb={12}>
             <CustomLabel title='Thumbnail' htmlFor='thumbnail' isRequired />
-            <Text color='gray.600' mb={8}>
+            <Text color='gray.600' mb={4}>
               Anyone can see it. Imagine it as a preview.
             </Text>
             <FilePreviewer
@@ -100,18 +117,17 @@ export const NewNFTComponent: React.FC<Props> = ({
                 ...register('thumbnail', {
                   required: 'Thumbnail is required',
                   validate: {
-                    maxFileSize: (f) => f[0].size < MAX_FILE_SIZE || 'uploaded file is too large',
+                    maxFileSize: (f) => !f[0] || f[0].size < MAX_FILE_SIZE || 'Uploaded file is too large',
                   },
                 }),
               }}
               acceptType='.jpeg,.jpg,.png,.gif'
               labelText={'Image'}
             />
-
             <FormErrorMessage>{errors.thumbnail && errors.thumbnail.message}</FormErrorMessage>
           </FormControl>
 
-          <FormControl isInvalid={!!errors.title} mt={12}>
+          <FormControl isInvalid={!!errors.title} mb={12}>
             <CustomLabel title='Title' htmlFor='title' isRequired />
             <Input
               id='title'
@@ -120,13 +136,13 @@ export const NewNFTComponent: React.FC<Props> = ({
               placeholder='Enter a title of your item'
               {...register('title', {
                 required: 'Title is required',
-                minLength: { value: 4, message: 'Minimum length should be 4' },
+                minLength: { value: 4, message: 'Minimum length should be 4 characters' },
               })}
             />
             <FormErrorMessage>{errors.title && errors.title.message}</FormErrorMessage>
           </FormControl>
 
-          <FormControl isInvalid={!!errors.description} mt={12}>
+          <FormControl isInvalid={!!errors.description} mb={12}>
             <CustomLabel title='Description' htmlFor='description' isRequired />
             <Input
               id='description'
@@ -135,42 +151,49 @@ export const NewNFTComponent: React.FC<Props> = ({
               placeholder='Enter a description of your item'
               {...register('description', {
                 required: 'Description is required',
-                minLength: { value: 4, message: 'Minimum length should be 4' },
+                minLength: { value: 4, message: 'Minimum length should be 4 characters' },
               })}
             />
-
             <FormErrorMessage>{errors.description && errors.description.message}</FormErrorMessage>
           </FormControl>
-          <Text mt={4}>With preserved line-breaks</Text>
+          <Text mb={8}>With preserved line-breaks</Text>
 
-          <Checkbox mt={8} size='md' colorScheme='blackAlpha' isChecked={isChecked} onChange={onChangeCheckbox} display='flex'>
-            <Text fontSize='sm'>Agree to the&nbsp; terms of serivce</Text>
-          </Checkbox>
-          <Link fontSize='sm' color='blue.600' href='https://ango-ya.notion.site/5632a448348b4722b2256e016dcc0cb4' isExternal>
-            Terms of Serivce
+          <FormControl mb={4}>
+            <Checkbox size='md' colorScheme='blackAlpha' isChecked={isChecked} onChange={onChangeCheckbox} id='terms-checkbox'>
+              <Text fontSize='sm'>I agree to the terms of service</Text>
+            </Checkbox>
+          </FormControl>
+          <Link
+            fontSize='sm'
+            color='blue.600'
+            href='https://ango-ya.notion.site/5632a448348b4722b2256e016dcc0cb4'
+            isExternal
+            mb={8}
+            display='inline-block'
+          >
+            Terms of Service
             <ExternalLinkIcon mx='2px' />
           </Link>
           <Button
-            text='Create Item for Free'
-            onClick={toggleModal}
+            text={isWalletConnected ? 'Create Item for Free' : 'Connect Wallet to Create NFT'}
+            onClick={handleCreateItem}
             isLoading={isLoading}
             loadingText='Creating Your NFT'
             width='100%'
             fontWeight='bold'
-            disalbed={!isChecked}
+            disabled={!isChecked || !isWalletConnected}
             mt={8}
           />
           <Text mt={6}>
             Creating a new item may take a few minutes.
             <br />
             Please do not move to another page while loading.
-            <br />
           </Text>
           <MintStepModal
             mintStep={mintStep}
             isOpen={isModalOpen}
             onMintClick={handleSubmit(onSubmit)}
-            onClose={() => console.log('click cancel')}
+            onClose={toggleModal}
             handleCancelClick={toggleModal}
           />
         </form>

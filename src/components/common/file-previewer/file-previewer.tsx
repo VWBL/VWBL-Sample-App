@@ -10,7 +10,7 @@ type Props = {
   url?: string;
   onClear: () => void;
   inputId: string;
-  onChange: (e: ChangeEvent<{ value: unknown }>) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   mimeType?: string;
   acceptType?: string;
   opt?: UseFormRegisterReturn;

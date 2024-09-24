@@ -17,33 +17,15 @@ import {
   Container,
 } from '@chakra-ui/react';
 import { MdOutlineAccountBalanceWallet } from 'react-icons/md';
-
 import { Button } from '../button';
 import { closeButton, hamburgerMenu } from './header.style';
 import { VwblContainer } from '../../../container';
 import { NavLink } from '../nav-link';
-
-const HamburgerMenu = ({ onClick, sx }: { onClick: () => void; sx: CSSObject }) => (
-  <ChakraButton
-    position='relative'
-    w='40px'
-    h='20px'
-    background='none'
-    border='none'
-    appearance='none'
-    cursor='pointer'
-    sx={sx}
-    onClick={onClick}
-    display={{ md: 'none' }}
-  >
-    <span></span>
-    <span></span>
-  </ChakraButton>
-);
+import HamburgerMenu from '../hamburger-menu/hamburger-menu';
 
 const Header: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { connectWallet, userAddress } = VwblContainer.useContainer();
+  const { connectWallet, userAddress, disconnectWallet } = VwblContainer.useContainer();
 
   const HeaderLinks = [
     { title: 'Explore', to: 'https://vwbl-protocol.org/', isExternal: true },
@@ -67,7 +49,7 @@ const Header: React.FC = () => {
           </HStack>
           {userAddress ? (
             <HStack spacing={6}>
-              <Button text='Disconnect' borderRadius={'3xl'} isReversed onClick={onClose} />
+              <Button text='Disconnect' borderRadius={'3xl'} isReversed onClick={disconnectWallet} />
               <Link
                 bg='black'
                 color='white'
@@ -115,25 +97,26 @@ const Header: React.FC = () => {
                     >
                       My Wallet
                     </Link>
-                    <Button px={6} text='Disconnect' borderRadius={'3xl'} fontSize='2xl' onClick={onClose} border='solid 1px white' />
-
-                    {/* <Link href='/account'>
-                      <Button as='a' text='My Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} height='40px' />
-                    </Link> */}
+                    <Button
+                      px={6}
+                      text='Disconnect'
+                      borderRadius={'3xl'}
+                      fontSize='2xl'
+                      onClick={disconnectWallet}
+                      border='solid 1px white'
+                    />
                   </VStack>
                 ) : (
-                  <HStack>
-                    <Button
-                      text='Connect Wallet'
-                      borderRadius={'3xl'}
-                      icon={MdOutlineAccountBalanceWallet}
-                      onClick={connectWallet}
-                      isReversed
-                      width={60}
-                      height={10}
-                      fontSize='xl'
-                    />
-                  </HStack>
+                  <Button
+                    text='Connect Wallet'
+                    borderRadius={'3xl'}
+                    icon={MdOutlineAccountBalanceWallet}
+                    onClick={connectWallet}
+                    isReversed
+                    width={60}
+                    height={10}
+                    fontSize='xl'
+                  />
                 )}
                 <Box fontSize='sm'>＊pcの方はmetamask chrome extention、mobileの方はmetamask appをご利用ください。</Box>
               </Stack>

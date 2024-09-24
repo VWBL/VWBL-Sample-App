@@ -18,7 +18,7 @@ type Props = {
   px?: string | number;
   border?: BorderProps['border'];
   borderRadius?: BorderProps['borderRadius'];
-  disalbed?: ButtonProps['disabled'];
+  disabled?: ButtonProps['disabled'];
   onClick?: () => void;
   isReversed?: boolean;
   icon?: IconType;
@@ -43,7 +43,7 @@ export const Button: React.FC<Props> = forwardRef(
       px,
       border,
       borderRadius,
-      disalbed,
+      disabled,
       onClick,
       isReversed,
       icon,
@@ -70,7 +70,7 @@ export const Button: React.FC<Props> = forwardRef(
         borderRadius={borderRadius}
         fontSize={fontSize}
         border={isReversed ? '1px solid' : border}
-        disabled={disalbed}
+        disabled={disabled}
         _hover={{ opacity: 0.7 }}
         onClick={onClick}
         as={as}

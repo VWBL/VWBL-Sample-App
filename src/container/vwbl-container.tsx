@@ -5,7 +5,7 @@ import { createContainer } from 'unstated-next';
 import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx, VWBLViewer } from 'vwbl-sdk';
 import { ethers } from 'ethers';
 import { Web3 } from 'web3';
-import { useWeb3Modal } from '@web3modal/ethers/react';
+import { useDisconnect, useWeb3Modal } from '@web3modal/ethers/react';
 
 const useVWBL = () => {
   const [vwbl, setVwbl] = useState<VWBLMetaTx>();
@@ -16,6 +16,7 @@ const useVWBL = () => {
   const [provider, setProvider] = useState<any>();
   const [ethersProvider, setEthersProvider] = useState<ethers.BrowserProvider>();
   const { open } = useWeb3Modal();
+  const { disconnect } = useDisconnect();
 
   const initializeVwbl = useCallback((instanceProvider: any) => {
     if (
@@ -135,6 +136,12 @@ const useVWBL = () => {
     setUserSignature(undefined);
   }, []);
 
+  const disconnectWallet = useCallback(() => {
+    disconnect(); // disconnectの実行
+    clearVwbl(); // 状態をリセット
+    setUserAddress(undefined); // ユーザーアドレスをクリア
+  }, [disconnect, clearVwbl]);
+
   const checkNetwork = useCallback(
     async (callback: () => void) => {
       if (!provider) return;
@@ -160,6 +167,7 @@ const useVWBL = () => {
     provider,
     ethersProvider,
     connectWallet,
+    disconnectWallet,
     initVwbl,
     initVWBLViewer,
     updateVwbl: initializeVwbl,
