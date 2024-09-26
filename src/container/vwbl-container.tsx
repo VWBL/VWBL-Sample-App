@@ -5,7 +5,8 @@ import { createContainer } from 'unstated-next';
 import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx, VWBLViewer } from 'vwbl-sdk';
 import { ethers } from 'ethers';
 import { Web3 } from 'web3';
-import { useDisconnect, useWeb3Modal } from '@web3modal/ethers/react';
+import { useAppKit } from '@reown/appkit/react';
+import { useDisconnect } from './web3modal';
 
 const useVWBL = () => {
   const [vwbl, setVwbl] = useState<VWBLMetaTx>();
@@ -15,8 +16,10 @@ const useVWBL = () => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [provider, setProvider] = useState<any>();
   const [ethersProvider, setEthersProvider] = useState<ethers.BrowserProvider>();
-  const { open } = useWeb3Modal();
-  const { disconnect } = useDisconnect();
+  const { open } = useAppKit();
+
+  // The library is not yet supported.
+  // const { disconnect } = useDisconnect();
 
   const initializeVwbl = useCallback((instanceProvider: any) => {
     if (
@@ -137,10 +140,10 @@ const useVWBL = () => {
   }, []);
 
   const disconnectWallet = useCallback(() => {
-    disconnect(); // disconnectの実行
-    clearVwbl(); // 状態をリセット
-    setUserAddress(undefined); // ユーザーアドレスをクリア
-  }, [disconnect, clearVwbl]);
+    useDisconnect();
+    clearVwbl();
+    setUserAddress(undefined);
+  }, [useDisconnect, clearVwbl]);
 
   const checkNetwork = useCallback(
     async (callback: () => void) => {

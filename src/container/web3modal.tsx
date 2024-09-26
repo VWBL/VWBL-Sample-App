@@ -1,27 +1,14 @@
 'use client';
-
-import { createWeb3Modal, defaultConfig } from '@web3modal/ethers/react';
+import { createAppKit } from '@reown/appkit/react';
+import { EthersAdapter as EthersAdapterClass } from '@reown/appkit-adapter-ethers';
+import { sepolia, polygon } from '@reown/appkit/networks';
 import { ReactNode } from 'react';
 
 // 1. Get projectId from https://cloud.walletconnect.com
-const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT!;
+const projectId = process.env.NEXT_PUBLIC_REOWN_ID!;
 
-// 2. Set chains
-const amoy = {
-  chainId: 80002,
-  name: 'Amoy',
-  currency: 'MATIC',
-  explorerUrl: 'https://www.oklink.com/ja/amoy',
-  rpcUrl: 'https://rpc-amoy.polygon.technology',
-};
-
-const polygon = {
-  chainId: 137,
-  name: 'Polygon',
-  currency: 'MATIC',
-  explorerUrl: 'https://polygonscan.com/',
-  rpcUrl: 'https://polygon-rpc.com/',
-};
+// 2. Set Ethers adapters
+const ethersAdapter = new EthersAdapterClass();
 
 // 3. Create a metadata object
 const metadata = {
@@ -31,26 +18,32 @@ const metadata = {
   icons: [''],
 };
 
-// 4. Create Ethers config
-const ethersConfig = defaultConfig({
-  /*Required*/
-  metadata,
-
-  /*Optional*/
-  enableEIP6963: true, // true by default
-  enableInjected: true, // true by default
-  enableCoinbase: true, // true by default
-  rpcUrl: '...', // used for the Coinbase SDK
-  defaultChainId: 1, // used for the Coinbase SDK
-});
-
-// 5. Create a AppKit instance
-createWeb3Modal({
-  ethersConfig,
-  chains: [polygon, amoy],
+// 4. Create the AppKit instance
+createAppKit({
+  adapters: [ethersAdapter],
+  metadata: metadata,
+  networks: [polygon, sepolia],
   projectId,
-  enableAnalytics: true, // Optional - defaults to your Cloud configuration
+  features: {
+    email: false,
+    socials: [],
+    analytics: false,
+    swaps: false,
+    onramp: false,
+    emailShowWallets: true,
+  },
 });
+
+// The library is not yet supported.
+export function useDisconnect() {
+  async function disconnect() {
+    await ethersAdapter.disconnect();
+  }
+
+  return {
+    disconnect,
+  };
+}
 
 export function Web3Wallet({ children }: { children: ReactNode }) {
   return <>{children}</>;

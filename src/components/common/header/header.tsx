@@ -22,16 +22,22 @@ import { closeButton, hamburgerMenu } from './header.style';
 import { VwblContainer } from '../../../container';
 import { NavLink } from '../nav-link';
 import HamburgerMenu from '../hamburger-menu/hamburger-menu';
+import { useAppKit } from '@reown/appkit/react';
 
 const Header: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { connectWallet, userAddress, disconnectWallet } = VwblContainer.useContainer();
+  const { open } = useAppKit();
 
   const HeaderLinks = [
     { title: 'Explore', to: 'https://vwbl-protocol.org/', isExternal: true },
     { title: 'Create', to: '/create', isExternal: false },
     { title: 'Receive', to: '/receive', isExternal: false },
   ];
+
+  const opneModal = () => {
+    open({ view: 'Account' });
+  };
 
   return (
     <Container px={{ base: 6, md: 8 }} maxW='100%' as='header'>
@@ -48,8 +54,9 @@ const Header: React.FC = () => {
             ))}
           </HStack>
           {userAddress ? (
-            <HStack spacing={6}>
+            <HStack spacing={5}>
               <Button text='Disconnect' borderRadius={'3xl'} isReversed onClick={disconnectWallet} />
+              <Button text='Wallet Info' borderRadius={'3xl'} isReversed onClick={opneModal} />
               <Link
                 bg='black'
                 color='white'
