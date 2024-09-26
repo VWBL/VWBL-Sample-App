@@ -1,13 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
   swcMinify: false,
   experimental: {
     serverComponentsExternalPackages: ['@react-pdf/renderer'],
   },
-  webpack: (config, {  isServer }) => {
+  webpack: (config, { isServer }) => {
     config.externals.push('pino-pretty', 'lokijs', 'encoding');
     config.resolve.alias.canvas = false;
-    // クライアント側でファイルシステム関連のモジュールを無効化
     if (!isServer) {
       config.resolve.fallback = {
         fs: false,
