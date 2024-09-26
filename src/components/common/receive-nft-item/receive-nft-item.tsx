@@ -1,12 +1,12 @@
 import { Heading, Box, Container, Text, VStack } from '@chakra-ui/react';
 import { Button } from '../button';
 import { NFTItem } from '../nft-item';
-import { ExtendedMetadeta } from 'vwbl-sdk';
+import { ExtendedMetadata } from 'vwbl-sdk';
 
 type Props = {
   title: string;
   description: string[];
-  nft: ExtendedMetadeta;
+  nft: ExtendedMetadata;
   contents: {
     title: string;
     description: string[];

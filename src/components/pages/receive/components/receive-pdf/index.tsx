@@ -1,5 +1,5 @@
 'use client';
-import { ExtendedMetadeta } from 'vwbl-sdk';
+import { ExtendedMetadata } from 'vwbl-sdk';
 import { ReceiveNFT } from '../../../../common/receive-nft';
 
 const contents = {
@@ -7,7 +7,7 @@ const contents = {
   description: ['暗号屋の会社案内のPDFです。', 'VWBL はPDFにも対応しています'],
 };
 
-export const nft: ExtendedMetadeta = {
+export const nft: ExtendedMetadata = {
   id: 1,
   name: 'Ango-ya LLC',
   description: 'Company Information',

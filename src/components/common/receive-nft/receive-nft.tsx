@@ -3,10 +3,10 @@ import { Link, Text, Container } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { WalletInfo } from '../../pages/receive/components/wallet-info';
 import { ReceiveNFTItemComponent } from '../receive-nft-item';
-import { ExtendedMetadeta } from 'vwbl-sdk';
+import { ExtendedMetadata } from 'vwbl-sdk';
 
 type Props = {
-  nft: ExtendedMetadeta;
+  nft: ExtendedMetadata;
   isLoading: boolean;
   isReceived: boolean;
   onSubmit: () => Promise<void>;

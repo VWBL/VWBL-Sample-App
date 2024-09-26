@@ -2,13 +2,13 @@
 
 import { useState, useCallback } from 'react';
 import { switchChain } from '../../../utils';
-import { ExtendedMetadeta } from 'vwbl-sdk';
+import { ExtendedMetadata } from 'vwbl-sdk';
 import { ToastContainer, VwblContainer } from '../../../container';
 import { useRouter } from 'next/navigation';
 import { ReceiveNFTComponent } from './receive-nft';
 
 type Props = {
-  nft: ExtendedMetadeta;
+  nft: ExtendedMetadata;
   nftKey: {
     metadataUrl: string;
     key: string;
