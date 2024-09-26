@@ -1,8 +1,12 @@
-import { useState, useCallback } from 'react';
+'use client';
+
+import { useState, useCallback, useEffect } from 'react';
 import { createContainer } from 'unstated-next';
 import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx, VWBLViewer } from 'vwbl-sdk';
 import { ethers } from 'ethers';
 import { Web3 } from 'web3';
+import { useAppKit } from '@reown/appkit/react';
+import { useDisconnect } from './web3modal';
 
 const useVWBL = () => {
   const [vwbl, setVwbl] = useState<VWBLMetaTx>();
@@ -12,7 +16,12 @@ const useVWBL = () => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [provider, setProvider] = useState<any>();
   const [ethersProvider, setEthersProvider] = useState<ethers.BrowserProvider>();
-  const updateVwbl = useCallback((provider: any): void => {
+  const { open } = useAppKit();
+
+  // The library is not yet supported.
+  // const { disconnect } = useDisconnect();
+
+  const initializeVwbl = useCallback((instanceProvider: any) => {
     if (
       !process.env.NEXT_PUBLIC_VWBL_NETWORK_URL ||
       !process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS ||
@@ -23,8 +32,9 @@ const useVWBL = () => {
     ) {
       throw new Error('missing setting');
     }
+
     const vwblInstance = new VWBLMetaTx({
-      bcProvider: provider,
+      bcProvider: instanceProvider,
       contractAddress: process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS,
       manageKeyType: ManageKeyType.VWBL_NETWORK_SERVER,
       uploadContentType: UploadContentType.IPFS,
@@ -39,37 +49,56 @@ const useVWBL = () => {
       },
       dataCollectorAddress: process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS,
     });
+
     setVwbl(vwblInstance);
   }, []);
 
   const connectWallet = useCallback(async () => {
     try {
-      const metaMaskProvider = (window as any).ethereum;
+      await open();
+      const instance = (window as any).ethereum as ethers.Eip1193Provider;
 
-      if (metaMaskProvider && metaMaskProvider.isMetaMask) {
-        setProvider(metaMaskProvider);
-        updateVwbl(metaMaskProvider);
-        const ethProvider = new ethers.BrowserProvider(metaMaskProvider);
-        setEthersProvider(ethProvider);
-        await metaMaskProvider.request({ method: 'eth_requestAccounts' });
-        const ethSigner = await ethProvider.getSigner();
-        const myAddress = await ethSigner.getAddress();
-        if (myAddress) setUserAddress(myAddress);
-      } else {
-        throw new Error('missing metamask');
+      if (!instance) {
+        throw new Error('Wallet connection failed');
       }
+
+      const ethProvider = new ethers.BrowserProvider(instance);
+      setProvider(instance);
+      setEthersProvider(ethProvider);
+      initializeVwbl(instance);
+
+      const ethSigner = await ethProvider.getSigner();
+      const myAddress = await ethSigner.getAddress();
+      setUserAddress(myAddress);
     } catch (err) {
-      console.log(err);
+      console.error('Wallet connection failed:', err);
+      setErrorMessage('Wallet connection failed');
     }
-  }, [updateVwbl]);
+  }, [initializeVwbl, open]);
 
-  const initVwbl = useCallback((): void => {
-    console.log(
-      process.env.NEXT_PUBLIC_VWBL_NETWORK_URL,
-      process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS,
-      process.env.NEXT_PUBLIC_PROVIDER_URL,
-    );
+  useEffect(() => {
+    const instance = (window as any).ethereum;
+    if (!provider && instance) {
+      setProvider(instance);
+      const ethProvider = new ethers.BrowserProvider(instance);
+      setEthersProvider(ethProvider);
+      initializeVwbl(instance);
+    }
 
+    const handleAccountsChanged = () => {
+      if (provider) {
+        const ethProvider = new ethers.BrowserProvider(provider);
+        setEthersProvider(ethProvider);
+      }
+    };
+
+    window.addEventListener('accountsChanged', handleAccountsChanged);
+    return () => {
+      window.removeEventListener('accountsChanged', handleAccountsChanged);
+    };
+  }, [provider, initializeVwbl]);
+
+  const initVwbl = useCallback(() => {
     if (
       !process.env.NEXT_PUBLIC_VWBL_NETWORK_URL ||
       !process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS ||
@@ -89,26 +118,32 @@ const useVWBL = () => {
       },
     });
     setVwbl(vwblInstance);
-  }, []);
+  }, [provider]);
 
-  const initVWBLViewer = () => {
+  const initVWBLViewer = useCallback(() => {
     if (!process.env.NEXT_PUBLIC_PROVIDER_URL || !process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS) {
       throw new Error('missing setting');
     }
-    const provider = new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_PROVIDER_URL);
-    const web3 = new Web3(provider);
+    const web3Provider = new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_PROVIDER_URL);
+    const web3 = new Web3(web3Provider);
     const vwblViewerInstance = new VWBLViewer({
       provider: web3 as any,
       dataCollectorAddress: process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS,
     });
     setVwblViewer(vwblViewerInstance);
-  };
+  }, []);
 
   const clearVwbl = useCallback(() => {
     setVwbl(undefined);
     setVwblViewer(undefined);
     setUserSignature(undefined);
   }, []);
+
+  const disconnectWallet = useCallback(() => {
+    useDisconnect();
+    clearVwbl();
+    setUserAddress(undefined);
+  }, [useDisconnect, clearVwbl]);
 
   const checkNetwork = useCallback(
     async (callback: () => void) => {
@@ -117,7 +152,8 @@ const useVWBL = () => {
       const ethProvider = new ethers.BrowserProvider(provider);
       const network = await ethProvider.getNetwork();
       const connectedChainId = network.chainId;
-      const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!);
+      const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!, 10);
+
       if (Number(connectedChainId) !== properChainId) {
         callback();
       }
@@ -127,18 +163,19 @@ const useVWBL = () => {
 
   return {
     vwbl,
-    updateVwbl,
     vwblViewer,
-    initVWBLViewer,
-    clearVwbl,
-    errorMessage,
-    setErrorMessage,
     userSignature,
     userAddress,
+    errorMessage,
     provider,
     ethersProvider,
     connectWallet,
+    disconnectWallet,
     initVwbl,
+    initVWBLViewer,
+    updateVwbl: initializeVwbl,
+    clearVwbl,
+    setErrorMessage,
     checkNetwork,
   };
 };

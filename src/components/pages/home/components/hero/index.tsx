@@ -1,5 +1,5 @@
 import { Box, Text, Container, Image } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { memo } from 'react';
 import { Button } from '../../../../common/button';
 

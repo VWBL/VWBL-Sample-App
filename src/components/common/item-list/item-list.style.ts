@@ -3,7 +3,6 @@ export const style = {
     padding: '20px',
   },
   wrapper: {
-
     '@media (min-width: 675px) and (max-width: 1004px)': {
       'li:nth-of-type(2n-1)': {
         paddingLeft: '0 !important',

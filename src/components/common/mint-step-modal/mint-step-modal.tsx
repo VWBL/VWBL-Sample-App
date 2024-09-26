@@ -1,7 +1,21 @@
-import { Modal, ModalContent, ModalHeader, ModalOverlay, Text, Box, Button, CircularProgress, Flex, Center } from '@chakra-ui/react';
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  Box,
+  Button,
+  CircularProgress,
+  Flex,
+  Center,
+  HStack,
+  VStack,
+} from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
 import { StepStatus } from 'vwbl-sdk';
-import Link from 'next/link';
+import { Link } from '@chakra-ui/next-js';
+
 import { memo } from 'react';
 
 export type Props = {
@@ -91,18 +105,12 @@ export const MintStepModal: React.FC<Props> = memo(({ isOpen, signature, mintSte
             </Box>
           </Flex>
           {mintStep.includes(StepStatus.SET_KEY) ? (
-            <>
-              <Center mt={10} mb={6}>
-                <Text fontSize={'xl'} as='b'>
-                  You have minted your VWBL NFT! 🎉
-                </Text>
-              </Center>
-              <Center>
-                <Link href={`/account/`} replace passHref>
-                  My page
-                </Link>
-              </Center>
-            </>
+            <VStack mt={10} mb={6} spacing={4} fontSize={'xl'}>
+              <Text as='b'>You have minted your VWBL NFT! 🎉</Text>
+              <Link href={`/account/`} color='blue.600' replace>
+                My page
+              </Link>
+            </VStack>
           ) : (
             <>
               <Center my={4}>

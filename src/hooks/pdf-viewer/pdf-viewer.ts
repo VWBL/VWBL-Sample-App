@@ -1,5 +1,7 @@
-import { useState, useCallback, useRef } from 'react';
-import { useGetElementProperty } from '../get-element-property';
+'use client';
+
+import { useState, useCallback } from 'react';
+
 
 interface PDFLoadSuccess {
   numPages: number;
@@ -23,16 +25,11 @@ export const usePdfViewer = () => {
     setPageNumber((prev) => prev - 1);
   };
 
-  const targetRef = useRef(null);
-  const { getElementProperty } = useGetElementProperty<HTMLDivElement>(targetRef);
-
   return {
     numPages,
     pageNumber,
     onDocumentLoadSuccess,
     onClickNextPage,
     onClickPreviousPage,
-    targetRef,
-    width: getElementProperty('width'),
   };
 };

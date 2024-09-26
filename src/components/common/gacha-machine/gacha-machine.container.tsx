@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+'use client';
+
+import { useState } from 'react';
 import { GachaMachineComponent } from './gacha-machine';
 import axios from 'axios';
 

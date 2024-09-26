@@ -1,47 +1,49 @@
-import { Heading, Box, Container, Text, VStack, FormControl } from '@chakra-ui/react';
-import { Button } from '../../common/button';
-import { NFTItem } from '../../common/nft-item';
-import { ExtendedMetadeta } from 'vwbl-sdk';
+import { LoadingModal } from '../../pages/receive/components/loading-modal';
+import { Link, Text, Container } from '@chakra-ui/react';
+import NextLink from 'next/link';
+import { WalletInfo } from '../../pages/receive/components/wallet-info';
+import { ReceiveNFTItemComponent } from '../receive-nft-item';
+import { ExtendedMetadata } from 'vwbl-sdk';
 
 type Props = {
-  title: string;
-  description: string[];
-  nft: ExtendedMetadeta;
+  nft: ExtendedMetadata;
+  isLoading: boolean;
+  isReceived: boolean;
+  onSubmit: () => Promise<void>;
   contents: {
     title: string;
     description: string[];
   };
-  onSubmit: () => Promise<void>;
-  isLoading: boolean;
-  extraInfo?: React.ReactNode;
 };
 
-export const ReceiveNFTComponent: React.FC<Props> = ({ title, description, nft, onSubmit, isLoading }) => {
+export const ReceiveNFTComponent: React.FC<Props> = ({ nft, isLoading, isReceived, onSubmit, contents }) => {
   return (
-    <Container maxW='container.md' my={12} centerContent>
-      <Heading as='h2' mb={5} w='100%' textAlign='center' size='lg'>
-        {title}
-      </Heading>
-      <VStack spacing={0} align='center'>
-        <Text align='center'>
-          {description.map((text, i) => (
-            <Box as='span' display='block' key={i} m={0}>{`${text}`}</Box>
-          ))}
-        </Text>
-        <Box>
-          <NFTItem nft={nft} disabled={true} />
-        </Box>
-        <FormControl w='100%'>
-          <Button
-            width='300px'
-            text='NFT を無料で受け取る'
+    <>
+      {isLoading && <LoadingModal isOpen={isLoading} />}
+      {isReceived ? (
+        <Container maxW='container.md' centerContent>
+          <Text my={2}>NFTを発行済です。</Text>
+          <Text my={2}>
+            NFTは
+            <Link color='blue.600' href='/account' as={NextLink}>
+              My Walletのページ
+            </Link>
+            で閲覧できます。
+          </Text>
+        </Container>
+      ) : (
+        <>
+          <ReceiveNFTItemComponent
+            onSubmit={onSubmit}
+            contents={contents}
             isLoading={isLoading}
-            loadingText='Creating Your NFT'
-            fontWeight='bold'
-            onClick={onSubmit}
+            title={contents.title}
+            description={contents.description}
+            nft={nft}
           />
-        </FormControl>
-      </VStack>
-    </Container>
+          <WalletInfo />
+        </>
+      )}
+    </>
   );
 };

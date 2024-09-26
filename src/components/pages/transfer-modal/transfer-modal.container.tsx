@@ -1,6 +1,8 @@
-import { useState, useCallback } from 'react';
+'use client';
+
+import { useState, useCallback, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { TransferModalComponent } from './transfer-modal';
 import { ExtractMetadata, ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx } from 'vwbl-sdk';
@@ -18,9 +20,11 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   nft: ExtractMetadata;
+  contractAddress: string | null;
+  tokenId: string | null;
 };
 
-export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
+export const TransferModal: React.FC<Props> = ({ isOpen, nft, contractAddress, tokenId }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
 
@@ -30,20 +34,22 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
     formState: { errors },
   } = useForm<FormInputs>({ mode: 'onBlur' });
   const router = useRouter();
+  const searchParams = useSearchParams();
+
   const { vwbl, provider, userAddress, checkNetwork } = VwblContainer.useContainer();
   const { openToast } = ToastContainer.useContainer();
   const properChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID!) as ChainId;
 
   const onSubmit = useCallback(
     async (data: FormInputs) => {
-      const { contractAddress, tokenId } = router.query;
+
       if (!contractAddress || !tokenId) return;
+
       const { walletAddress } = data;
+
       if (!walletAddress) {
-        console.log('something went wrong');
         return;
       }
-
       await checkNetwork(() =>
         openToast({
           title: 'Please switch to ' + NETWORKS[properChainId],
@@ -58,9 +64,13 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
       }
       try {
         setIsLoading(true);
-        const lowerCaseContractAddress = getAsString(contractAddress).toLowerCase();
-        const nftContractAddress = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS!.toLowerCase();
-        const nftGachaContractAddress = process.env.NEXT_PUBLIC_GACHA_NFT_CONTRACT_ADDRESS!.toLowerCase();
+        const lowerCaseContractAddress = getAsString(contractAddress)?.toLowerCase() || '';
+        const nftContractAddress = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS
+          ? process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS.toLowerCase()
+          : '';
+        const nftGachaContractAddress = process.env.NEXT_PUBLIC_GACHA_NFT_CONTRACT_ADDRESS
+          ? process.env.NEXT_PUBLIC_GACHA_NFT_CONTRACT_ADDRESS.toLowerCase()
+          : '';
 
         let apiKey: string | undefined, transferApiId: string | undefined;
 
@@ -103,13 +113,19 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
         setIsLoading(false);
       }
     },
-    [vwbl, router, checkNetwork, openToast],
+    [vwbl, router, checkNetwork, openToast, searchParams],
   );
+
+  const handleClose = useCallback(() => {
+    setIsComplete(false);
+    router.back();
+  }, [router]);
 
   const onRefresh = async () => {
     await router.push('/account');
     setIsComplete(false);
-    router.reload();
+    router.replace('/account');
+    router.refresh();
   };
 
   return (
@@ -118,7 +134,7 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
       isComplete={isComplete}
       isLoading={isLoading}
       onSubmit={onSubmit}
-      onCloseModal={onClose}
+      onCloseModal={handleClose}
       onRefresh={onRefresh}
       handleSubmit={handleSubmit}
       register={register}

@@ -1,6 +1,6 @@
 import { StepStatus } from 'vwbl-sdk';
-import { VwblContainer } from '../../../container';
 import { MintStepModal as MintStepModalComponent } from './mint-step-modal';
+import { VwblContainer } from '../../../container';
 
 type Props = {
   isOpen: boolean;
