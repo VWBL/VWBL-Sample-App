@@ -1,7 +1,7 @@
 'use client';
 
-import { Link } from '@chakra-ui/next-js';
 import {
+  Link,
   Flex,
   HStack,
   Image,
@@ -13,7 +13,6 @@ import {
   Stack,
   Box,
   Button as ChakraButton,
-  CSSObject,
   Container,
 } from '@chakra-ui/react';
 import { MdOutlineAccountBalanceWallet } from 'react-icons/md';

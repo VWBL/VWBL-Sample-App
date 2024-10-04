@@ -14,7 +14,7 @@ permissions:
 env:
   # バージョン何が使えるのかは以下を参照
   # https://github.com/actions/node-versions/blob/main/versions-manifest.json
-  node-version: '18.x'
+  node-version: '22.x'
 
 jobs:
   setup:
@@ -105,7 +105,7 @@ jobs:
           aws s3 sync \
             --exact-timestamps \
             --delete \
-            "./.next" s3://${{ secrets.DEPLOY_BUCKET }}
+            "out" s3://${{ secrets.DEPLOY_BUCKET }}
       - name: Clear cloudfront cache
         run: |
           aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
@@ -170,7 +170,7 @@ jobs:
           aws s3 sync \
             --exact-timestamps \
             --delete \
-            "./.next" s3://${{ secrets.DEPLOY_BUCKET }}
+            "out" s3://${{ secrets.DEPLOY_BUCKET }}
       - name: Clear cloudfront cache
         run: |
           aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"

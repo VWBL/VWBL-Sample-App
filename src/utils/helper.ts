@@ -1,4 +1,4 @@
-import { toHex } from 'web3-utils';
+import { toBeHex } from 'ethers';
 import { FetchedNFT } from '../components/types';
 import { ChainId, NETWORKS } from './const';
 
@@ -29,7 +29,7 @@ export const switchChain = async (provider: any) => {
     try {
       await provider.request({
         method: 'wallet_switchEthereumChain',
-        params: [{ chainId: toHex(properChainId) }], // chainId must be in hexadecimal numbers
+        params: [{ chainId: toBeHex(properChainId) }], // chainId must be in hexadecimal numbers
       });
     } catch (error: any) {
       if (error.code === 4902) {
@@ -38,7 +38,7 @@ export const switchChain = async (provider: any) => {
             method: 'wallet_addEthereumChain',
             params: [
               {
-                chainId: toHex(properChainId),
+                chainId: toBeHex(properChainId),
                 ...NETWORKS[properChainId],
               },
             ],

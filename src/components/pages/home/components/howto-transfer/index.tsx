@@ -1,5 +1,4 @@
-import { Box, Container, Text, Image, Divider } from '@chakra-ui/react';
-import { Link } from '@chakra-ui/next-js';
+import { Box, Container, Text, Image, Divider, Link } from '@chakra-ui/react';
 
 import { Button } from '../../../../common/button';
 import { memo } from 'react';
