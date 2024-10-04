@@ -1,5 +1,6 @@
 import { LoadingModal } from '../../pages/receive/components/loading-modal';
-import { Link, Text, Container } from '@chakra-ui/react';
+import { Text, Container, Link } from '@chakra-ui/react';
+
 import NextLink from 'next/link';
 import { WalletInfo } from '../../pages/receive/components/wallet-info';
 import { ReceiveNFTItemComponent } from '../receive-nft-item';

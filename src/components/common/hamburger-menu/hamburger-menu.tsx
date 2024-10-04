@@ -1,11 +1,8 @@
 'use client';
 
-import {
-  Button as ChakraButton,
-  CSSObject,
-} from '@chakra-ui/react';
+import { Button as ChakraButton, SystemStyleObject } from '@chakra-ui/react';
 
-const HamburgerMenu = ({ onClick, sx }: { onClick: () => void; sx: CSSObject }) => (
+const HamburgerMenu = ({ onClick, sx }: { onClick: () => void; sx: SystemStyleObject }) => (
   <ChakraButton
     position='relative'
     w='40px'
@@ -21,5 +18,5 @@ const HamburgerMenu = ({ onClick, sx }: { onClick: () => void; sx: CSSObject }) 
     <span></span>
     <span></span>
   </ChakraButton>
-)
+);
 export default HamburgerMenu;

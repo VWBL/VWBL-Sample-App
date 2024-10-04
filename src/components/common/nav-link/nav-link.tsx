@@ -1,8 +1,7 @@
 'use client';
 
-import { Link } from '@chakra-ui/next-js';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
-
+import { Link } from '@chakra-ui/react';
 type Props = {
   title: string;
   to: string;
