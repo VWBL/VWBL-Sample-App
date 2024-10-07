@@ -43,7 +43,7 @@ jobs:
 
       - name: Install Dependencies
         if: steps.cache_node_modules.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
   deploy-staging:
     if: github.ref == 'refs/heads/develop'
