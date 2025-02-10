@@ -104,8 +104,14 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
   return (
     <>
-      <Container px={{ base: 6, md: 8 }} maxW='container.lg'>
-        <Flex as='header' h={{ base: '70px', md: '80px' }} alignItems={'center'} justifyContent={'space-between'}>
+      <Box px={{ base: 6, md: 8 }}>
+        <Flex
+          as='header'
+          h={{ base: '70px', md: '80px' }}
+          alignItems={'center'}
+          justifyContent={'space-between'}
+          px={{ base: '0px', md: '5vw' }}
+        >
           <Link href='/' as={NextLink}>
             <Image src='/header-logo.svg' alt='VWBL Sample App' h={7} />
           </Link>
@@ -121,7 +127,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             {userAddress ? (
               <HStack spacing={6}>
                 <Link href='/account' as={NextLink}>
-                  <Button text='My Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} />
+                  <Button as='a' text='My Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} />
                 </Link>
               </HStack>
             ) : (
@@ -164,7 +170,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             </VStack>
           </DrawerContent>
         </Drawer>
-      </Container>
+      </Box>
 
       {/* hidden element to adjust hight */}
       <Box minH='calc(100vh - 160px)'>{children}</Box>
@@ -177,13 +183,11 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         borderTop='2px'
         px={{ base: 6, md: 8 }}
       >
-        <Flex
+        <Stack
           justifyContent={{ base: 'center', md: 'space-between' }}
           direction={{ base: 'column', md: 'row' }}
           alignItems={{ base: 'start', md: 'center' }}
           h='100%'
-          maxW='container.lg'
-          mx='auto'
         >
           <Stack
             spacing={{ base: 4, md: 6 }}
@@ -201,7 +205,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           <Text fontSize='sm' color='#AEAEB2'>
             &copy; {new Date().getFullYear()} Ango-ya, LLC. All rights reserved.
           </Text>
-        </Flex>
+        </Stack>
       </Container>
     </>
   );

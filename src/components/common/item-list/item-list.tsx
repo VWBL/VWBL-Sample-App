@@ -9,10 +9,10 @@ type Props = {
 
 export const ItemList: React.FC<Props> = ({ nfts }) => {
   return (
-    <Wrap spacing={0} justify='center' sx={style.wrapper} p={0}>
+    <Wrap spacing={4} justify='center' sx={style.wrapper}>
       {nfts.map((nft) => {
         return (
-          <WrapItem key={nft.id} style={style.wrapItem} borderBottom={{ base: '1px', md: '4px' }} borderColor='black'>
+          <WrapItem key={nft.id} my={2} style={style.wrapItem}>
             <NFTItem nft={nft} />
           </WrapItem>
         );

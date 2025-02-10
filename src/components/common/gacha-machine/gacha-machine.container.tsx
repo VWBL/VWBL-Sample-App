@@ -41,7 +41,7 @@ export const GachaMachine: React.FC = () => {
 
         // gachaId に基づいてアイテム選択
         const gachaId = response.data.gachaId;
-        if (gachaId >= 1 && gachaId < items.length + 1) {
+        if (gachaId >= 0 && gachaId < items.length) {
           setCurrentItem(items[gachaId - 1]);
         } else {
           console.error('Invalid gachaId:', gachaId);
@@ -68,7 +68,7 @@ export const GachaMachine: React.FC = () => {
           await new Promise((resolve) => setTimeout(resolve, retryDelay));
         } else {
           console.error('Max retries reached. Giving up.');
-          setError('時間をおいてもう一度もう一度お試しください。');
+          setError('ガチャの実行に失敗しました。もう一度お試しください。');
         }
       }
     }
