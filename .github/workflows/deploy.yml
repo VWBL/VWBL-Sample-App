@@ -14,7 +14,7 @@ permissions:
 env:
   # バージョン何が使えるのかは以下を参照
   # https://github.com/actions/node-versions/blob/main/versions-manifest.json
-  node-version: '22.x'
+  node-version: '18.x'
 
 jobs:
   setup:
@@ -43,7 +43,7 @@ jobs:
 
       - name: Install Dependencies
         if: steps.cache_node_modules.outputs.cache-hit != 'true'
-        run: yarn install --immutable
+        run: yarn install --frozen-lockfile
 
   deploy-staging:
     if: github.ref == 'refs/heads/develop'
@@ -97,7 +97,7 @@ jobs:
           NEXT_PUBLIC_GACHA_API_URL: ${{ secrets.GACHA_API_URL }}
           NEXT_PUBLIC_GACHA_TRANSFER_API_ID: ${{ secrets.GACHA_TRANSFER_API_ID }}
           NEXT_PUBLIC_GACHA_BICONOMY_API_KEY: ${{ secrets.GACHA_BICONOMY_API_KEY }}
-          NEXT_PUBLIC_REOWN_ID: ${{ secrets.REOWN_ID }}
+
         run: |
           yarn build
       - name: Deploy to s3
@@ -105,7 +105,7 @@ jobs:
           aws s3 sync \
             --exact-timestamps \
             --delete \
-            "out" s3://${{ secrets.DEPLOY_BUCKET }}
+            "./out" s3://${{ secrets.DEPLOY_BUCKET }}
       - name: Clear cloudfront cache
         run: |
           aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
@@ -162,7 +162,6 @@ jobs:
           NEXT_PUBLIC_GACHA_API_URL: ${{ secrets.GACHA_API_URL }}
           NEXT_PUBLIC_GACHA_TRANSFER_API_ID: ${{ secrets.GACHA_TRANSFER_API_ID }}
           NEXT_PUBLIC_GACHA_BICONOMY_API_KEY: ${{ secrets.GACHA_BICONOMY_API_KEY }}
-          NEXT_PUBLIC_REOWN_ID: ${{ secrets.REOWN_ID }}
         run: |
           yarn build
       - name: Deploy to s3
@@ -170,7 +169,7 @@ jobs:
           aws s3 sync \
             --exact-timestamps \
             --delete \
-            "out" s3://${{ secrets.DEPLOY_BUCKET }}
+            "./out" s3://${{ secrets.DEPLOY_BUCKET }}
       - name: Clear cloudfront cache
         run: |
           aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"

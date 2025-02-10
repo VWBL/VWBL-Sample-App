@@ -1,45 +1,28 @@
-'use client';
-
 import { Document, Page, pdfjs } from 'react-pdf';
 import { Box, Text, HStack, IconButton } from '@chakra-ui/react';
 import { ChevronRightIcon, ChevronLeftIcon } from '@chakra-ui/icons';
 import { usePdfViewer } from '../../../hooks/pdf-viewer';
-import { useResizeObserver } from '@wojtekmaj/react-hooks';
-import { useCallback, useState } from 'react';
+import workerSrc from '../../../../pdf-worker';
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
-const resizeObserverOptions = {};
+pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
 
 type Props = {
   fileUrl: string;
 };
 
-const maxWidth = 800;
 export const PdfViewer: React.FC<Props> = ({ fileUrl }) => {
-  const { numPages, pageNumber, onDocumentLoadSuccess, onClickNextPage, onClickPreviousPage } = usePdfViewer();
-  const [containerRef, setContainerRef] = useState<HTMLElement | null>(null);
-  const [containerWidth, setContainerWidth] = useState<number>();
-
-  const onResize = useCallback<ResizeObserverCallback>((entries) => {
-    const [entry] = entries;
-
-    if (entry) {
-      setContainerWidth(entry.contentRect.width);
-    }
-  }, []);
-
-  useResizeObserver(containerRef, resizeObserverOptions, onResize);
+  const { numPages, pageNumber, onDocumentLoadSuccess, onClickNextPage, onClickPreviousPage, targetRef, width } = usePdfViewer();
 
   return (
-    <Box w='100%' h='80%'>
-      <Box w='100%' h='80%' display='flex' justifyContent='center' ref={setContainerRef}>
+    <Box w='100%' h='80%' ref={targetRef}>
+      <Box w='100%' h='80%' display='flex' justifyContent='center'>
         <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error}>
           <Page
             pageNumber={pageNumber}
             renderAnnotationLayer={false}
             renderTextLayer={false}
             canvasBackground='gray'
-            width={containerWidth ? Math.min(containerWidth, maxWidth) : maxWidth}
+            width={width / 1.5}
             height={200}
           />
         </Document>

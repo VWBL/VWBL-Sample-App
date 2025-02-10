@@ -1,5 +1,4 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons';
-
 import { Box, Text, Container, Image, Link } from '@chakra-ui/react';
 import { memo } from 'react';
 

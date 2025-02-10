@@ -1,14 +1,13 @@
-'use client';
 import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
+
 import { NftDetailComponent } from './nft-detail';
 import { VwblContainer } from '../../../container';
-import { switchChain } from '../../../utils/helper';
+import { getAsString, switchChain } from '../../../utils/helper';
 import { FetchedNFT } from '../../types';
 import { isOwnerOf } from '../../../utils';
 import { ethers } from 'ethers';
-// @ts-ignore
-import { FALLBACK_STRING, useDynamicParams } from 'next-static-utils';
+
 const NoMetadata = 'metadata not found';
 
 export const NftDetail = () => {
@@ -17,106 +16,82 @@ export const NftDetail = () => {
   const [isOpenContentDrawer, setIsOpenContentDrawer] = useState(false);
   const [isOpenTransferModal, setIsOpenTransferModal] = useState(false);
   const [isOpenNotificationModal, setIsOpenNotificationModal] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(false);
   const router = useRouter();
-
   const { vwbl, vwblViewer, userAddress, provider, initVwbl, updateVwbl, initVWBLViewer, checkNetwork } = VwblContainer.useContainer();
 
-  const { contractAddress, tokenId } = useDynamicParams();
-  if (contractAddress === FALLBACK_STRING) return null;
-  if (tokenId === FALLBACK_STRING) return null;
-
-  useEffect(() => {
-    const initialize = async () => {
-      if (!provider) return;
-      if (!vwbl) {
-        await initVwbl();
-      } else if (!vwblViewer) {
-        await initVWBLViewer();
-      } else {
-        setIsInitialized(true);
-      }
-    };
-
-    initialize();
-  }, [provider, vwbl, vwblViewer, initVwbl, initVWBLViewer]);
-
   const loadNFTByTokenId = useCallback(async () => {
-    if (!contractAddress || !tokenId) {
-      console.error('Error: Invalid path. Expected format: ./assets/contractAddress/tokenId');
-      setIsOpenNotificationModal(true);
+    const { contractAddress, tokenId } = router.query;
+    if (!contractAddress || !tokenId) return;
+    if (!vwbl) {
+      if (!provider) {
+        initVwbl();
+      } else {
+        updateVwbl(provider);
+      }
       return;
     }
-
-    if (!vwbl || !vwblViewer) {
+    if (!vwblViewer) {
+      initVWBLViewer();
       return;
     }
 
     try {
-      await Promise.all([checkNetwork(() => switchChain(provider)), vwbl.sign()]);
+      checkNetwork(() => switchChain(provider));
 
-      const [metadata, owner] = await Promise.all([
-        vwbl.extractMetadata(parseInt(tokenId), contractAddress),
-        vwblViewer.getNFTOwner(contractAddress, parseInt(tokenId)),
-      ]);
+      await vwbl.sign();
 
+      const metadata = await vwbl.extractMetadata(parseInt(getAsString(tokenId)), getAsString(contractAddress));
       if (!metadata) {
         throw new Error('Something went wrong, please try again.');
       }
-
-      setLoadedNft({ ...metadata, owner });
+      const owner = await vwblViewer.getNFTOwner(getAsString(contractAddress), parseInt(getAsString(tokenId)));
+      const item = { ...metadata, owner };
+      setLoadedNft(item);
     } catch (err: any) {
       console.error(err);
       if (err.message && err.message.includes('User denied')) {
         router.back();
-      } else if (err instanceof Error && err.message === NoMetadata) {
-        handleNoMetadataError();
+      }
+      if (err instanceof Error && err.message === NoMetadata) {
+        const id = parseInt(getAsString(tokenId));
+        const nftWithoutMetadata: FetchedNFT = {
+          id,
+          name: `#${tokenId}`,
+          description: '',
+          image: '/noimage.jpg',
+          mimeType: '',
+          encryptLogic: 'base64',
+          owner: '',
+        };
+        const ethersProvider = new ethers.BrowserProvider(provider);
+        const signer = await ethersProvider.getSigner();
+        const signerAddress = await signer.getAddress();
+        if (!provider || !(await isOwnerOf(ethersProvider, id))) {
+          setLoadedNft(nftWithoutMetadata);
+        } else {
+          setLoadedNft({ ...nftWithoutMetadata, owner: signerAddress });
+        }
       } else {
         setIsOpenNotificationModal(true);
+        throw err;
       }
     }
-  }, [vwbl, vwblViewer, provider, checkNetwork, router, contractAddress, tokenId]);
-
-  const handleNoMetadataError = useCallback(async () => {
-    if (!contractAddress || !tokenId || !provider) return;
-
-    const id = parseInt(tokenId);
-    const nftWithoutMetadata: FetchedNFT = {
-      id,
-      name: `#${tokenId}`,
-      description: '',
-      image: '/noimage.jpg',
-      mimeType: '',
-      encryptLogic: 'base64',
-      owner: '',
-    };
-
-    try {
-      const ethersProvider = new ethers.BrowserProvider(provider);
-      const signer = await ethersProvider.getSigner();
-      const signerAddress = await signer.getAddress();
-      const isOwner = await isOwnerOf(ethersProvider, id);
-
-      setLoadedNft(isOwner ? { ...nftWithoutMetadata, owner: signerAddress } : nftWithoutMetadata);
-    } catch (err) {
-      console.error('Error handling no metadata:', err);
-      setLoadedNft(nftWithoutMetadata);
-    }
-  }, [contractAddress, tokenId, provider]);
+  }, [router.query, initVwbl, updateVwbl, provider, vwbl, userAddress]);
 
   const onCloseNotificationModal = useCallback(() => {
     router.back();
+    setIsOpenNotificationModal(false);
   }, [router]);
 
   useEffect(() => {
-    if (userAddress) setWalletAddress(userAddress);
+    if (!userAddress) return;
+    setWalletAddress(userAddress);
   }, [userAddress]);
 
   useEffect(() => {
-    if (isInitialized) {
-      loadNFTByTokenId();
-    }
-  }, [isInitialized, loadNFTByTokenId]);
+    loadNFTByTokenId();
+  }, [loadNFTByTokenId]);
+
   return (
     <NftDetailComponent
       nft={loadedNft}
@@ -129,8 +104,6 @@ export const NftDetail = () => {
       onOpenTransferModal={() => setIsOpenTransferModal(true)}
       onCloseTransferModal={() => setIsOpenTransferModal(false)}
       onCloseNotificationModal={onCloseNotificationModal}
-      contractAddress={contractAddress}
-      tokenId={tokenId}
     />
   );
 };

@@ -1,10 +1,10 @@
 import { Wrap, WrapItem } from '@chakra-ui/react';
-import { ExtendedMetadata } from 'vwbl-sdk';
+import { ExtendedMetadeta } from 'vwbl-sdk';
 import { NFTItem } from '../nft-item';
 import { style } from './item-list.style';
 
 type Props = {
-  nfts: ExtendedMetadata[];
+  nfts: ExtendedMetadeta[];
 };
 
 export const ItemList: React.FC<Props> = ({ nfts }) => {
