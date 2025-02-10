@@ -105,7 +105,7 @@ jobs:
           aws s3 sync \
             --exact-timestamps \
             --delete \
-            "./.next" s3://${{ secrets.DEPLOY_BUCKET }}
+            "./next" s3://${{ secrets.DEPLOY_BUCKET }}
       - name: Clear cloudfront cache
         run: |
           aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
@@ -170,7 +170,7 @@ jobs:
           aws s3 sync \
             --exact-timestamps \
             --delete \
-            "./.next" s3://${{ secrets.DEPLOY_BUCKET }}
+            "./next" s3://${{ secrets.DEPLOY_BUCKET }}
       - name: Clear cloudfront cache
         run: |
           aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
