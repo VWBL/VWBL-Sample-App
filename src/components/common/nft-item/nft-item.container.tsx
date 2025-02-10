@@ -1,8 +1,8 @@
 import { NFTItemComponent } from './nft-item';
-import { ExtendedMetadata } from 'vwbl-sdk';
+import { ExtendedMetadeta } from 'vwbl-sdk';
 
 type Props = {
-  nft: ExtendedMetadata;
+  nft: ExtendedMetadeta;
   disabled?: boolean;
 };
 

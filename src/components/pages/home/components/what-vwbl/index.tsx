@@ -1,6 +1,5 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { Link } from '@chakra-ui/next-js';
-import { Box, Text, Container, Image } from '@chakra-ui/react';
+import { Box, Text, Container, Image, Link } from '@chakra-ui/react';
 import { memo } from 'react';
 
 export const WhatVWBLComponent: React.FC = memo(() => {

@@ -1,14 +1,12 @@
-'use client';
-
 import { useState, useEffect, useCallback } from 'react';
-import { ExtendedMetadata } from 'vwbl-sdk';
+import { ExtendedMetadeta } from 'vwbl-sdk';
 import { NFTListComponent } from './nft-list';
 import { MEDIA_TYPE } from '../../../utils';
 import { VwblContainer } from '../../../container';
 
 export const NFTList = () => {
-  const [nfts, setNfts] = useState<ExtendedMetadata[]>([]);
-  const [sortedNFTs, setSortedNFTs] = useState<ExtendedMetadata[]>([]);
+  const [nfts, setNfts] = useState<ExtendedMetadeta[]>([]);
+  const [sortedNFTs, setSortedNFTs] = useState<ExtendedMetadeta[]>([]);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [sortType, setSortType] = useState<string>(MEDIA_TYPE.All);
   const { vwblViewer, initVWBLViewer } = VwblContainer.useContainer();
@@ -20,10 +18,10 @@ export const NFTList = () => {
       '0x268d2A3697DEcE5ed8Fd9972935635e4aa1201c1',
     ]);
     if (!items) return;
-    setNfts(items.filter((v) => v).reverse() as ExtendedMetadata[]);
+    setNfts(items.filter((v) => v).reverse() as ExtendedMetadeta[]);
   }, []);
 
-  const sortNFTsByMedia = (nfts: ExtendedMetadata[], sortType: string) => {
+  const sortNFTsByMedia = (nfts: ExtendedMetadeta[], sortType: string) => {
     // MediaType: All
     if (sortType === MEDIA_TYPE.All) {
       return nfts;
@@ -43,20 +41,18 @@ export const NFTList = () => {
   }, [sortType, nfts]);
 
   useEffect(() => {
-    const initializeViewer = async () => {
-      if (!vwblViewer) {
-        try {
-          await initVWBLViewer();
-        } catch (initError) {
-          setIsOpenModal(true);
-          return;
-        }
-      }
-      await loadNFTs();
-    };
+    if (!vwblViewer) {
+      initVWBLViewer();
+      return;
+    }
+    try {
+      loadNFTs();
+    } catch (err) {
+      setIsOpenModal(true);
+      console.log(err);
+    }
+  }, [vwblViewer]);
 
-    initializeViewer();
-  }, [vwblViewer, initVWBLViewer, loadNFTs]);
   return (
     <NFTListComponent
       nfts={sortedNFTs}

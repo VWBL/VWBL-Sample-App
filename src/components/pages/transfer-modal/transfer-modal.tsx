@@ -2,23 +2,25 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
+  ModalHeader,
   ModalBody,
+  HStack,
   Text,
   Input,
   FormControl,
   FormLabel,
   FormErrorMessage,
   Box,
+  Spinner,
   Stack,
 } from '@chakra-ui/react';
 import { ExtractMetadata } from 'vwbl-sdk';
 import { FieldErrors, UseFormRegister, UseFormHandleSubmit } from 'react-hook-form';
+import { BsCheckLg } from 'react-icons/bs';
 
 import { FormInputs } from './transfer-modal.container';
 import { FileViewer } from '../../common/file-viewer';
 import { Button } from '../../common/button';
-import { CompleteModal } from './components/complete-modal';
-import { LoadingModal } from './components/loading-modal';
 
 type Props = {
   isOpenModal: boolean;
@@ -45,6 +47,48 @@ export const TransferModalComponent: React.FC<Props> = ({
   errors,
   nft,
 }) => {
+  const LoadingModal = () => {
+    return (
+      <Modal
+        isOpen={isLoading}
+        onClose={() => {
+          return;
+        }}
+        isCentered
+        closeOnOverlayClick={false}
+      >
+        <ModalOverlay />
+        <ModalContent p={4} mx={6}>
+          <ModalHeader>Transferring</ModalHeader>
+          <ModalBody>
+            <HStack>
+              <Spinner />
+              <Text>Transferring your NFT</Text>
+            </HStack>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    );
+  };
+
+  const CompleteModal = () => {
+    return (
+      <Modal isOpen={isComplete} onClose={onRefresh} isCentered>
+        <ModalOverlay />
+        <ModalContent p={4} mx={6}>
+          <ModalHeader>Complete</ModalHeader>
+          <ModalBody>
+            <HStack mb={6}>
+              <BsCheckLg />
+              <Text>Your NFT was successfully transfered</Text>
+            </HStack>
+            <Button text='Close' width='100%' onClick={onRefresh} />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    );
+  };
+
   return (
     <>
       <Modal isOpen={isOpenModal && !isLoading && !isComplete} onClose={onCloseModal} size='lg' closeOnOverlayClick={false}>
@@ -104,8 +148,8 @@ export const TransferModalComponent: React.FC<Props> = ({
           </ModalBody>
         </ModalContent>
       </Modal>
-      <LoadingModal isLoading={isLoading} />
-      <CompleteModal isComplete={isComplete} onRefresh={onRefresh} />
+      <LoadingModal />
+      <CompleteModal />
     </>
   );
 };

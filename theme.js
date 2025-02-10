@@ -5,8 +5,7 @@ export const theme = extendTheme({
     black: '#090909',
   },
   fonts: {
-    heading: 'En700, Ja700, sans-serif',
-    body: 'En400, Ja400, sans-serif',
+    body: 'Roboto, KintoSans, sans-serif',
   },
   components: {
     Tabs: {

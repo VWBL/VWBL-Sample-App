@@ -1,24 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: false,
-  experimental: {
-    serverComponentsExternalPackages: ['@react-pdf/renderer'],
-  },
+  output: 'export',
   webpack: (config, { isServer }) => {
-    config.externals.push('pino-pretty', 'lokijs', 'encoding');
-    config.resolve.alias.canvas = false;
     if (!isServer) {
-      config.resolve.fallback = {
-        fs: false,
-        child_process: false,
-        net: false,
-        dns: false,
-        tls: false,
-      };
+      config.resolve.fallback.fs = false;
+      config.resolve.fallback.child_process = false;
+      config.resolve.fallback.net = false;
+      config.resolve.fallback.dns = false;
+      config.resolve.fallback.tls = false;
     }
     return config;
   },
+  trailingSlash: true,
 };
 
 module.exports = nextConfig;

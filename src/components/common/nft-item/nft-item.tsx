@@ -1,9 +1,9 @@
 import { useColorModeValue, VStack, Box, Image, Text } from '@chakra-ui/react';
 import Link from 'next/link';
-import { ExtendedMetadata } from 'vwbl-sdk';
+import { ExtendedMetadeta } from 'vwbl-sdk';
 
 type Props = {
-  nft: ExtendedMetadata;
+  nft: ExtendedMetadeta;
   disabled?: boolean;
 };
 

@@ -1,4 +1,3 @@
-'use client';
 import { useToast } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { createContainer } from 'unstated-next';

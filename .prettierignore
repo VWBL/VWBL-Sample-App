@@ -2,6 +2,3 @@ build
 *.html
 package.json
 package-lock.json
-next.config.js
-next.config copy.js
-settings.json
