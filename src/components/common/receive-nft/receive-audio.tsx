@@ -10,7 +10,7 @@ export const nft: ExtendedMetadeta = {
   id: 2,
   name: 'Ango-ya DJ Service',
   description: 'Block Chain party feat.79',
-  image: 'https://nftstorage.link/ipfs/bafybeicobxejm5fflfl4jauk3fh6anqrt3laahd54ydzscbdnnao4yq6t4',
+  image: 'https://gateway.lighthouse.storage/ipfs/QmQNRQ1TfYGJTafHY8Ybsx6UFmfEWhUceM9GSW2K1PTuW5',
   mimeType: 'audio/mpeg',
   encryptLogic: 'base64',
   address: '0x9850c4682475ac6bcB9CdA91F927CCc1574781C7',
@@ -28,7 +28,7 @@ export const ReceiveAudio: React.FC = () => {
       nftKey={nftKey}
       contents={contents}
       fetchContentUrl='/sample-nft-audio-content.mp3'
-      fetchThumbnailUrl='https://nftstorage.link/ipfs/bafybeicobxejm5fflfl4jauk3fh6anqrt3laahd54ydzscbdnnao4yq6t4'
+      fetchThumbnailUrl='https://gateway.lighthouse.storage/ipfs/QmQNRQ1TfYGJTafHY8Ybsx6UFmfEWhUceM9GSW2K1PTuW5'
       successMessage='You have successfully received the Music NFT'
       redirectUrl='/account/'
     />
