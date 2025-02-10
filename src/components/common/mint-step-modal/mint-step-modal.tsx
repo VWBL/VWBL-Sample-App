@@ -11,10 +11,10 @@ import {
   Center,
   HStack,
   VStack,
-  Link,
 } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
 import { StepStatus } from 'vwbl-sdk';
+import { Link } from '@chakra-ui/next-js';
 
 import { memo } from 'react';
 
@@ -107,7 +107,7 @@ export const MintStepModal: React.FC<Props> = memo(({ isOpen, signature, mintSte
           {mintStep.includes(StepStatus.SET_KEY) ? (
             <VStack mt={10} mb={6} spacing={4} fontSize={'xl'}>
               <Text as='b'>You have minted your VWBL NFT! 🎉</Text>
-              <Link href={`/account/`} color='blue.600'>
+              <Link href={`/account/`} color='blue.600' replace>
                 My page
               </Link>
             </VStack>

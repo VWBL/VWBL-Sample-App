@@ -1,5 +1,5 @@
 import * as CSS from 'csstype';
-import { Button as ChakraButton, Icon, BorderProps, forwardRef, TypographyProps, ButtonProps } from '@chakra-ui/react';
+import { Button as ChakraButton, Icon, BorderProps, forwardRef, As, TypographyProps, ButtonProps } from '@chakra-ui/react';
 import { IconType } from 'react-icons';
 
 type Props = {
@@ -22,6 +22,7 @@ type Props = {
   onClick?: () => void;
   isReversed?: boolean;
   icon?: IconType;
+  as?: As;
 };
 
 export const Button: React.FC<Props> = forwardRef(
@@ -46,6 +47,7 @@ export const Button: React.FC<Props> = forwardRef(
       onClick,
       isReversed,
       icon,
+      as,
     },
     ref,
   ) => {
@@ -71,6 +73,7 @@ export const Button: React.FC<Props> = forwardRef(
         disabled={disabled}
         _hover={{ opacity: 0.7 }}
         onClick={onClick}
+        as={as}
       >
         {icon && <Icon as={icon} mr={2} />}
         {text}

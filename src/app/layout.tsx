@@ -23,8 +23,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='en'>
       <body>
-        <ChakraProviders>
-          <Web3Wallet>
+        <Web3Wallet>
+          <ChakraProviders>
             <VwblProvider>
               <ToastProvider>
                 <Header />
@@ -32,8 +32,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Footer />
               </ToastProvider>
             </VwblProvider>
-          </Web3Wallet>
-        </ChakraProviders>
+          </ChakraProviders>
+        </Web3Wallet>
       </body>
     </html>
   );

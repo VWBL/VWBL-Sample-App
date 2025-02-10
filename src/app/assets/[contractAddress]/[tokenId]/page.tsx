@@ -1,8 +1,5 @@
-// @ts-ignore
-import { withDynamicParams } from 'next-static-utils';
+'use client';
 import { NftDetail } from '../../../../components/pages/nft-detail';
-
-export const generateStaticParams = withDynamicParams();
 
 export default function Page() {
   return <NftDetail />;

@@ -1,14 +1,13 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { NftDetailComponent } from './nft-detail';
 import { VwblContainer } from '../../../container';
 import { switchChain } from '../../../utils/helper';
 import { FetchedNFT } from '../../types';
 import { isOwnerOf } from '../../../utils';
 import { ethers } from 'ethers';
-// @ts-ignore
-import { FALLBACK_STRING, useDynamicParams } from 'next-static-utils';
+
 const NoMetadata = 'metadata not found';
 
 export const NftDetail = () => {
@@ -19,12 +18,20 @@ export const NftDetail = () => {
   const [isOpenNotificationModal, setIsOpenNotificationModal] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   const { vwbl, vwblViewer, userAddress, provider, initVwbl, updateVwbl, initVWBLViewer, checkNetwork } = VwblContainer.useContainer();
 
-  const { contractAddress, tokenId } = useDynamicParams();
-  if (contractAddress === FALLBACK_STRING) return null;
-  if (tokenId === FALLBACK_STRING) return null;
+  const { contractAddress, tokenId } = useMemo(() => {
+    const parts = pathname?.split('/').filter(Boolean);
+    if (parts && parts.length >= 3 && parts[0] === 'assets') {
+      return {
+        contractAddress: parts[1],
+        tokenId: parts[2],
+      };
+    }
+    return { contractAddress: null, tokenId: null };
+  }, [pathname]);
 
   useEffect(() => {
     const initialize = async () => {
@@ -34,7 +41,7 @@ export const NftDetail = () => {
       } else if (!vwblViewer) {
         await initVWBLViewer();
       } else {
-        setIsInitialized(true);
+        setIsInitialized(true); // 初期化完了
       }
     };
 
@@ -95,6 +102,7 @@ export const NftDetail = () => {
       const ethersProvider = new ethers.BrowserProvider(provider);
       const signer = await ethersProvider.getSigner();
       const signerAddress = await signer.getAddress();
+
       const isOwner = await isOwnerOf(ethersProvider, id);
 
       setLoadedNft(isOwner ? { ...nftWithoutMetadata, owner: signerAddress } : nftWithoutMetadata);
