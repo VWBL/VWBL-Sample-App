@@ -10,7 +10,7 @@ export const nft: ExtendedMetadeta = {
   id: 1,
   name: 'Ango-ya LLC',
   description: 'Company Information',
-  image: 'https://nftstorage.link/ipfs/bafybeiefochdgnrz6hgvmww35vmfegchnnf6zqh3b2xzpdqhbzjyqftv3y',
+  image: 'https://gateway.lighthouse.storage/ipfs/QmZdZfr6CYKbn8jcZCs8SgeXFU12D13FP4oQcTdo4nbHoa',
   mimeType: 'application/pdf',
   encryptLogic: 'base64',
   address: '0x9850c4682475ac6bcB9CdA91F927CCc1574781C7',
@@ -28,7 +28,7 @@ export const ReceivePdf: React.FC = () => {
       nftKey={nftKey}
       contents={contents}
       fetchContentUrl='/sample-nft-content.pdf'
-      fetchThumbnailUrl='https://nftstorage.link/ipfs/bafybeiefochdgnrz6hgvmww35vmfegchnnf6zqh3b2xzpdqhbzjyqftv3y'
+      fetchThumbnailUrl='https://gateway.lighthouse.storage/ipfs/QmZdZfr6CYKbn8jcZCs8SgeXFU12D13FP4oQcTdo4nbHoa'
       successMessage='You have successfully received the PDF NFT'
       redirectUrl='/account/'
     />

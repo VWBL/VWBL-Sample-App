@@ -59,9 +59,11 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
       try {
         setIsLoading(true);
         const lowerCaseContractAddress = getAsString(contractAddress).toLowerCase();
-        const nftContractAddress = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS!.toLowerCase();
-        const nftGachaContractAddress = process.env.NEXT_PUBLIC_GACHA_NFT_CONTRACT_ADDRESS!.toLowerCase();
-
+        const nftContractAddress = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS?.toLowerCase() || '';
+        const nftGachaContractAddress = process.env.NEXT_PUBLIC_GACHA_NFT_CONTRACT_ADDRESS?.toLowerCase() || '';
+        console.log('lowerCaseContractAddress:', lowerCaseContractAddress);
+        console.log('NFT Contract Address:', process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS);
+        console.log('Gacha NFT Contract Address:', process.env.NEXT_PUBLIC_GACHA_NFT_CONTRACT_ADDRESS);
         let apiKey: string | undefined, transferApiId: string | undefined;
 
         if (lowerCaseContractAddress === nftContractAddress) {
