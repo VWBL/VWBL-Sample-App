@@ -42,10 +42,8 @@ jobs:
           path: '**/node_modules'
 
       - name: Install Dependencies
-        # if: steps.cache_node_modules.outputs.cache-hit != 'true'
-        run: |
-          rm -rf **/node_modules
-          yarn install --frozen-lockfile
+        if: steps.cache_node_modules.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
 
   deploy-staging:
     if: github.ref == 'refs/heads/develop'
