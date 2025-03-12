@@ -64,13 +64,10 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
         console.log('lowerCaseContractAddress:', lowerCaseContractAddress);
         console.log('NFT Contract Address:', process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS);
         console.log('Gacha NFT Contract Address:', process.env.NEXT_PUBLIC_GACHA_NFT_CONTRACT_ADDRESS);
-        let transferApiId: string | undefined;
 
         if (lowerCaseContractAddress === nftContractAddress) {
-          transferApiId = process.env.NEXT_PUBLIC_TRANSFER_API_ID!;
-          await vwbl.safeTransfer(walletAddress, parseInt(getAsString(tokenId)), transferApiId);
+          await vwbl.safeTransfer(walletAddress, parseInt(getAsString(tokenId)));
         } else if (lowerCaseContractAddress === nftGachaContractAddress) {
-          transferApiId = process.env.NEXT_PUBLIC_GACHA_TRANSFER_API_ID!;
           const provider = (window as any).ethereum;
           const vwblInstance = new VWBLMetaTx({
             bcProvider: provider,
@@ -89,7 +86,7 @@ export const TransferModal: React.FC<Props> = ({ isOpen, onClose, nft }) => {
             dataCollectorAddress: process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS,
           });
 
-          await vwblInstance.safeTransfer(walletAddress, parseInt(getAsString(tokenId)), transferApiId);
+          await vwblInstance.safeTransfer(walletAddress, parseInt(getAsString(tokenId)));
         } else {
           const ethProvider = new ethers.BrowserProvider(provider);
           const signer = await ethProvider.getSigner();

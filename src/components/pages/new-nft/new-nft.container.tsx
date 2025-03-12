@@ -116,7 +116,6 @@ export const NewNFT = () => {
           thumbnail[0],
           0,
           isBase64 ? 'base64' : 'binary',
-          process.env.NEXT_PUBLIC_MINT_API_ID!,
           uploadEncryptedFileToLighthouse,
           uploadThumbnailToLighthouse,
           uploadMetadataToLighthouse,
