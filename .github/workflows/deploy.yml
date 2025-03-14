@@ -34,7 +34,7 @@ jobs:
         run: corepack enable
 
       - name: node_modules cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: cache_node_modules
         with:
           # キャッシュキー完全一致しない場合 yarn installする必要があるのでrestore-keysは使わない
@@ -68,7 +68,7 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
       - name: node_modules cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           key: ${{ runner.os }}-build-node_modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/package.json') }}
           path: '**/node_modules'
@@ -133,7 +133,7 @@ jobs:
         run: corepack enable
 
       - name: node_modules cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           key: ${{ runner.os }}-build-node_modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/package.json') }}
           path: '**/node_modules'
