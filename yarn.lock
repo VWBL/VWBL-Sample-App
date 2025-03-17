@@ -9946,6 +9946,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"vwbl-core@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "vwbl-core@npm:0.1.0"
+  dependencies:
+    "@aws-sdk/client-s3": "npm:^3.338.0"
+    "@aws-sdk/credential-providers": "npm:^3.338.0"
+    "@aws-sdk/lib-storage": "npm:^3.338.0"
+    crypto: "npm:^1.0.1"
+    crypto-js: "npm:^4.1.1"
+    mime-types: "npm:^2.1.35"
+    uuid: "npm:^8.3.2"
+  checksum: b3f5014700dbce19cf03dc01d0f8c1f2ea0831b905459cb63f4ff18dade1bde8f987e30fd58b6709868e8abbc137f848ce8bf688e326acdc60e6190255fc0b6e
+  languageName: node
+  linkType: hard
+
 "vwbl-sample-app@workspace:.":
   version: 0.0.0-use.local
   resolution: "vwbl-sample-app@workspace:."
@@ -9980,14 +9995,14 @@ __metadata:
     react-player: "npm:^2.10.0"
     typescript: "npm:^5.3.3"
     unstated-next: "npm:^1.1.0"
-    vwbl-sdk: "npm:^0.1.19"
+    vwbl-sdk: "npm:^0.1.21"
     web3: "npm:^4.0.0"
   languageName: unknown
   linkType: soft
 
-"vwbl-sdk@npm:^0.1.19":
-  version: 0.1.19
-  resolution: "vwbl-sdk@npm:0.1.19"
+"vwbl-sdk@npm:^0.1.21":
+  version: 0.1.21
+  resolution: "vwbl-sdk@npm:0.1.21"
   dependencies:
     "@aws-sdk/client-s3": "npm:^3.338.0"
     "@aws-sdk/credential-providers": "npm:^3.338.0"
@@ -10002,8 +10017,9 @@ __metadata:
     jimp: "npm:^0.16.1"
     mime-types: "npm:^2.1.35"
     uuid: "npm:^8.3.2"
+    vwbl-core: "npm:^0.1.0"
     web3: "npm:^4.3.0"
-  checksum: d01676181b274f44a76985a806d36d2351a56025140c00ceba521e4ecd9eb03ced8a24a5912b525a407726662377fc444370bd647c4b7593012c80aed85d8ef7
+  checksum: f7366b0fa0a5550a1e1f04efc2bdb03ef1e46bd014521e02cd30e2f3683520ef31a416ec25aa25e0b93a0991e08b2e022c37cd4847519d3254e10aa178bdf52e
   languageName: node
   linkType: hard
 
