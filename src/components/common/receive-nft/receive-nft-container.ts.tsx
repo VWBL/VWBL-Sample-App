@@ -25,12 +25,12 @@ type Props = {
   redirectUrl: string;
 };
 
-export const mintTokenAndSetKey = async (vwbl: any, metadataUrl: string, key: string, mintApiId: string) => {
+export const mintTokenAndSetKey = async (vwbl: any, metadataUrl: string, key: string) => {
   if (!vwbl.signature) {
     throw new Error('Please sign first.');
   }
   try {
-    const tokenId = await vwbl.mintTokenForIPFS(metadataUrl, 0, mintApiId);
+    const tokenId = await vwbl.mintTokenForIPFS(metadataUrl, 0);
     await vwbl.setKey(tokenId, key);
     console.log('Key set successfully for token ID:', tokenId);
     return tokenId;
@@ -73,7 +73,7 @@ export const ReceiveNFTContainer: React.FC<Props> = ({ nft, nftKey, contents, su
       const metadataUrl = nftKey.metadataUrl;
       const key = nftKey.key;
 
-      const tokenId = await mintTokenAndSetKey(vwbl, metadataUrl, key, process.env.NEXT_PUBLIC_MINT_API_ID!);
+      const tokenId = await mintTokenAndSetKey(vwbl, metadataUrl, key);
       console.log(tokenId);
       openToast({
         title: 'Successfully received',

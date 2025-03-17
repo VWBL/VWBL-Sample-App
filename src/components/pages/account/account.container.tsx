@@ -33,23 +33,38 @@ export const Account = () => {
         return;
       }
       try {
-        const query = `${process.env.NEXT_PUBLIC_ALCHEMY_NFT_API}/getNFTs?owner=${userAddress}`;
+        const query = `${process.env.NEXT_PUBLIC_ALCHEMY_NFT_API}/getNFTsForOwner?owner=${userAddress}`;
         const result = await axios.get(query);
-        const ownedItems = result.data.ownedNfts
-          .filter((v: any) => {
-            return typeof v.metadata.encrypted_data !== 'undefined';
-          })
-          .map((v: any) => {
+        const ownedItems = (await Promise.all(
+          result.data.ownedNfts.map(async (v: any) => {
+            if (!(v.raw && v.raw.tokenUri)) {
+              console.warn(`No tokenUri available for tokenId ${v.tokenId}`);
+              return null;
+            }
+            let metadata;
+            try {
+              const tokenRes = await axios.get(v.raw.tokenUri);
+              metadata = tokenRes.data;
+            } catch (err) {
+              console.log(err);
+              return null;
+            }
+            if (typeof metadata.encrypted_data === 'undefined') {
+              console.warn(`NFT tokenId ${v.tokenId} missing encrypted_data`, metadata);
+              return null;
+            }
             return {
-              id: Number(v.id.tokenId),
-              name: v.metadata.name,
-              description: v.metadata.description,
-              image: v.metadata.image,
-              mimeType: v.metadata.mime_type,
-              encryptLogic: v.metadata.encrypt_logic,
+              id: Number(v.tokenId),
+              name: metadata.name,
+              description: metadata.description,
+              image: metadata.image,
+              mimeType: metadata.mime_type,
+              encryptLogic: metadata.encrypt_logic,
               address: v.contract.address,
             } as ExtendedMetadeta;
           })
+        ))
+          .filter((item) => item !== null)
           .reverse();
         setOwnedNfts(ownedItems);
       } catch (err) {
