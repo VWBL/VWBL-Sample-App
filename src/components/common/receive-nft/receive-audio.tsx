@@ -1,4 +1,4 @@
-import { ExtendedMetadeta } from 'vwbl-sdk';
+import { ExtendedMetadata } from 'vwbl-sdk';
 import { ReceiveNFTContainer } from './receive-nft-container.ts';
 
 const contents = {
@@ -6,7 +6,7 @@ const contents = {
   description: ['暗号屋の大人気曲「ブロックチェーンパーティー」の', 'テーマソングの音源をNFTでお届けします。'],
 };
 
-export const nft: ExtendedMetadeta = {
+export const nft: ExtendedMetadata = {
   id: 2,
   name: 'Ango-ya DJ Service',
   description: 'Block Chain party feat.79',

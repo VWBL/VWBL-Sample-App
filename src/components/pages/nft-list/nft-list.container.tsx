@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ExtendedMetadeta } from 'vwbl-sdk';
+import { ExtendedMetadata } from 'vwbl-sdk';
 import { NFTListComponent } from './nft-list';
 import { MEDIA_TYPE } from '../../../utils';
 import { VwblContainer } from '../../../container';
 
 export const NFTList = () => {
-  const [nfts, setNfts] = useState<ExtendedMetadeta[]>([]);
-  const [sortedNFTs, setSortedNFTs] = useState<ExtendedMetadeta[]>([]);
+  const [nfts, setNfts] = useState<ExtendedMetadata[]>([]);
+  const [sortedNFTs, setSortedNFTs] = useState<ExtendedMetadata[]>([]);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [sortType, setSortType] = useState<string>(MEDIA_TYPE.All);
   const { vwblViewer, initVWBLViewer } = VwblContainer.useContainer();
@@ -18,10 +18,10 @@ export const NFTList = () => {
       '0x268d2A3697DEcE5ed8Fd9972935635e4aa1201c1',
     ]);
     if (!items) return;
-    setNfts(items.filter((v) => v).reverse() as ExtendedMetadeta[]);
+    setNfts(items.filter((v) => v).reverse() as ExtendedMetadata[]);
   }, []);
 
-  const sortNFTsByMedia = (nfts: ExtendedMetadeta[], sortType: string) => {
+  const sortNFTsByMedia = (nfts: ExtendedMetadata[], sortType: string) => {
     // MediaType: All
     if (sortType === MEDIA_TYPE.All) {
       return nfts;
