@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { switchChain } from '../../../utils';
-import { ExtendedMetadeta } from 'vwbl-sdk';
+import { ExtendedMetadata } from 'vwbl-sdk';
 import { ToastContainer, VwblContainer } from '../../../container';
 import { ReceiveNFTComponent } from './receive-nft';
 import { useRouter } from 'next/router';
@@ -10,7 +10,7 @@ import { Link, Text, Container } from '@chakra-ui/react';
 import NextLink from 'next/link';
 
 type Props = {
-  nft: ExtendedMetadeta;
+  nft: ExtendedMetadata;
   nftKey: {
     metadataUrl: string;
     key: string;

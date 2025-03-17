@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { AccountComponent } from './account';
 import { VwblContainer } from '../../../container';
-import { ExtendedMetadeta } from 'vwbl-sdk';
+import { ExtendedMetadata } from 'vwbl-sdk';
 import { switchChain } from '../../../utils';
 import { ethers } from 'ethers';
 import axios from 'axios';
 
 export const Account = () => {
-  const [ownedNfts, setOwnedNfts] = useState<ExtendedMetadeta[]>([]);
-  const [mintedNfts, setMintedNfts] = useState<ExtendedMetadeta[]>([]);
+  const [ownedNfts, setOwnedNfts] = useState<ExtendedMetadata[]>([]);
+  const [mintedNfts, setMintedNfts] = useState<ExtendedMetadata[]>([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');
 
@@ -61,7 +61,7 @@ export const Account = () => {
               mimeType: metadata.mime_type,
               encryptLogic: metadata.encrypt_logic,
               address: v.contract.address,
-            } as ExtendedMetadeta;
+            } as ExtendedMetadata;
           })
         ))
           .filter((item) => item !== null)
@@ -74,7 +74,7 @@ export const Account = () => {
 
       try {
         const mintedItems = await vwblViewer.listMintedNFTMetadata(userAddress);
-        setMintedNfts(mintedItems.filter((v) => v).reverse() as ExtendedMetadeta[]);
+        setMintedNfts(mintedItems.filter((v) => v).reverse() as ExtendedMetadata[]);
       } catch (err) {
         console.log(err);
       }
