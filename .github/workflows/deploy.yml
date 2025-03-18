@@ -97,6 +97,7 @@ jobs:
           NEXT_PUBLIC_GACHA_API_URL: ${{ secrets.GACHA_API_URL }}
           NEXT_PUBLIC_GACHA_TRANSFER_API_ID: ${{ secrets.GACHA_TRANSFER_API_ID }}
           NEXT_PUBLIC_GACHA_BICONOMY_API_KEY: ${{ secrets.GACHA_BICONOMY_API_KEY }}
+          NEXT_PUBLIC_META_TX_ENDPOINT: ${{ secrets.META_TX_ENDPOINT }}
 
         run: |
           yarn build
@@ -162,6 +163,7 @@ jobs:
           NEXT_PUBLIC_GACHA_API_URL: ${{ secrets.GACHA_API_URL }}
           NEXT_PUBLIC_GACHA_TRANSFER_API_ID: ${{ secrets.GACHA_TRANSFER_API_ID }}
           NEXT_PUBLIC_GACHA_BICONOMY_API_KEY: ${{ secrets.GACHA_BICONOMY_API_KEY }}
+          NEXT_PUBLIC_META_TX_ENDPOINT: ${{ secrets.META_TX_ENDPOINT }}
         run: |
           yarn build
       - name: Deploy to s3
