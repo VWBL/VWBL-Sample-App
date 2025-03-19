@@ -23,6 +23,7 @@ import { Button } from '../button';
 import { hamburgerMenu, closeButton } from './layout.style';
 import { useRouter } from 'next/router';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
+import { BaseProvider } from '@metamask/providers';
 
 type Link = {
   title: string;
@@ -94,8 +95,22 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     },
   ];
 
+  const handleConnectWallet = async () => {
+    const { ethereum } = window as unknown as { ethereum: BaseProvider };
+    if (ethereum && !(ethereum as any).isMetaMask) {
+      alert("Metamask Walletで接続してください");
+      return;
+    }
+    try {
+      await connectWallet();
+    } catch (error) {
+      console.error(error);
+      alert("ウォレットの接続に失敗しました");
+    }
+  };
+
   useEffect(() => {
-    connectWallet();
+    handleConnectWallet();
   }, []);
 
   useEffect(() => {
@@ -125,7 +140,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 </Link>
               </HStack>
             ) : (
-              <Button text='Connect Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} onClick={connectWallet} />
+              <Button text='Connect Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} onClick={handleConnectWallet} />
             )}
           </Flex>
         </Flex>
@@ -153,7 +168,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                       text='Connect Wallet'
                       borderRadius={'3xl'}
                       icon={MdOutlineAccountBalanceWallet}
-                      onClick={connectWallet}
+                      onClick={handleConnectWallet}
                       isReversed
                       height='40px'
                     />
