@@ -72,15 +72,9 @@ export const TransferModal: React.FC<Props> = ({ isOpen, nft, contractAddress, t
           ? process.env.NEXT_PUBLIC_GACHA_NFT_CONTRACT_ADDRESS.toLowerCase()
           : '';
 
-        let apiKey: string | undefined, transferApiId: string | undefined;
-
         if (lowerCaseContractAddress === nftContractAddress) {
-          apiKey = process.env.NEXT_PUBLIC_BICONOMY_API_KEY;
-          transferApiId = process.env.NEXT_PUBLIC_TRANSFER_API_ID!;
-          await vwbl.safeTransfer(walletAddress, parseInt(getAsString(tokenId)), transferApiId);
+          await vwbl.safeTransfer(walletAddress, parseInt(getAsString(tokenId)));
         } else if (lowerCaseContractAddress === nftGachaContractAddress) {
-          apiKey = process.env.NEXT_PUBLIC_GACHA_BICONOMY_API_KEY!;
-          transferApiId = process.env.NEXT_PUBLIC_GACHA_TRANSFER_API_ID!;
           const provider = (window as any).ethereum;
           const vwblInstance = new VWBLMetaTx({
             bcProvider: provider,
@@ -92,14 +86,14 @@ export const TransferModal: React.FC<Props> = ({ isOpen, nft, contractAddress, t
             ipfsConfig: {
               apiKey: process.env.NEXT_PUBLIC_LIGHT_HOUSE_KEY!,
             },
-            biconomyConfig: {
-              apiKey: apiKey,
+            metaTxConfig: {
               forwarderAddress: process.env.NEXT_PUBLIC_FORWARDER_ADDRESS!,
+              metaTxEndpoint: process.env.NEXT_PUBLIC_META_TX_ENDPOINT!,
             },
             dataCollectorAddress: process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS,
           });
 
-          await vwblInstance.safeTransfer(walletAddress, parseInt(getAsString(tokenId)), transferApiId);
+          await vwblInstance.safeTransfer(walletAddress, parseInt(getAsString(tokenId)));
         } else {
           const ethProvider = new ethers.BrowserProvider(provider);
           const signer = await ethProvider.getSigner();

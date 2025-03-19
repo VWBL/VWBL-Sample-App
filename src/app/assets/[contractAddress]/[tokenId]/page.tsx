@@ -1,6 +1,8 @@
-'use client';
-import { NftDetail } from '../../../../components/pages/nft-detail';
+import { withDynamicParams } from 'next-static-utils';
+import ClientPage from './ClientPage';
+
+export const generateStaticParams = withDynamicParams();
 
 export default function Page() {
-  return <NftDetail />;
+  return <ClientPage />;
 }

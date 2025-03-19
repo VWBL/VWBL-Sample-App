@@ -28,7 +28,9 @@ const useVWBL = () => {
       !process.env.NEXT_PUBLIC_PROVIDER_URL ||
       !process.env.NEXT_PUBLIC_LIGHT_HOUSE_KEY ||
       !process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS ||
-      !process.env.NEXT_PUBLIC_ALCHEMY_NFT_API
+      !process.env.NEXT_PUBLIC_ALCHEMY_NFT_API ||
+      !process.env.NEXT_PUBLIC_FORWARDER_ADDRESS ||
+      !process.env.NEXT_PUBLIC_META_TX_ENDPOINT
     ) {
       throw new Error('missing setting');
     }
@@ -43,9 +45,9 @@ const useVWBL = () => {
       ipfsConfig: {
         apiKey: process.env.NEXT_PUBLIC_LIGHT_HOUSE_KEY,
       },
-      biconomyConfig: {
-        apiKey: process.env.NEXT_PUBLIC_BICONOMY_API_KEY!,
+      metaTxConfig: {
         forwarderAddress: process.env.NEXT_PUBLIC_FORWARDER_ADDRESS!,
+        metaTxEndpoint: process.env.NEXT_PUBLIC_META_TX_ENDPOINT!,
       },
       dataCollectorAddress: process.env.NEXT_PUBLIC_DATA_COLLECTOR_ADDRESS,
     });
@@ -103,7 +105,9 @@ const useVWBL = () => {
       !process.env.NEXT_PUBLIC_VWBL_NETWORK_URL ||
       !process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS ||
       !process.env.NEXT_PUBLIC_PROVIDER_URL ||
-      !process.env.NEXT_PUBLIC_ALCHEMY_NFT_API
+      !process.env.NEXT_PUBLIC_ALCHEMY_NFT_API ||
+      !process.env.NEXT_PUBLIC_FORWARDER_ADDRESS ||
+      !process.env.NEXT_PUBLIC_META_TX_ENDPOINT
     ) {
       throw new Error('missing setting');
     }
@@ -112,9 +116,9 @@ const useVWBL = () => {
       bcProvider: provider,
       contractAddress: process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS,
       vwblNetworkUrl: process.env.NEXT_PUBLIC_VWBL_NETWORK_URL,
-      biconomyConfig: {
-        apiKey: process.env.NEXT_PUBLIC_BICONOMY_API_KEY!,
+      metaTxConfig: {
         forwarderAddress: process.env.NEXT_PUBLIC_FORWARDER_ADDRESS!,
+        metaTxEndpoint: process.env.NEXT_PUBLIC_META_TX_ENDPOINT!,
       },
     });
     setVwbl(vwblInstance);

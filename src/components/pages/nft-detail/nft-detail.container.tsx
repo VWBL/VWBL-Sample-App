@@ -1,6 +1,6 @@
 'use client';
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { NftDetailComponent } from './nft-detail';
 import { VwblContainer } from '../../../container';
 import { switchChain } from '../../../utils/helper';
@@ -10,7 +10,12 @@ import { ethers } from 'ethers';
 
 const NoMetadata = 'metadata not found';
 
-export const NftDetail = () => {
+interface NftDetailProps {
+  contractAddress: string;
+  tokenId: string;
+}
+
+export const NftDetail = ({ contractAddress, tokenId }: NftDetailProps) => {
   const [loadedNft, setLoadedNft] = useState<FetchedNFT>();
   const [walletAddress, setWalletAddress] = useState('');
   const [isOpenContentDrawer, setIsOpenContentDrawer] = useState(false);
@@ -18,20 +23,8 @@ export const NftDetail = () => {
   const [isOpenNotificationModal, setIsOpenNotificationModal] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const router = useRouter();
-  const pathname = usePathname();
 
-  const { vwbl, vwblViewer, userAddress, provider, initVwbl, updateVwbl, initVWBLViewer, checkNetwork } = VwblContainer.useContainer();
-
-  const { contractAddress, tokenId } = useMemo(() => {
-    const parts = pathname?.split('/').filter(Boolean);
-    if (parts && parts.length >= 3 && parts[0] === 'assets') {
-      return {
-        contractAddress: parts[1],
-        tokenId: parts[2],
-      };
-    }
-    return { contractAddress: null, tokenId: null };
-  }, [pathname]);
+  const { vwbl, vwblViewer, userAddress, provider, initVwbl, initVWBLViewer, checkNetwork } = VwblContainer.useContainer();
 
   useEffect(() => {
     const initialize = async () => {
@@ -50,7 +43,7 @@ export const NftDetail = () => {
 
   const loadNFTByTokenId = useCallback(async () => {
     if (!contractAddress || !tokenId) {
-      console.error('Error: Invalid path. Expected format: ./assets/contractAddress/tokenId');
+      console.error('Error: Invalid dynamic params. Expected keys: contractAddress and tokenId');
       setIsOpenNotificationModal(true);
       return;
     }

@@ -13,7 +13,6 @@ import {
   Stack,
   Box,
   Button as ChakraButton,
-  CSSObject,
   Container,
 } from '@chakra-ui/react';
 import { MdOutlineAccountBalanceWallet } from 'react-icons/md';
@@ -105,7 +104,6 @@ const Header: React.FC = () => {
                       My Wallet
                     </Link>
                     <Button
-                      px={6}
                       text='Disconnect'
                       borderRadius={'3xl'}
                       fontSize='2xl'

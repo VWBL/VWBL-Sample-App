@@ -9479,6 +9479,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"next-static-utils@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "next-static-utils@npm:1.0.4"
+  peerDependencies:
+    next: ^14.2.3
+    react: ^18
+  bin:
+    next-static-utils: dist/cli/index.js
+  checksum: 7b78a9364b75361de77cd580f2655748bbe26558e4f2c28aba58cc87b043aad169230869d0341efde9b96db2290ee6641ebf551366982fca744bc0d16f8ce138
+  languageName: node
+  linkType: hard
+
 "next@npm:^14.2.6":
   version: 14.2.13
   resolution: "next@npm:14.2.13"
@@ -11904,6 +11916,7 @@ __metadata:
     husky: "npm:^9.1.5"
     lint-staged: "npm:^15.2.9"
     next: "npm:^14.2.6"
+    next-static-utils: "npm:^1.0.4"
     prettier: "npm:^3.3.3"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -11914,14 +11927,14 @@ __metadata:
     typescript: "npm:^5.5.4"
     unstated-next: "npm:^1.1.0"
     vwbl-core: "npm:^0.1.0"
-    vwbl-sdk: "npm:^0.1.20"
+    vwbl-sdk: "npm:^0.1.21"
     web3: "npm:^4.12.0"
   languageName: unknown
   linkType: soft
 
-"vwbl-sdk@npm:^0.1.20":
-  version: 0.1.20
-  resolution: "vwbl-sdk@npm:0.1.20"
+"vwbl-sdk@npm:^0.1.21":
+  version: 0.1.21
+  resolution: "vwbl-sdk@npm:0.1.21"
   dependencies:
     "@aws-sdk/client-s3": "npm:^3.338.0"
     "@aws-sdk/credential-providers": "npm:^3.338.0"
@@ -11938,7 +11951,7 @@ __metadata:
     uuid: "npm:^8.3.2"
     vwbl-core: "npm:^0.1.0"
     web3: "npm:^4.3.0"
-  checksum: ffb0a7ece48642b6ad74e3cb63025e215cb944ca1d21dc7909cb321bdad3f97d27654a93a94a1d0ed82eb56fa2bcc65f92336db1bed4b06b932921509a37a7c2
+  checksum: f7366b0fa0a5550a1e1f04efc2bdb03ef1e46bd014521e02cd30e2f3683520ef31a416ec25aa25e0b93a0991e08b2e022c37cd4847519d3254e10aa178bdf52e
   languageName: node
   linkType: hard
 
