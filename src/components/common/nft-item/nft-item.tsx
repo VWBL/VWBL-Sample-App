@@ -9,7 +9,7 @@ type Props = {
 
 export const NFTItemComponent: React.FC<Props> = ({ nft, disabled }) => {
   return (
-    <Link href={`/assets/${nft.address}/${nft.id}`} passHref>
+    <Link href={`/assets/${nft.address}_${nft.id}`} passHref>
       <VStack
         bg={useColorModeValue('white', 'gray.800')}
         width={300}

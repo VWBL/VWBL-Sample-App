@@ -2,8 +2,8 @@
 const serveConfig = {
     rewrites: [
     {
-        "source": "/assets/:contractAddress/:tokenId",
-        "destination": "/assets/next-static-fallback/next-static-fallback.html"
+        "source": "/assets/:contractAddressAndTokenId",
+        "destination": "/assets/next-static-fallback.html"
     }
 ],
 };

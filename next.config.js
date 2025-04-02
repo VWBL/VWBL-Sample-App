@@ -2,7 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: false,
-  output: 'export', 
   experimental: {
     serverComponentsExternalPackages: ['@react-pdf/renderer'],
   },
