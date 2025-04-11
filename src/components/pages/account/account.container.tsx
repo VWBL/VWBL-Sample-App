@@ -54,7 +54,7 @@ export const Account = () => {
               return null;
             }
             try {
-              const tokenRes = await axios.get(v.raw.tokenUri, {timeout: 300});
+              const tokenRes = await axios.get(v.raw.tokenUri, {timeout: 500});
               metadata = tokenRes.data;
             } catch (err) {
               return null;
@@ -74,7 +74,7 @@ export const Account = () => {
             } as ExtendedMetadata;
           })
         ))
-          .filter((item) => item !== null)
+          .filter((item): item is ExtendedMetadata => item !== null)
           .reverse();
         setOwnedNfts(ownedItems);
         setIsLoading(false);
