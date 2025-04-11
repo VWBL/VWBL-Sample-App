@@ -3,6 +3,7 @@ import { Box, Tabs, Tab, TabList, TabPanels, TabPanel, Text, Container, Badge, S
 import { ExtendedMetadata } from 'vwbl-sdk';
 import { ItemList } from '../../common/item-list';
 import { NotificationModal, notifications } from '../../common/notification-modal';
+import { CustomLoading } from '../../common/custom-loading';
 
 type Props = {
   ownedNfts: ExtendedMetadata[];
@@ -10,9 +11,10 @@ type Props = {
   walletAddress: string;
   isOpenModal: boolean;
   onCloseModal: () => void;
+  isLoading: boolean;
 };
 
-export const AccountComponent: React.FC<Props> = ({ ownedNfts, mintedNfts, walletAddress, isOpenModal, onCloseModal }) => {
+export const AccountComponent: React.FC<Props> = ({ ownedNfts, mintedNfts, walletAddress, isOpenModal, onCloseModal, isLoading }) => {
   const tabOptions = [
     { name: 'Owned', length: ownedNfts.length },
     { name: 'Created', length: mintedNfts.length },
@@ -25,6 +27,7 @@ export const AccountComponent: React.FC<Props> = ({ ownedNfts, mintedNfts, walle
 
   return (
     <Box >
+      {isLoading && <CustomLoading />}
       <NotificationModal isOpen={isOpenModal} onClose={onCloseModal} notification={notifications.load_failed} />
       <Container
         borderTop='1px solid black'

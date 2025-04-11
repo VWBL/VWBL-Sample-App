@@ -11,6 +11,7 @@ export const Account = () => {
   const [mintedNfts, setMintedNfts] = useState<ExtendedMetadata[]>([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const { vwblViewer, initVWBLViewer, provider, connectWallet, checkNetwork } = VwblContainer.useContainer();
 
@@ -25,6 +26,7 @@ export const Account = () => {
 
   useEffect(() => {
     const setup = async () => {
+      setIsLoading(true);
       if (!provider) {
         await connectWallet();
         return;
@@ -52,10 +54,9 @@ export const Account = () => {
               return null;
             }
             try {
-              const tokenRes = await axios.get(v.raw.tokenUri, {timeout: 500});
+              const tokenRes = await axios.get(v.raw.tokenUri, {timeout: 300});
               metadata = tokenRes.data;
             } catch (err) {
-              console.log(err);
               return null;
             }
             if (typeof metadata.encrypted_data === 'undefined') {
@@ -76,6 +77,7 @@ export const Account = () => {
           .filter((item) => item !== null)
           .reverse();
         setOwnedNfts(ownedItems);
+        setIsLoading(false);
       } catch (err) {
         setIsOpenModal(true);
         console.log(err);
@@ -98,6 +100,7 @@ export const Account = () => {
       walletAddress={walletAddress}
       isOpenModal={isOpenModal}
       onCloseModal={() => setIsOpenModal(false)}
+      isLoading={isLoading}
     />
   );
 };
