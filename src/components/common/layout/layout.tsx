@@ -159,7 +159,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 {userAddress ? (
                   <VStack spacing={6} alignItems='start'>
                     <Link href='/account' as={NextLink}>
-                      <Button as='a' text='My Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} height='40px' isReversed />
+                      <Button text='My Wallet' borderRadius={'3xl'} icon={MdOutlineAccountBalanceWallet} height='40px' isReversed />
                     </Link>
                   </VStack>
                 ) : (

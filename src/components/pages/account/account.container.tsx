@@ -11,8 +11,14 @@ export const Account = () => {
   const [mintedNfts, setMintedNfts] = useState<ExtendedMetadata[]>([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const { vwblViewer, initVWBLViewer, provider, connectWallet, checkNetwork } = VwblContainer.useContainer();
+
+  const metadataBlockList = [
+    // openseaの共有コントラクトから発行されたNFTでありVWBL NFTではない
+    'https://api.opensea.io/api/v2/metadata/matic/0x2953399124F0cBB46d2CbACD8A89cF0599974963'
+  ];
 
   useEffect(() => {
     checkNetwork(() => switchChain(provider));
@@ -20,6 +26,7 @@ export const Account = () => {
 
   useEffect(() => {
     const setup = async () => {
+      setIsLoading(true);
       if (!provider) {
         await connectWallet();
         return;
@@ -33,7 +40,7 @@ export const Account = () => {
         return;
       }
       try {
-        const query = `${process.env.NEXT_PUBLIC_ALCHEMY_NFT_API}/getNFTsForOwner?owner=${userAddress}`;
+        const query = `${process.env.NEXT_PUBLIC_ALCHEMY_NFT_API}/getNFTsForOwner?owner=${userAddress}&excludeFilters[]=SPAM`;
         const result = await axios.get(query);
         const ownedItems = (await Promise.all(
           result.data.ownedNfts.map(async (v: any) => {
@@ -42,11 +49,14 @@ export const Account = () => {
               return null;
             }
             let metadata;
+            const isBlackList = metadataBlockList.some(blockedUrl => v.raw.tokenUri.includes(blockedUrl));
+            if (isBlackList) {
+              return null;
+            }
             try {
-              const tokenRes = await axios.get(v.raw.tokenUri);
+              const tokenRes = await axios.get(v.raw.tokenUri, {timeout: 500});
               metadata = tokenRes.data;
             } catch (err) {
-              console.log(err);
               return null;
             }
             if (typeof metadata.encrypted_data === 'undefined') {
@@ -64,12 +74,14 @@ export const Account = () => {
             } as ExtendedMetadata;
           })
         ))
-          .filter((item) => item !== null)
+          .filter((item): item is ExtendedMetadata => item !== null)
           .reverse();
         setOwnedNfts(ownedItems);
+        setIsLoading(false);
       } catch (err) {
         setIsOpenModal(true);
         console.log(err);
+        setIsLoading(false);
       }
 
       try {
@@ -77,6 +89,7 @@ export const Account = () => {
         setMintedNfts(mintedItems.filter((v) => v).reverse() as ExtendedMetadata[]);
       } catch (err) {
         console.log(err);
+        setIsLoading(false);
       }
     };
     setup();
@@ -89,6 +102,7 @@ export const Account = () => {
       walletAddress={walletAddress}
       isOpenModal={isOpenModal}
       onCloseModal={() => setIsOpenModal(false)}
+      isLoading={isLoading}
     />
   );
 };
