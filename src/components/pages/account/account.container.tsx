@@ -81,6 +81,7 @@ export const Account = () => {
       } catch (err) {
         setIsOpenModal(true);
         console.log(err);
+        setIsLoading(false);
       }
 
       try {
@@ -88,6 +89,7 @@ export const Account = () => {
         setMintedNfts(mintedItems.filter((v) => v).reverse() as ExtendedMetadata[]);
       } catch (err) {
         console.log(err);
+        setIsLoading(false);
       }
     };
     setup();
