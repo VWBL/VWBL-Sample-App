@@ -16,10 +16,10 @@ export const PdfViewer: React.FC<Props> = ({ fileUrl }) => {
   return (
     <Box w='100%' h='80%' ref={targetRef}>
       <Box w='100%' h='80%' display='flex' justifyContent='center'>
-        <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error}>
+        <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error} externalLinkTarget="_blank" externalLinkRel="noopener noreferrer">
           <Page
             pageNumber={pageNumber}
-            renderAnnotationLayer={false}
+            renderAnnotationLayer={true}
             renderTextLayer={false}
             canvasBackground='gray'
             width={width / 1.5}

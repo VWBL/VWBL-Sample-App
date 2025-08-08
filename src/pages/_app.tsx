@@ -1,5 +1,6 @@
 import '../styles/fonts.css';
 import '../styles/globals.css';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import type { AppProps } from 'next/app';
 import { Layout } from '../components/common/layout';
 import { ChakraProvider } from '@chakra-ui/react';
