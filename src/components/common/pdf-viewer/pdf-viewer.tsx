@@ -3,7 +3,6 @@ import { Box, Text, HStack, IconButton } from '@chakra-ui/react';
 import { ChevronRightIcon, ChevronLeftIcon } from '@chakra-ui/icons';
 import { usePdfViewer } from '../../../hooks/pdf-viewer';
 import workerSrc from '../../../../pdf-worker';
-import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
 
