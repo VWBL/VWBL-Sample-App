@@ -50,11 +50,12 @@ export const AdminDashboardContainer: React.FC<AdminDashboardContainerProps> = (
       }
 
       const data = await response.json();
-      
-      if (data.data) {
-        setGachaStatus(data.data);
+
+      const payload = data?.data ?? data;
+      if (payload && typeof payload === 'object' && 'totalPrizes' in payload) {
+        setGachaStatus(payload as GachaStatusResponse);
       } else {
-        throw new Error('Invalid response format');
+        throw new Error('不正なレスポンス形式です');
       }
     } catch (err) {
       console.error('Failed to fetch gacha status:', err);

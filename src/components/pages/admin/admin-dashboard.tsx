@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Box,
   Container,
@@ -80,14 +80,22 @@ const WinnersSection: React.FC<{ prize: PrizeItemStatus }> = ({ prize }) => {
   const [showAll, setShowAll] = useState(false);
   const rarity = getPrizeRarity(prize.type);
   
-  const filteredAddresses = prize.winnerAddresses.filter(address =>
-    address.toLowerCase().includes(searchTerm.toLowerCase())
+  const entries = useMemo(
+    () => prize.winnerAddresses.map((addr, i) => ({ addr, i })),
+    [prize.winnerAddresses]
   );
-  
+  const filteredEntries = useMemo(
+    () =>
+      entries.filter(e =>
+        e.addr.toLowerCase().includes(searchTerm.toLowerCase())
+      ),
+    [entries, searchTerm]
+  );
   // ハズレ以外は全件表示、ハズレのみ20件制限
   const isLimitedDisplay = prize.type === 'miss';
-  const displayedAddresses = (isLimitedDisplay && !showAll) ? filteredAddresses.slice(0, 20) : filteredAddresses;
-  const hasMore = isLimitedDisplay && filteredAddresses.length > 20;
+  const displayedEntries =
+    isLimitedDisplay && !showAll ? filteredEntries.slice(0, 20) : filteredEntries;
+  const hasMore = isLimitedDisplay && filteredEntries.length > 20;
   
   return (
     <Box>
@@ -117,21 +125,16 @@ const WinnersSection: React.FC<{ prize: PrizeItemStatus }> = ({ prize }) => {
       </HStack>
       
       <VStack align="stretch" spacing={2} pl={4}>
-        {displayedAddresses.map((address) => {
-          const originalIndex = prize.winnerAddresses.indexOf(address);
-          return (
-            <HStack key={`${prize.type}-${originalIndex}`}>
-              <Text fontSize="sm" width="80px">
-                #{originalIndex + 1}
-              </Text>
-              <Code fontSize="sm" p={2} borderRadius="md">
-                {address}
-              </Code>
-            </HStack>
-          );
-        })}
+        {displayedEntries.map(({ addr, i }) => (
+          <HStack key={`${prize.type}-${i}`}>
+            <Text fontSize="sm" width="80px">#{i + 1}</Text>
+            <Code fontSize="sm" p={2} borderRadius="md">
+              {addr}
+            </Code>
+          </HStack>
+        ))}
         
-        {hasMore && !showAll && filteredAddresses.length > 20 && (
+        {hasMore && !showAll && filteredEntries.length > 20 && (
           <Button
             variant="ghost"
             size="sm"
@@ -140,7 +143,7 @@ const WinnersSection: React.FC<{ prize: PrizeItemStatus }> = ({ prize }) => {
             alignSelf="flex-start"
             mt={2}
           >
-            さらに表示 ({filteredAddresses.length - 20}件)
+            さらに表示 ({filteredEntries.length - 20}件)
           </Button>
         )}
         
@@ -157,7 +160,7 @@ const WinnersSection: React.FC<{ prize: PrizeItemStatus }> = ({ prize }) => {
           </Button>
         )}
         
-        {searchTerm && filteredAddresses.length === 0 && (
+        {searchTerm && filteredEntries.length === 0 && (
           <Text fontSize="sm" color="gray.500" textAlign="center" py={4}>
             該当するアドレスが見つかりません
           </Text>
@@ -227,20 +230,28 @@ export const AdminDashboardComponent: React.FC<AdminDashboardComponentProps> = (
                 <StatLabel>配布済み</StatLabel>
                 <StatNumber color="red.500">{gachaStatus.allocatedPrizes}</StatNumber>
                 <StatHelpText>
-                  {((gachaStatus.allocatedPrizes / gachaStatus.totalPrizes) * 100).toFixed(1)}%
+                  {gachaStatus.totalPrizes > 0
+                    ? ((gachaStatus.allocatedPrizes / gachaStatus.totalPrizes) * 100).toFixed(1)
+                    : '0.0'}%
                 </StatHelpText>
               </Stat>
               <Stat textAlign="center">
                 <StatLabel>残り</StatLabel>
                 <StatNumber color="green.500">{gachaStatus.remainingPrizes}</StatNumber>
                 <StatHelpText>
-                  {((gachaStatus.remainingPrizes / gachaStatus.totalPrizes) * 100).toFixed(1)}%
+                  {gachaStatus.totalPrizes > 0
+                    ? ((gachaStatus.remainingPrizes / gachaStatus.totalPrizes) * 100).toFixed(1)
+                    : '0.0'}%
                 </StatHelpText>
               </Stat>
             </HStack>
             <Box mt={4}>
               <Progress
-                value={(gachaStatus.allocatedPrizes / gachaStatus.totalPrizes) * 100}
+                value={
+                  gachaStatus.totalPrizes > 0
+                    ? (gachaStatus.allocatedPrizes / gachaStatus.totalPrizes) * 100
+                    : 0
+                }
                 colorScheme="purple"
                 size="lg"
                 borderRadius="md"
@@ -268,7 +279,10 @@ export const AdminDashboardComponent: React.FC<AdminDashboardComponentProps> = (
               <Tbody>
                 {gachaStatus.prizeItems.map((prize) => {
                   const rarity = getPrizeRarity(prize.type);
-                  const progressPercent = (prize.allocatedCount / prize.totalCount) * 100;
+                  const progressPercent =
+                    prize.totalCount > 0
+                      ? (prize.allocatedCount / prize.totalCount) * 100
+                      : 0;
                   
                   return (
                     <Tr key={prize.type}>
