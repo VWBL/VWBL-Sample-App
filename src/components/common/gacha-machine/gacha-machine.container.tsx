@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GachaMachineComponent } from './gacha-machine';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
 import { VwblContainer } from '../../../container';
 
@@ -12,9 +13,43 @@ export const GachaMachine: React.FC = () => {
   const [fetchedData, setFetchedData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasPlayedGacha, setHasPlayedGacha] = useState(false);
+  const [userGachaId, setUserGachaId] = useState<string>('');
   const { vwbl } = VwblContainer.useContainer();
 
+  // ユーザーID管理とガチャ実行制限チェック
+  useEffect(() => {
+    let gachaId = localStorage.getItem('vwbl_gacha_user_id');
+    if (!gachaId) {
+      gachaId = uuidv4();
+      localStorage.setItem('vwbl_gacha_user_id', gachaId);
+    }
+    setUserGachaId(gachaId);
+
+    const hasPlayed = localStorage.getItem(`vwbl_gacha_played_${gachaId}`);
+    if (hasPlayed === 'true') {
+      setHasPlayedGacha(true);
+      // 既にプレイ済みの場合、結果を復元
+      const savedResult = localStorage.getItem(`vwbl_gacha_result_${gachaId}`);
+      if (savedResult) {
+        const result = JSON.parse(savedResult);
+        setFetchedData(result.fetchedData);
+        setCurrentItem(result.currentItem);
+      }
+    }
+  }, []);
+
   const fetchData = async () => {
+    if (hasPlayedGacha) {
+      setError('ガチャは1人1回までです。');
+      return;
+    }
+
+    if (!userGachaId) {
+      setError('ユーザーIDの生成に失敗しました。ページを再読み込みしてください。');
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
     if (vwbl) await vwbl.sign();
@@ -29,6 +64,7 @@ export const GachaMachine: React.FC = () => {
           `${process.env.NEXT_PUBLIC_GACHA_API_URL}/pro/mint`,
           {
             ethSig: signature,
+            userGachaId: userGachaId,
           },
           {
             headers: {
@@ -41,19 +77,41 @@ export const GachaMachine: React.FC = () => {
 
         // gachaId に基づいてアイテム選択
         const gachaId = response.data.gachaId;
+        let selectedItem = null;
         if (gachaId >= 1 && gachaId < items.length + 1) {
-          setCurrentItem(items[gachaId - 1]);
+          selectedItem = items[gachaId - 1];
+          setCurrentItem(selectedItem);
         } else {
           console.error('Invalid gachaId:', gachaId);
           setError('無効なガチャIDです。');
         }
+
+        // ガチャ結果をlocalStorageに保存
+        localStorage.setItem(`vwbl_gacha_played_${userGachaId}`, 'true');
+        localStorage.setItem(`vwbl_gacha_result_${userGachaId}`, JSON.stringify({
+          fetchedData: response.data,
+          currentItem: selectedItem
+        }));
+        setHasPlayedGacha(true);
         setIsLoading(false);
         return;
       } catch (error: any) {
         if (error.response) {
           if (error.response.status === 400) {
             console.error('Error 400, not retrying:', error.response.data);
-            setError('リクエストエラーが発生しました。時間をおいてもう一度お試しください。');
+            
+            // バックエンドから重複検知エラーの場合
+            const errorMessage = error.response.data?.error || error.response.data?.message;
+            if (errorMessage && (
+              errorMessage.includes('Already played') || 
+              errorMessage.includes('既に実行済み') ||
+              errorMessage.includes('1人1回')
+            )) {
+              setError('ガチャは1人1回までです。既に実行済みです。');
+              setHasPlayedGacha(true);
+            } else {
+              setError('リクエストエラーが発生しました。時間をおいてもう一度お試しください。');
+            }
             setIsLoading(false);
             return;
           }
@@ -93,6 +151,7 @@ export const GachaMachine: React.FC = () => {
       fetchedData={fetchedData}
       isLoading={isLoading}
       error={error}
+      hasPlayedGacha={hasPlayedGacha}
     />
   );
 };
