@@ -82,14 +82,17 @@ export const GachaMachine: React.FC = () => {
         setFetchedData(response.data);
 
         // gachaId に基づいてアイテム選択
-        const gachaId = response.data.gachaId;
-        let selectedItem = null;
-        if (gachaId >= 1 && gachaId < items.length + 1) {
+        const gachaIdRaw = response.data.gachaId;
+        const gachaId = Number(gachaIdRaw);
+        let selectedItem: string | null = null;
+        if (Number.isInteger(gachaId) && gachaId >= 1 && gachaId <= items.length) {
           selectedItem = items[gachaId - 1];
           setCurrentItem(selectedItem);
         } else {
-          console.error('Invalid gachaId:', gachaId);
+          console.error('Invalid gachaId:', gachaIdRaw);
           setError('無効なガチャIDです。');
+          setIsLoading(false);
+          return;
         }
 
         // ガチャ結果をlocalStorageに保存
@@ -115,6 +118,17 @@ export const GachaMachine: React.FC = () => {
             )) {
               setError('ガチャは1人1回までです。既に実行済みです。');
               setHasPlayedGacha(true);
+              try {
+                localStorage.setItem(`vwbl_gacha_played_${userGachaId}`, 'true');
+                const saved = localStorage.getItem(`vwbl_gacha_result_${userGachaId}`);
+                if (saved) {
+                  const result = JSON.parse(saved);
+                  setFetchedData(result.fetchedData);
+                  setCurrentItem(result.currentItem);
+                }
+              } catch (e) {
+                console.warn('Failed to persist/restore duplicate-play state.', e);
+              }
             } else {
               setError('リクエストエラーが発生しました。時間をおいてもう一度お試しください。');
             }
