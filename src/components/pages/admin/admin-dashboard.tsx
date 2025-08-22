@@ -270,7 +270,6 @@ export const AdminDashboardComponent: React.FC<AdminDashboardComponentProps> = (
               <Thead>
                 <Tr>
                   <Th>景品名</Th>
-                  <Th>レア度</Th>
                   <Th>配布状況</Th>
                   <Th>進捗</Th>
                   <Th>当選者数</Th>
@@ -288,9 +287,6 @@ export const AdminDashboardComponent: React.FC<AdminDashboardComponentProps> = (
                     <Tr key={prize.type}>
                       <Td>
                         <Text fontWeight="bold">{prize.title}</Text>
-                      </Td>
-                      <Td>
-                        <Badge colorScheme={rarity.color}>{rarity.label}</Badge>
                       </Td>
                       <Td>
                         <Text>
