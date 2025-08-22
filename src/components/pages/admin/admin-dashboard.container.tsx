@@ -26,8 +26,6 @@ interface AdminDashboardContainerProps {
   }>;
 }
 
-const ADMIN_API_URL = `${process.env.NEXT_PUBLIC_GACHA_API_URL}/pro/admin`;
-
 export const AdminDashboardContainer: React.FC<AdminDashboardContainerProps> = ({ component: Component }) => {
   const [gachaStatus, setGachaStatus] = useState<GachaStatusResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -35,16 +33,18 @@ export const AdminDashboardContainer: React.FC<AdminDashboardContainerProps> = (
 
   const fetchGachaStatus = async () => {
     if (!process.env.NEXT_PUBLIC_GACHA_API_URL) {
-      throw new Error(
-        '環境変数 NEXT_PUBLIC_GACHA_API_URL が未設定です。.env(<mode>) ファイルに定義してください。'
-      );
+      setError('環境変数 NEXT_PUBLIC_GACHA_API_URL が未設定です。');
+      setIsLoading(false);
+      return;
     }
+    const apiBase = process.env.NEXT_PUBLIC_GACHA_API_URL.replace(/\/+$/, '');
+    const adminApiUrl = `${apiBase}/pro/admin`;
 
     try {
       setIsLoading(true);
       setError(null);
 
-      const response = await fetch(ADMIN_API_URL, {
+      const response = await fetch(adminApiUrl, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
