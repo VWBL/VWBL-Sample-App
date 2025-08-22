@@ -61,7 +61,7 @@ export const GachaMachine: React.FC = () => {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_GACHA_API_URL}/pro/mint`,
+          `${process.env.NEXT_PUBLIC_GACHA_API_URL}/pro/prize`,
           {
             ethSig: signature,
             userGachaId: userGachaId,
