@@ -32,9 +32,14 @@ export const GachaMachine: React.FC = () => {
       // 既にプレイ済みの場合、結果を復元
       const savedResult = localStorage.getItem(`vwbl_gacha_result_${gachaId}`);
       if (savedResult) {
-        const result = JSON.parse(savedResult);
-        setFetchedData(result.fetchedData);
-        setCurrentItem(result.currentItem);
+        try {
+          const result = JSON.parse(savedResult);
+          setFetchedData(result.fetchedData);
+          setCurrentItem(result.currentItem);
+        } catch (e) {
+          console.warn('Broken gacha result in localStorage. Clearing result data...', e);
+          localStorage.removeItem(`vwbl_gacha_result_${gachaId}`);
+        }
       }
     }
   }, []);
@@ -122,9 +127,15 @@ export const GachaMachine: React.FC = () => {
                 localStorage.setItem(`vwbl_gacha_played_${userGachaId}`, 'true');
                 const saved = localStorage.getItem(`vwbl_gacha_result_${userGachaId}`);
                 if (saved) {
-                  const result = JSON.parse(saved);
-                  setFetchedData(result.fetchedData);
-                  setCurrentItem(result.currentItem);
+                  try {
+                    const result = JSON.parse(saved);
+                    if (result && result.fetchedData && result.currentItem) {
+                      setFetchedData(result.fetchedData);
+                      setCurrentItem(result.currentItem);
+                    }
+                  } catch (e) {
+                    console.warn('Failed to parse saved gacha result.', e);
+                  }
                 }
               } catch (e) {
                 console.warn('Failed to persist/restore duplicate-play state.', e);
