@@ -81,16 +81,16 @@ export const GachaMachine: React.FC = () => {
 
         setFetchedData(response.data);
 
-        // gachaId に基づいてアイテム選択
-        const gachaIdRaw = response.data.gachaId;
-        const gachaId = Number(gachaIdRaw);
+        // prizeId に基づいてアイテム選択
+        const prizeIdRaw = response.data.prizeId;
+        const prizeId = Number(prizeIdRaw);
         let selectedItem: string | null = null;
-        if (Number.isInteger(gachaId) && gachaId >= 1 && gachaId <= items.length) {
-          selectedItem = items[gachaId - 1];
+        if (Number.isInteger(prizeId) && prizeId >= 1 && prizeId <= items.length) {
+          selectedItem = items[prizeId - 1];
           setCurrentItem(selectedItem);
         } else {
-          console.error('Invalid gachaId:', gachaIdRaw);
-          setError('無効なガチャIDです。');
+          console.error('Invalid prizeId:', prizeIdRaw);
+          setError('無効な景品IDです。');
           setIsLoading(false);
           return;
         }
