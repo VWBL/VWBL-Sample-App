@@ -30,8 +30,6 @@ import {
   InputGroup,
   InputLeftElement,
   Button,
-  Collapse,
-  useDisclosure,
 } from '@chakra-ui/react';
 import { SearchIcon, ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { AdminDashboardContainer } from './admin-dashboard.container';
@@ -119,7 +117,7 @@ const WinnersSection: React.FC<{ prize: PrizeItemStatus }> = ({ prize }) => {
       </HStack>
       
       <VStack align="stretch" spacing={2} pl={4}>
-        {displayedAddresses.map((address, index) => {
+        {displayedAddresses.map((address) => {
           const originalIndex = prize.winnerAddresses.indexOf(address);
           return (
             <HStack key={`${prize.type}-${originalIndex}`}>
@@ -175,7 +173,6 @@ export const AdminDashboardComponent: React.FC<AdminDashboardComponentProps> = (
   gachaStatus,
   isLoading,
   error,
-  refreshData,
 }) => {
   if (isLoading) {
     return (
