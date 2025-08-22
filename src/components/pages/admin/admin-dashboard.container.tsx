@@ -26,7 +26,7 @@ interface AdminDashboardContainerProps {
   }>;
 }
 
-const ADMIN_API_URL = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'https://x92s8btj0m.execute-api.ap-northeast-1.amazonaws.com/pro/admin';
+const ADMIN_API_URL = `${process.env.NEXT_PUBLIC_GACHA_API_URL}/pro/admin`;
 
 export const AdminDashboardContainer: React.FC<AdminDashboardContainerProps> = ({ component: Component }) => {
   const [gachaStatus, setGachaStatus] = useState<GachaStatusResponse | null>(null);
@@ -34,6 +34,12 @@ export const AdminDashboardContainer: React.FC<AdminDashboardContainerProps> = (
   const [error, setError] = useState<string | null>(null);
 
   const fetchGachaStatus = async () => {
+    if (!process.env.NEXT_PUBLIC_GACHA_API_URL) {
+      throw new Error(
+        '環境変数 NEXT_PUBLIC_GACHA_API_URL が未設定です。.env(<mode>) ファイルに定義してください。'
+      );
+    }
+
     try {
       setIsLoading(true);
       setError(null);
