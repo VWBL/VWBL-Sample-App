@@ -40,6 +40,12 @@ export const GachaMachine: React.FC = () => {
   }, []);
 
   const fetchData = async () => {
+    if (!process.env.NEXT_PUBLIC_GACHA_API_URL) {
+      throw new Error(
+        '環境変数 NEXT_PUBLIC_GACHA_API_URL が未設定です。.env(<mode>) ファイルに定義してください。'
+      );
+    }
+
     if (hasPlayedGacha) {
       setError('ガチャは1人1回までです。');
       return;
