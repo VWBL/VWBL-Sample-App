@@ -40,6 +40,12 @@ export const GachaMachine: React.FC = () => {
   }, []);
 
   const fetchData = async () => {
+    if (!process.env.NEXT_PUBLIC_GACHA_API_URL) {
+      throw new Error(
+        '環境変数 NEXT_PUBLIC_GACHA_API_URL が未設定です。.env(<mode>) ファイルに定義してください。'
+      );
+    }
+
     if (hasPlayedGacha) {
       setError('ガチャは1人1回までです。');
       return;
@@ -75,15 +81,18 @@ export const GachaMachine: React.FC = () => {
 
         setFetchedData(response.data);
 
-        // gachaId に基づいてアイテム選択
-        const gachaId = response.data.gachaId;
-        let selectedItem = null;
-        if (gachaId >= 1 && gachaId < items.length + 1) {
-          selectedItem = items[gachaId - 1];
+        // prizeId に基づいてアイテム選択
+        const prizeIdRaw = response.data.prizeId;
+        const prizeId = Number(prizeIdRaw);
+        let selectedItem: string | null = null;
+        if (Number.isInteger(prizeId) && prizeId >= 1 && prizeId <= items.length) {
+          selectedItem = items[prizeId - 1];
           setCurrentItem(selectedItem);
         } else {
-          console.error('Invalid gachaId:', gachaId);
-          setError('無効なガチャIDです。');
+          console.error('Invalid prizeId:', prizeIdRaw);
+          setError('無効な景品IDです。');
+          setIsLoading(false);
+          return;
         }
 
         // ガチャ結果をlocalStorageに保存
@@ -109,6 +118,17 @@ export const GachaMachine: React.FC = () => {
             )) {
               setError('ガチャは1人1回までです。既に実行済みです。');
               setHasPlayedGacha(true);
+              try {
+                localStorage.setItem(`vwbl_gacha_played_${userGachaId}`, 'true');
+                const saved = localStorage.getItem(`vwbl_gacha_result_${userGachaId}`);
+                if (saved) {
+                  const result = JSON.parse(saved);
+                  setFetchedData(result.fetchedData);
+                  setCurrentItem(result.currentItem);
+                }
+              } catch (e) {
+                console.warn('Failed to persist/restore duplicate-play state.', e);
+              }
             } else {
               setError('リクエストエラーが発生しました。時間をおいてもう一度お試しください。');
             }

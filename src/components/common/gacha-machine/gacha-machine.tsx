@@ -33,7 +33,7 @@ export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({
             color='white' 
             display='flex' 
             onClick={fetchData}
-            isDisabled={hasPlayedGacha}
+            isDisabled={hasPlayedGacha || isLoading}
           >
             {hasPlayedGacha ? 'ガチャ完了です' : 'ガチャを回す'}
           </Button>
