@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { VwblContainer } from '../../../container';
 
-const items = ['/thumbnail_a.jpeg', '/thumbnail_b.png', '/thumbnail_c.png'];
+const items = ['/meat.jpg', '/physical-blockchain.png', '/physical-blockchain-earring.png', '/crypto.jpg', '/physical-bitcoin.jpg', '/miss.png'];
 
 export const GachaMachine: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);

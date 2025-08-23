@@ -54,7 +54,7 @@ export const Account = () => {
               return null;
             }
             try {
-              const tokenRes = await axios.get(v.raw.tokenUri, {timeout: 500});
+              const tokenRes = await axios.get(v.raw.tokenUri, {timeout: 1000});
               metadata = tokenRes.data;
             } catch (err) {
               return null;
