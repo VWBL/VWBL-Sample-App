@@ -17,6 +17,10 @@ export const GachaMachine: React.FC = () => {
   const fetchData = async () => {
     setIsLoading(true);
     setError(null);
+    setCurrentItem(null);
+    setFetchedData(null);
+    setIsPlaying(true);
+
     if (vwbl) await vwbl.sign();
     const signature = vwbl?.signature;
 
@@ -37,23 +41,29 @@ export const GachaMachine: React.FC = () => {
           },
         );
 
-        setFetchedData(response.data);
-
         // gachaId に基づいてアイテム選択
         const gachaId = response.data.gachaId;
         if (gachaId >= 1 && gachaId < items.length + 1) {
-          setCurrentItem(items[gachaId - 1]);
+          // 演出のための遅延
+          setTimeout(() => {
+            setCurrentItem(items[gachaId - 1]);
+            setFetchedData(response.data);
+            setIsPlaying(false);
+            setIsLoading(false);
+          }, 3000);
         } else {
           console.error('Invalid gachaId:', gachaId);
           setError('無効なガチャIDです。');
+          setIsPlaying(false);
+          setIsLoading(false);
         }
-        setIsLoading(false);
         return;
       } catch (error: any) {
         if (error.response) {
           if (error.response.status === 400) {
             console.error('Error 400, not retrying:', error.response.data);
             setError('リクエストエラーが発生しました。時間をおいてもう一度お試しください。');
+            setIsPlaying(false);
             setIsLoading(false);
             return;
           }
@@ -68,20 +78,16 @@ export const GachaMachine: React.FC = () => {
           await new Promise((resolve) => setTimeout(resolve, retryDelay));
         } else {
           console.error('Max retries reached. Giving up.');
-          setError('時間をおいてもう一度もう一度お試しください。');
+          setError('時間をおいてもう一度お試しください。');
+          setIsPlaying(false);
+          setIsLoading(false);
         }
       }
     }
   };
 
   const playGacha = () => {
-    setIsPlaying(true);
-
-    setTimeout(() => {
-      setIsPlaying(false);
-    }, 2000);
-
-    setIsLoading(false);
+    fetchData();
   };
 
   return (
