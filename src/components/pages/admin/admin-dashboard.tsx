@@ -64,6 +64,8 @@ const getPrizeRarity = (type: string): { color: string; label: string } => {
       return { color: 'red', label: 'レジェンダリー' };
     case 'physical_blockchain':
       return { color: 'purple', label: 'エピック' };
+    case 'physical_blockchain_earring':
+      return { color: 'pink', label: 'エピック+' };
     case 'crypto':
       return { color: 'blue', label: 'レア' };
     case 'physical_bitcoin':
