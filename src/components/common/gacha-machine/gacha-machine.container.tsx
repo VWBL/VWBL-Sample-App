@@ -147,11 +147,12 @@ export const GachaMachine: React.FC = () => {
 
             // バックエンドから重複検知エラーの場合
             const errorMessage = error.response.data?.error || error.response.data?.message;
-            if (
-              errorMessage &&
-              (errorMessage.includes('Already played') || errorMessage.includes('既に実行済み') || errorMessage.includes('1人1回'))
-            ) {
-              setError('ガチャは1人1回までです。既に実行済みです。');
+            if (errorMessage && errorMessage.startsWith('WALLET_ADDRESS_DUPLICATE')) {
+              setError('このウォレットアドレスは既に使用されています。別のアドレスでお試しください。');
+              setIsLoading(false);
+              return;
+            } else if (errorMessage && errorMessage.startsWith('USER_GACHA_ID_DUPLICATE')) {
+              setError('既にプレイ済みです。ガチャは1人1回までとなります。');
               setHasPlayedGacha(true);
               try {
                 localStorage.setItem(`vwbl_gacha_played_${userGachaId}`, 'true');
