@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Button, Container, Heading, Image, Spinner, Text, VStack, Link, Box, SimpleGrid, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from '@chakra-ui/react';
+import { Alert, Button, Container, Heading, Image, Spinner, Text, VStack, Link, Box, SimpleGrid } from '@chakra-ui/react';
 import styles from './gacha-machine.module.css';
 
 type GachaMachineComponentProps = {
@@ -11,8 +11,6 @@ type GachaMachineComponentProps = {
   isLoading: boolean;
   error: string | null;
   hasPlayedGacha: boolean;
-  showResultModal: boolean;
-  onCloseResultModal: () => void;
 };
 
 export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({
@@ -21,8 +19,6 @@ export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({
   isLoading,
   error,
   hasPlayedGacha,
-  showResultModal,
-  onCloseResultModal,
 }) => {
   return (
     <div className={styles.gachaMachine}>
@@ -157,54 +153,6 @@ export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({
             </Text>
           </Container>
         )}
-        {/* ガチャ結果モーダル */}
-        <Modal isOpen={showResultModal} onClose={onCloseResultModal} size="lg" isCentered>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader textAlign="center">
-              <Heading as='h2' size='md' color='gray.700'>
-                🎉 ガチャ結果 🎉
-              </Heading>
-            </ModalHeader>
-            <ModalCloseButton />
-            <ModalBody pb={6}>
-              <VStack spacing={6}>
-                <Text fontSize='lg' color='gray.600' textAlign='center'>
-                  おめでとうございます！<br />
-                  景品を獲得しました！
-                </Text>
-                
-                <Box position="relative" display="flex" justifyContent="center">
-                  <div className={`${styles.capsule} ${styles.modalCapsule}`}>
-                    <div className={`${styles.lid} ${currentItem ? styles.open : ''}`}></div>
-                    {currentItem && <img className={styles.item} src={currentItem} alt='ガチャアイテム' />}
-                  </div>
-                </Box>
-
-                <VStack spacing={3}>
-                  <Text fontSize='md' color='gray.600' textAlign='center'>
-                    獲得した景品は<br />
-                    <Link href='/account' color='blue.600' fontWeight='bold'>
-                      My Walletのページ
-                    </Link>
-                    で確認できます。
-                  </Text>
-                  
-                  <Button 
-                    as={Link} 
-                    href='/account' 
-                    colorScheme='blue' 
-                    size='lg'
-                    _hover={{ textDecoration: 'none' }}
-                    onClick={onCloseResultModal}
-                  >
-                    My Walletで景品を確認する
-                  </Button>
-                </VStack>
-              </VStack>
-            </ModalBody>
-          </ModalContent>
-        </Modal>
       </VStack>
     </div>
   );
