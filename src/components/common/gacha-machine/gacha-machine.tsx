@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Button, Container, Heading, Image, Spinner, Text, VStack, Link, Box, SimpleGrid } from '@chakra-ui/react';
+import { Alert, Button, Container, Heading, Image, Spinner, Text, VStack, Link, Box, SimpleGrid, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from '@chakra-ui/react';
 import styles from './gacha-machine.module.css';
 
 type GachaMachineComponentProps = {
@@ -11,16 +11,18 @@ type GachaMachineComponentProps = {
   isLoading: boolean;
   error: string | null;
   hasPlayedGacha: boolean;
+  showResultModal: boolean;
+  onCloseResultModal: () => void;
 };
 
 export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({
-  isPlaying,
   currentItem,
   fetchData,
-  fetchedData,
   isLoading,
   error,
   hasPlayedGacha,
+  showResultModal,
+  onCloseResultModal,
 }) => {
   return (
     <div className={styles.gachaMachine}>
@@ -33,12 +35,16 @@ export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({
                   VWBL GACHA
                 </Heading>
                 <Image src='/gacha_blink.gif' alt='ガチャマシーン' w={350} h={280} objectFit='contain' />
-                <Text fontSize='md' color='gray.600' fontStyle='italic'>
-                  ガチャを回して景品をゲットしよう！
-                </Text>
-                <Text fontSize='sm' color='gray.500'>
-                  ※ ガチャは1人1回までです。
-                </Text>
+                {!hasPlayedGacha && (
+                  <>
+                    <Text fontSize='md' color='gray.600' fontStyle='italic'>
+                      ガチャを回して景品をゲットしよう！
+                    </Text>
+                    <Text fontSize='sm' color='gray.500'>
+                      ※ ガチャは1人1回までです。
+                    </Text>
+                  </>
+                )}
               </VStack>
             )}
             {isLoading && (
@@ -60,20 +66,27 @@ export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({
               </Alert>
             )}
           </Box>
-          <Button
-            colorScheme='blackAlpha'
-            bg='black'
-            size='lg'
-            color='white'
-            display='flex'
-            onClick={fetchData}
-            isDisabled={hasPlayedGacha || isLoading || (currentItem !== null && !error)}
-            isLoading={isLoading}
-            loadingText='ガチャ実行中...'
-            spinner={<Spinner />}
-          >
-            {hasPlayedGacha ? 'ガチャ完了です' : 'ガチャを回す'}
-          </Button>
+          <VStack spacing={3}>
+            <Button
+              colorScheme='blackAlpha'
+              bg='black'
+              size='lg'
+              color='white'
+              display='flex'
+              onClick={fetchData}
+              isDisabled={hasPlayedGacha || isLoading || (currentItem !== null && !error)}
+              isLoading={isLoading}
+              loadingText='ガチャ実行中...'
+              spinner={<Spinner />}
+            >
+              {hasPlayedGacha ? 'ガチャ完了です' : 'ガチャを回す'}
+            </Button>
+            {hasPlayedGacha && (
+              <Link href='/account' color='blue.600' fontSize='md' fontWeight='medium'>
+                → 景品はこちらから確認できます
+              </Link>
+            )}
+          </VStack>
         </Container>
 
         {/* 景品リスト */}
@@ -116,27 +129,54 @@ export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({
             </Text>
           </Container>
         )}
-        {fetchedData && (
-          <VStack mt={10} px={{ base: 4, md: 10 }}>
-            <Heading as='h2' size='md' my={4}>
-              ガチャの中身を見る
-            </Heading>
-            <Text fontSize={{ base: 'lg', md: 'xl' }}>ガチャで獲得したアイテムは</Text>
-            <Text fontSize={{ base: 'lg', md: 'xl' }}>
-              <Link href='/account' color='blue.600'>
-                My Walletのページ
-              </Link>
-              で確認できます。
-            </Text>
-            <div className={`${styles.capsule} ${isPlaying ? styles.playing : ''}`}>
-              <div className={`${styles.lid} ${currentItem ? styles.open : ''}`}></div>
-              {currentItem && <img className={styles.item} src={currentItem} alt='ガチャアイテム' />}
-            </div>
-            <Button colorScheme='blackAlpha' bg='black' size='md' mt={4} color='white' onClick={() => window.location.reload()}>
-              もう一度回す
-            </Button>
-          </VStack>
-        )}
+        {/* ガチャ結果モーダル */}
+        <Modal isOpen={showResultModal} onClose={onCloseResultModal} size="lg" isCentered>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader textAlign="center">
+              <Heading as='h2' size='md' color='gray.700'>
+                🎉 ガチャ結果 🎉
+              </Heading>
+            </ModalHeader>
+            <ModalCloseButton />
+            <ModalBody pb={6}>
+              <VStack spacing={6}>
+                <Text fontSize='lg' color='gray.600' textAlign='center'>
+                  おめでとうございます！<br />
+                  以下のアイテムを獲得しました！
+                </Text>
+                
+                <Box position="relative" display="flex" justifyContent="center">
+                  <div className={`${styles.capsule} ${styles.modalCapsule}`}>
+                    <div className={`${styles.lid} ${currentItem ? styles.open : ''}`}></div>
+                    {currentItem && <img className={styles.item} src={currentItem} alt='ガチャアイテム' />}
+                  </div>
+                </Box>
+
+                <VStack spacing={3}>
+                  <Text fontSize='md' color='gray.600' textAlign='center'>
+                    獲得したアイテムは<br />
+                    <Link href='/account' color='blue.600' fontWeight='bold'>
+                      My Walletのページ
+                    </Link>
+                    で確認できます。
+                  </Text>
+                  
+                  <Button 
+                    as={Link} 
+                    href='/account' 
+                    colorScheme='blue' 
+                    size='lg'
+                    _hover={{ textDecoration: 'none' }}
+                    onClick={onCloseResultModal}
+                  >
+                    My Walletで確認する
+                  </Button>
+                </VStack>
+              </VStack>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
       </VStack>
     </div>
   );
