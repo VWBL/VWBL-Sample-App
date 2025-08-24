@@ -5,7 +5,14 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { VwblContainer } from '../../../container';
 
-const items = ['/meat.jpg', '/physical-blockchain.png', '/physical-blockchain-earring.png', '/crypto.jpg', '/physical-bitcoin.jpg', '/miss.png'];
+const items = [
+  '/meat.jpg',
+  '/physical-blockchain.png',
+  '/physical-blockchain-earring.png',
+  '/crypto.jpg',
+  '/physical-bitcoin.jpg',
+  '/miss.png',
+];
 
 export const GachaMachine: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -63,8 +70,29 @@ export const GachaMachine: React.FC = () => {
 
     setIsLoading(true);
     setError(null);
-    if (vwbl) await vwbl.sign();
-    const signature = vwbl?.signature;
+    setCurrentItem(null);
+    setFetchedData(null);
+    setIsPlaying(true);
+
+    let signature: string | undefined;
+    try {
+      if (vwbl) {
+        await vwbl.sign();
+        signature = vwbl.signature;
+      }
+    } catch (e) {
+      console.error('Failed to sign.', e);
+      setError('ウォレット署名に失敗しました。ウォレット接続を確認してから再度お試しください。');
+      setIsPlaying(false);
+      setIsLoading(false);
+      return;
+    }
+    if (!signature) {
+      setError('署名が取得できませんでした。ウォレット接続を確認してから再度お試しください。');
+      setIsPlaying(false);
+      setIsLoading(false);
+      return;
+    }
 
     const maxRetries = 3;
     const retryDelay = 1000; // 1秒 = 1000ミリ秒
@@ -102,10 +130,13 @@ export const GachaMachine: React.FC = () => {
 
         // ガチャ結果をlocalStorageに保存
         localStorage.setItem(`vwbl_gacha_played_${userGachaId}`, 'true');
-        localStorage.setItem(`vwbl_gacha_result_${userGachaId}`, JSON.stringify({
-          fetchedData: response.data,
-          currentItem: selectedItem
-        }));
+        localStorage.setItem(
+          `vwbl_gacha_result_${userGachaId}`,
+          JSON.stringify({
+            fetchedData: response.data,
+            currentItem: selectedItem,
+          }),
+        );
         setHasPlayedGacha(true);
         setIsLoading(false);
         return;
@@ -113,14 +144,13 @@ export const GachaMachine: React.FC = () => {
         if (error.response) {
           if (error.response.status === 400) {
             console.error('Error 400, not retrying:', error.response.data);
-            
+
             // バックエンドから重複検知エラーの場合
             const errorMessage = error.response.data?.error || error.response.data?.message;
-            if (errorMessage && (
-              errorMessage.includes('Already played') || 
-              errorMessage.includes('既に実行済み') ||
-              errorMessage.includes('1人1回')
-            )) {
+            if (
+              errorMessage &&
+              (errorMessage.includes('Already played') || errorMessage.includes('既に実行済み') || errorMessage.includes('1人1回'))
+            ) {
               setError('ガチャは1人1回までです。既に実行済みです。');
               setHasPlayedGacha(true);
               try {
@@ -157,20 +187,16 @@ export const GachaMachine: React.FC = () => {
           await new Promise((resolve) => setTimeout(resolve, retryDelay));
         } else {
           console.error('Max retries reached. Giving up.');
-          setError('時間をおいてもう一度もう一度お試しください。');
+          setError('時間をおいてもう一度お試しください。');
+          setIsPlaying(false);
+          setIsLoading(false);
         }
       }
     }
   };
 
   const playGacha = () => {
-    setIsPlaying(true);
-
-    setTimeout(() => {
-      setIsPlaying(false);
-    }, 2000);
-
-    setIsLoading(false);
+    fetchData();
   };
 
   return (
