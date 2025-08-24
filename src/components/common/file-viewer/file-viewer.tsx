@@ -42,7 +42,7 @@ export const FileViewer: React.FC<Props> = ({ nft }) => {
     (nft: FetchedNFT | ExtractMetadata) => {
       if (isExtractMetadata(nft)) {
         if (nft.mimeType.match(VALID_EXTENSIONS.image)) {
-          return <Image src={fileUrl} alt='original data' rounded='md' objectFit='contain' p={10} width='60%' />;
+          return <Image src={fileUrl} alt='original data' rounded='md' objectFit='contain' p={{ base: 0, md: 10 }} width={{ base: '100%', md: '60%' }} maxHeight={{ base: '95vh', md: '100%' }} />;
         } else if (nft.mimeType.match(VALID_EXTENSIONS.video)) {
           return <ReactPlayer url={fileUrl} controls={true} width='100%' height='90%' />;
         } else if (nft.mimeType.match(VALID_EXTENSIONS.audio)) {
@@ -53,14 +53,14 @@ export const FileViewer: React.FC<Props> = ({ nft }) => {
           return <Button onClick={download}>Download</Button>;
         }
       } else {
-        return <Image src={nft.image} alt='thumbnail data' rounded='md' />;
+        return <Image src={nft.image} alt='thumbnail data' rounded='md' width={{ base: '100%', md: 'auto' }} maxHeight={{ base: '95vh', md: 'none' }} objectFit='contain' />;
       }
     },
     [download, fileUrl],
   );
 
   return (
-    <Box mx='auto' maxH='100vh' maxW='100%' display='flex' justifyContent='center' alignItems='center'>
+    <Box mx='auto' h={{ base: '100vh', md: 'auto' }} maxW='100%' display='flex' justifyContent='center' alignItems='center'>
       {switchViewer(nft)}
     </Box>
   );
