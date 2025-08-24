@@ -36,6 +36,9 @@ export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({
                 <Text fontSize='md' color='gray.600' fontStyle='italic'>
                   ガチャを回して景品をゲットしよう！
                 </Text>
+                <Text fontSize='sm' color='gray.500'>
+                  ※ ガチャは1人1回までです。
+                </Text>
               </VStack>
             )}
             {isLoading && (
