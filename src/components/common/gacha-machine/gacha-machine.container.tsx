@@ -143,41 +143,43 @@ export const GachaMachine: React.FC = () => {
         return;
       } catch (error: any) {
         if (error.response) {
+          const detailMessage = error.response.data?.message ?? '';
+
+          // messageフィールドを優先的にチェック
+          if (detailMessage && typeof detailMessage === 'string' && detailMessage.includes('WALLET_ADDRESS_DUPLICATE')) {
+            console.error(`Error ${error.response.status}, not retrying - WALLET_ADDRESS_DUPLICATE:`, error.response.data);
+            setError('このウォレットアドレスは既に使用されています。ガチャは1人1回までとなります。');
+            setIsPlaying(false);
+            setIsLoading(false);
+            return;
+          } else if (detailMessage && typeof detailMessage === 'string' && detailMessage.includes('USER_GACHA_ID_DUPLICATE')) {
+            console.error(`Error ${error.response.status}, not retrying - USER_GACHA_ID_DUPLICATE:`, error.response.data);
+            setError('既にプレイ済みです。ガチャは1人1回までとなります。');
+            setIsPlaying(false);
+            setHasPlayedGacha(true);
+            try {
+              localStorage.setItem(`vwbl_gacha_played_${userGachaId}`, 'true');
+              const saved = localStorage.getItem(`vwbl_gacha_result_${userGachaId}`);
+              if (saved) {
+                try {
+                  const result = JSON.parse(saved);
+                  if (result && result.fetchedData && result.currentItem) {
+                    setFetchedData(result.fetchedData);
+                    setCurrentItem(result.currentItem);
+                  }
+                } catch (e) {
+                  console.warn('Failed to parse saved gacha result.', e);
+                }
+              }
+            } catch (e) {
+              console.warn('Failed to persist/restore duplicate-play state.', e);
+            }
+            return;
+          }
+          
           if (error.response.status === 400) {
             console.error('Error 400, not retrying:', error.response.data);
-
-            // バックエンドから重複検知エラーの場合
-            const rawMessage = error.response.data?.error ?? error.response.data?.message;
-            const code = typeof rawMessage === 'string' ? rawMessage.split(':', 1)[0] : '';
-            if (code === 'WALLET_ADDRESS_DUPLICATE') {
-              setError('このウォレットアドレスは既に使用されています。別のアドレスでお試しください。');
-              setIsPlaying(false);
-              setIsLoading(false);
-              return;
-            } else if (code === 'USER_GACHA_ID_DUPLICATE') {
-              setError('既にプレイ済みです。ガチャは1人1回までとなります。');
-              setIsPlaying(false);
-              setHasPlayedGacha(true);
-              try {
-                localStorage.setItem(`vwbl_gacha_played_${userGachaId}`, 'true');
-                const saved = localStorage.getItem(`vwbl_gacha_result_${userGachaId}`);
-                if (saved) {
-                  try {
-                    const result = JSON.parse(saved);
-                    if (result && result.fetchedData && result.currentItem) {
-                      setFetchedData(result.fetchedData);
-                      setCurrentItem(result.currentItem);
-                    }
-                  } catch (e) {
-                    console.warn('Failed to parse saved gacha result.', e);
-                  }
-                }
-              } catch (e) {
-                console.warn('Failed to persist/restore duplicate-play state.', e);
-              }
-            } else {
-              setError('リクエストエラーが発生しました。時間をおいてもう一度お試しください。');
-            }
+            setError('リクエストエラーが発生しました。時間をおいてもう一度お試しください。');
             setIsPlaying(false);
             setIsLoading(false);
             return;
