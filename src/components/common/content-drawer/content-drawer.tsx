@@ -19,7 +19,7 @@ export const ContentDrawer: React.FC<Props> = ({ isOpen, onClose, nft }) => {
           <DrawerCloseButton position='static' justifyContent='space-between' px={2} />
         </DrawerHeader>
         <Box bg='black' h='100%' position='relative'>
-          <Box position='absolute' top='50%' left='50%' transform='translate(-50%, -50%)' w='80%'>
+          <Box position='absolute' top='50%' left='50%' transform='translate(-50%, -50%)' w={{ base: '100%', md: '80%' }}>
             <FileViewer nft={nft} />
           </Box>
         </Box>
