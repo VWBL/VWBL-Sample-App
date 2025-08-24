@@ -6,12 +6,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { VwblContainer } from '../../../container';
 
 const items = [
-  '/meat.jpg',
-  '/physical-blockchain.png',
-  '/physical-blockchain-earring.png',
-  '/crypto.jpg',
-  '/physical-bitcoin.jpg',
-  '/miss.png',
+  '/pre_draw.png',
+  '/pre_draw.png',
+  '/pre_draw.png',
+  '/pre_draw.png',
+  '/pre_draw.png',
+  '/pre_draw.png',
 ];
 
 export const GachaMachine: React.FC = () => {
@@ -22,7 +22,6 @@ export const GachaMachine: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [hasPlayedGacha, setHasPlayedGacha] = useState(false);
   const [userGachaId, setUserGachaId] = useState<string>('');
-  const [showResultModal, setShowResultModal] = useState(false);
   const { vwbl } = VwblContainer.useContainer();
 
   // ユーザーID管理とガチャ実行制限チェック
@@ -141,11 +140,6 @@ export const GachaMachine: React.FC = () => {
         setHasPlayedGacha(true);
         setIsLoading(false);
         
-        // ガチャ完了後にモーダルを表示
-        setTimeout(() => {
-          setShowResultModal(true);
-        }, 1000);
-        
         return;
       } catch (error: any) {
         if (error.response) {
@@ -207,10 +201,6 @@ export const GachaMachine: React.FC = () => {
     fetchData();
   };
 
-  const handleCloseResultModal = () => {
-    setShowResultModal(false);
-  };
-
   return (
     <GachaMachineComponent
       isPlaying={isPlaying}
@@ -221,8 +211,6 @@ export const GachaMachine: React.FC = () => {
       isLoading={isLoading}
       error={error}
       hasPlayedGacha={hasPlayedGacha}
-      showResultModal={showResultModal}
-      onCloseResultModal={handleCloseResultModal}
     />
   );
 };
