@@ -83,7 +83,7 @@ export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({
             </Button>
             {hasPlayedGacha && (
               <Link href='/account' color='blue.600' fontSize='md' fontWeight='medium'>
-                → 景品はこちらから確認できます
+                → 当選した景品はこちらから
               </Link>
             )}
           </VStack>
