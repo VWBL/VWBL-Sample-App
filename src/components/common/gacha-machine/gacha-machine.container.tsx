@@ -74,8 +74,25 @@ export const GachaMachine: React.FC = () => {
     setFetchedData(null);
     setIsPlaying(true);
 
-    if (vwbl) await vwbl.sign();
-    const signature = vwbl?.signature;
+    let signature: string | undefined;
+    try {
+      if (vwbl) {
+        await vwbl.sign();
+        signature = vwbl.signature;
+      }
+    } catch (e) {
+      console.error('Failed to sign.', e);
+      setError('ウォレット署名に失敗しました。ウォレット接続を確認してから再度お試しください。');
+      setIsPlaying(false);
+      setIsLoading(false);
+      return;
+    }
+    if (!signature) {
+      setError('署名が取得できませんでした。ウォレット接続を確認してから再度お試しください。');
+      setIsPlaying(false);
+      setIsLoading(false);
+      return;
+    }
 
     const maxRetries = 3;
     const retryDelay = 1000; // 1秒 = 1000ミリ秒
