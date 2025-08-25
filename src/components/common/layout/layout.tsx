@@ -23,7 +23,7 @@ import { Button } from '../button';
 import { hamburgerMenu, closeButton } from './layout.style';
 import { useRouter } from 'next/router';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { BaseProvider } from '@metamask/providers';
+import { WalletSelectionModal } from '../wallet-selection-modal';
 
 type Link = {
   title: string;
@@ -62,6 +62,7 @@ const HamburgerMenu = ({ onClick, sx }: { onClick: () => void; sx: CSSObject }) 
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isWalletModalOpen, onOpen: onWalletModalOpen, onClose: onWalletModalClose } = useDisclosure();
   const { connectWallet, userAddress } = VwblContainer.useContainer();
   const router = useRouter();
 
@@ -96,13 +97,21 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   ];
 
   const handleConnectWallet = async () => {
-    const { ethereum } = window as unknown as { ethereum: BaseProvider };
-    if (ethereum && !(ethereum as any).isMetaMask) {
-      alert("Metamask Walletで接続してください");
-      return;
+    onWalletModalOpen();
+  };
+
+  const handleWalletSelect = async (walletType: 'metamask' | 'walletconnect') => {
+    // WalletConnectの場合はすぐにモーダルを閉じる（QRコード表示のため）
+    if (walletType === 'walletconnect') {
+      onWalletModalClose();
     }
+    
     try {
-      await connectWallet();
+      await connectWallet(walletType);
+      // MetaMaskの場合は接続完了後にモーダルを閉じる
+      if (walletType === 'metamask') {
+        onWalletModalClose();
+      }
     } catch (error) {
       console.error(error);
       alert("ウォレットの接続に失敗しました");
@@ -111,11 +120,11 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
   useEffect(() => {
     handleConnectWallet();
-  }, []);
+  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     onClose();
-  }, [router]);
+  }, [router, onClose]);
 
   return (
     <>
@@ -174,11 +183,17 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                     />
                   </HStack>
                 )}
-                <Box fontSize='sm'>＊pcの方はmetamask chrome extention、mobileの方はmetamask appをご利用ください。</Box>
+                <Box fontSize='sm'>＊PCの方はMetaMask Chrome拡張、モバイルの方はMetaMaskアプリまたはWalletConnect対応アプリをご利用ください。</Box>
               </Stack>
             </VStack>
           </DrawerContent>
         </Drawer>
+        
+        <WalletSelectionModal 
+          isOpen={isWalletModalOpen} 
+          onClose={onWalletModalClose} 
+          onSelectWallet={handleWalletSelect}
+        />
       </Container>
 
       {/* hidden element to adjust hight */}
