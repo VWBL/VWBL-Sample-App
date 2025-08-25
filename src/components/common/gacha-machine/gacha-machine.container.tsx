@@ -112,6 +112,13 @@ export const GachaMachine: React.FC = () => {
           },
         );
 
+        if (!response.data || !response.data.prizeId || !response.data.tokenId || response.status !== 200) {
+          console.error('Incomplete response:', response);
+          setError('ガチャ処理が完全に完了しませんでした。もう一度お試しください。');
+          setIsLoading(false);
+          return;
+        }
+
         setFetchedData(response.data);
 
         // prizeId に基づいてアイテム選択
@@ -128,7 +135,7 @@ export const GachaMachine: React.FC = () => {
           return;
         }
 
-        // ガチャ結果をlocalStorageに保存
+        // 完全成功の場合のみlocalStorageに保存してプレイ済み状態にする
         localStorage.setItem(`vwbl_gacha_played_${userGachaId}`, 'true');
         localStorage.setItem(
           `vwbl_gacha_result_${userGachaId}`,
