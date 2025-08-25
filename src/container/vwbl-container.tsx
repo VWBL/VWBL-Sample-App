@@ -3,6 +3,7 @@ import { createContainer } from 'unstated-next';
 import { ManageKeyType, UploadContentType, UploadMetadataType, VWBLMetaTx, VWBLViewer } from 'vwbl-sdk';
 import { ethers } from 'ethers';
 import { Web3 } from 'web3';
+import EthereumProvider from '@walletconnect/ethereum-provider';
 
 const useVWBL = () => {
   const [vwbl, setVwbl] = useState<VWBLMetaTx>();
@@ -12,6 +13,7 @@ const useVWBL = () => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [provider, setProvider] = useState<any>();
   const [ethersProvider, setEthersProvider] = useState<ethers.BrowserProvider>();
+  const [walletConnectProvider, setWalletConnectProvider] = useState<EthereumProvider>();
   const updateVwbl = useCallback((provider: any): void => {
     if (
       !process.env.NEXT_PUBLIC_VWBL_NETWORK_URL ||
@@ -43,7 +45,7 @@ const useVWBL = () => {
     setVwbl(vwblInstance);
   }, []);
 
-  const connectWallet = useCallback(async () => {
+  const connectMetaMask = useCallback(async () => {
     try {
       const metaMaskProvider = (window as any).ethereum;
       if (metaMaskProvider && metaMaskProvider.isMetaMask) {
@@ -62,6 +64,63 @@ const useVWBL = () => {
       console.log(err);
     }
   }, [updateVwbl]);
+
+  const connectWalletConnect = useCallback(async () => {
+    try {
+      if (!process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID) {
+        throw new Error('WalletConnect project ID not configured');
+      }
+
+      const wcProvider = await EthereumProvider.init({
+        projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
+        chains: [137],
+        showQrModal: true,
+        metadata: {
+          name: 'VWBL Sample App',
+          description: 'VWBL Demo Application',
+          url: window.location.origin,
+          icons: ['https://vwbl.network/favicon.ico']
+        }
+      });
+
+      await wcProvider.enable();
+      setWalletConnectProvider(wcProvider);
+      setProvider(wcProvider);
+      updateVwbl(wcProvider);
+      
+      const ethProvider = new ethers.BrowserProvider(wcProvider);
+      setEthersProvider(ethProvider);
+      const ethSigner = await ethProvider.getSigner();
+      const myAddress = await ethSigner.getAddress();
+      if (myAddress) setUserAddress(myAddress);
+    } catch (err) {
+      console.log('WalletConnect connection error:', err);
+    }
+  }, [updateVwbl]);
+
+  const connectWallet = useCallback(async (walletType: 'metamask' | 'walletconnect' = 'metamask') => {
+    if (walletType === 'walletconnect') {
+      await connectWalletConnect();
+    } else {
+      await connectMetaMask();
+    }
+  }, [connectMetaMask, connectWalletConnect]);
+
+  const disconnectWallet = useCallback(async () => {
+    try {
+      if (walletConnectProvider) {
+        await walletConnectProvider.disconnect();
+        setWalletConnectProvider(undefined);
+      }
+      setProvider(undefined);
+      setEthersProvider(undefined);
+      setUserAddress(undefined);
+      setUserSignature(undefined);
+      setVwbl(undefined);
+    } catch (err) {
+      console.log('Disconnect error:', err);
+    }
+  }, [walletConnectProvider]);
 
   const initVwbl = useCallback((): void => {
     console.log(
@@ -137,7 +196,11 @@ const useVWBL = () => {
     userAddress,
     provider,
     ethersProvider,
+    walletConnectProvider,
     connectWallet,
+    connectMetaMask,
+    connectWalletConnect,
+    disconnectWallet,
     initVwbl,
     checkNetwork,
   };
