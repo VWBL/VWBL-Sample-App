@@ -20,7 +20,7 @@ export const GachaMachine: React.FC = () => {
   const [fetchedData, setFetchedData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [hasPlayedGacha, setHasPlayedGacha] = useState(false);
+  const [gachaPlayCount, setGachaPlayCount] = useState(0);
   const [userGachaId, setUserGachaId] = useState<string>('');
   const { vwbl } = VwblContainer.useContainer();
 
@@ -33,21 +33,66 @@ export const GachaMachine: React.FC = () => {
     }
     setUserGachaId(gachaId);
 
-    const hasPlayed = localStorage.getItem(`vwbl_gacha_played_${gachaId}`);
-    if (hasPlayed === 'true') {
-      setHasPlayedGacha(true);
-      // 既にプレイ済みの場合、結果を復元
-      const savedResult = localStorage.getItem(`vwbl_gacha_result_${gachaId}`);
-      if (savedResult) {
+    // プレイ回数を配列で管理（最大2回）
+    const playHistory = localStorage.getItem(`vwbl_gacha_history_${gachaId}`);
+    let playCount = 0;
+    let latestResult = null;
+    
+    if (playHistory) {
+      try {
+        const history = JSON.parse(playHistory);
+        if (Array.isArray(history)) {
+          playCount = history.length;
+          if (playCount > 0) {
+            latestResult = history[history.length - 1]; // 最新の結果
+          }
+        }
+      } catch (e) {
+        console.warn('Broken gacha history in localStorage. Clearing history data...', e);
+        localStorage.removeItem(`vwbl_gacha_history_${gachaId}`);
+      }
+    } else {
+      // 旧形式データの移行処理
+      const oldPlayed = localStorage.getItem(`vwbl_gacha_played_${gachaId}`);
+      const oldResult = localStorage.getItem(`vwbl_gacha_result_${gachaId}`);
+      
+      if (oldPlayed === 'true' && oldResult) {
         try {
-          const result = JSON.parse(savedResult);
-          setFetchedData(result.fetchedData);
-          setCurrentItem(result.currentItem);
+          const parsedOldResult = JSON.parse(oldResult);
+          if (parsedOldResult && parsedOldResult.fetchedData && parsedOldResult.currentItem) {
+            // 旧形式を新形式（配列）に変換
+            const migratedHistory = [{
+              fetchedData: parsedOldResult.fetchedData,
+              currentItem: parsedOldResult.currentItem,
+              timestamp: Date.now() // タイムスタンプがない場合は現在時刻
+            }];
+            
+            // 新形式で保存
+            localStorage.setItem(`vwbl_gacha_history_${gachaId}`, JSON.stringify(migratedHistory));
+            
+            // 旧データを削除
+            localStorage.removeItem(`vwbl_gacha_played_${gachaId}`);
+            localStorage.removeItem(`vwbl_gacha_result_${gachaId}`);
+            
+            // 移行されたデータを設定
+            playCount = 1;
+            latestResult = migratedHistory[0];
+          }
         } catch (e) {
-          console.warn('Broken gacha result in localStorage. Clearing result data...', e);
+          console.warn('Failed to migrate old gacha data:', e);
+          // 移行に失敗した場合は旧データを削除
+          localStorage.removeItem(`vwbl_gacha_played_${gachaId}`);
           localStorage.removeItem(`vwbl_gacha_result_${gachaId}`);
         }
       }
+    }
+    
+    setGachaPlayCount(playCount);
+    
+    // 最新の結果を表示（プレイ履歴がある場合）
+    if (latestResult && playCount > 0) {
+      setFetchedData(latestResult.fetchedData);
+      setCurrentItem(latestResult.currentItem);
     }
   }, []);
 
@@ -58,8 +103,8 @@ export const GachaMachine: React.FC = () => {
     }
     const apiBase = process.env.NEXT_PUBLIC_GACHA_API_URL.replace(/\/+$/, '');
 
-    if (hasPlayedGacha) {
-      setError('ガチャは1人1回までです。');
+    if (gachaPlayCount >= 2) {
+      setError('ガチャは1人2回までです。既に2回プレイ済みです。');
       return;
     }
 
@@ -139,16 +184,29 @@ export const GachaMachine: React.FC = () => {
           return;
         }
 
-        // 完全成功の場合のみlocalStorageに保存してプレイ済み状態にする
-        localStorage.setItem(`vwbl_gacha_played_${userGachaId}`, 'true');
-        localStorage.setItem(
-          `vwbl_gacha_result_${userGachaId}`,
-          JSON.stringify({
-            fetchedData: response.data,
-            currentItem: selectedItem,
-          }),
-        );
-        setHasPlayedGacha(true);
+        // 画面にガチャ結果を表示
+        setFetchedData(response.data);
+        setCurrentItem(selectedItem);
+        
+        // ガチャ結果を履歴配列に保存
+        const newResult = {
+          fetchedData: response.data,
+          currentItem: selectedItem,
+          timestamp: Date.now(),
+        };
+        
+        const currentHistory = localStorage.getItem(`vwbl_gacha_history_${userGachaId}`);
+        let history = [];
+        try {
+          history = currentHistory ? JSON.parse(currentHistory) : [];
+        } catch (e) {
+          history = [];
+        }
+        
+        history.push(newResult);
+        localStorage.setItem(`vwbl_gacha_history_${userGachaId}`, JSON.stringify(history));
+        
+        setGachaPlayCount(history.length);
         setIsLoading(false);
         
         return;
@@ -159,31 +217,35 @@ export const GachaMachine: React.FC = () => {
           // messageフィールドを優先的にチェック
           if (detailMessage && typeof detailMessage === 'string' && detailMessage.includes('WALLET_ADDRESS_DUPLICATE')) {
             console.error(`Error ${error.response.status}, not retrying - WALLET_ADDRESS_DUPLICATE:`, error.response.data);
-            setError('このウォレットアドレスは既に使用されています。ガチャは1人1回までとなります。');
+            setError('このウォレットアドレスは既に2回使用されています。ガチャは1人2回までとなります。');
             setIsPlaying(false);
             setIsLoading(false);
             return;
           } else if (detailMessage && typeof detailMessage === 'string' && detailMessage.includes('USER_GACHA_ID_DUPLICATE')) {
             console.error(`Error ${error.response.status}, not retrying - USER_GACHA_ID_DUPLICATE:`, error.response.data);
-            setError('既にプレイ済みです。ガチャは1人1回までとなります。');
+            setError('既に2回プレイ済みです。ガチャは1人2回までとなります。');
             setIsPlaying(false);
-            setHasPlayedGacha(true);
+            setIsLoading(false);
             try {
-              localStorage.setItem(`vwbl_gacha_played_${userGachaId}`, 'true');
-              const saved = localStorage.getItem(`vwbl_gacha_result_${userGachaId}`);
+              // 既存の履歴から最新の結果を復元
+              const saved = localStorage.getItem(`vwbl_gacha_history_${userGachaId}`);
               if (saved) {
                 try {
-                  const result = JSON.parse(saved);
-                  if (result && result.fetchedData && result.currentItem) {
-                    setFetchedData(result.fetchedData);
-                    setCurrentItem(result.currentItem);
+                  const history = JSON.parse(saved);
+                  if (Array.isArray(history) && history.length > 0) {
+                    const latestResult = history[history.length - 1];
+                    if (latestResult && latestResult.fetchedData && latestResult.currentItem) {
+                      setFetchedData(latestResult.fetchedData);
+                      setCurrentItem(latestResult.currentItem);
+                    }
+                    setGachaPlayCount(history.length);
                   }
                 } catch (e) {
-                  console.warn('Failed to parse saved gacha result.', e);
+                  console.warn('Failed to parse saved gacha history.', e);
                 }
               }
             } catch (e) {
-              console.warn('Failed to persist/restore duplicate-play state.', e);
+              console.warn('Failed to restore duplicate-play state.', e);
             }
             return;
           }
@@ -227,7 +289,8 @@ export const GachaMachine: React.FC = () => {
       fetchedData={fetchedData}
       isLoading={isLoading}
       error={error}
-      hasPlayedGacha={hasPlayedGacha}
+      hasPlayedGacha={!!fetchedData}
+      gachaPlayCount={gachaPlayCount}
     />
   );
 };

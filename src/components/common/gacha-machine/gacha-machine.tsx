@@ -11,6 +11,7 @@ type GachaMachineComponentProps = {
   isLoading: boolean;
   error: string | null;
   hasPlayedGacha: boolean;
+  gachaPlayCount: number;
 };
 
 export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({
@@ -19,6 +20,7 @@ export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({
   isLoading,
   error,
   hasPlayedGacha,
+  gachaPlayCount,
 }) => {
   return (
     <div className={styles.gachaMachine}>
@@ -35,7 +37,7 @@ export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({
                   ガチャを回して景品をゲットしよう！
                 </Text>
                 <Text fontSize='sm' color='gray.500'>
-                  ※ ガチャは1人1回までです。
+                  ※ ガチャは1人2回までです。
                 </Text>
               </VStack>
             )}
@@ -95,7 +97,7 @@ export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({
               </Alert>
             )}
           </Box>
-          {!hasPlayedGacha && (
+          {gachaPlayCount < 2 && (
             <Button
               colorScheme='blackAlpha'
               bg='black'
@@ -103,7 +105,7 @@ export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({
               color='white'
               display='flex'
               onClick={fetchData}
-              isDisabled={isLoading || (currentItem !== null && !error)}
+              isDisabled={isLoading || gachaPlayCount >= 2}
               isLoading={isLoading}
               loadingText='ガチャ実行中...'
               spinner={<Spinner />}
