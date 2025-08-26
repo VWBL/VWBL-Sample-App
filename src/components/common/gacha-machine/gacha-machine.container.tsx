@@ -225,6 +225,7 @@ export const GachaMachine: React.FC = () => {
             console.error(`Error ${error.response.status}, not retrying - USER_GACHA_ID_DUPLICATE:`, error.response.data);
             setError('既に2回プレイ済みです。ガチャは1人2回までとなります。');
             setIsPlaying(false);
+            setIsLoading(false);
             try {
               // 既存の履歴から最新の結果を復元
               const saved = localStorage.getItem(`vwbl_gacha_history_${userGachaId}`);
