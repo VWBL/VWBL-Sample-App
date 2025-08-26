@@ -51,6 +51,40 @@ export const GachaMachine: React.FC = () => {
         console.warn('Broken gacha history in localStorage. Clearing history data...', e);
         localStorage.removeItem(`vwbl_gacha_history_${gachaId}`);
       }
+    } else {
+      // 旧形式データの移行処理
+      const oldPlayed = localStorage.getItem(`vwbl_gacha_played_${gachaId}`);
+      const oldResult = localStorage.getItem(`vwbl_gacha_result_${gachaId}`);
+      
+      if (oldPlayed === 'true' && oldResult) {
+        try {
+          const parsedOldResult = JSON.parse(oldResult);
+          if (parsedOldResult && parsedOldResult.fetchedData && parsedOldResult.currentItem) {
+            // 旧形式を新形式（配列）に変換
+            const migratedHistory = [{
+              fetchedData: parsedOldResult.fetchedData,
+              currentItem: parsedOldResult.currentItem,
+              timestamp: Date.now() // タイムスタンプがない場合は現在時刻
+            }];
+            
+            // 新形式で保存
+            localStorage.setItem(`vwbl_gacha_history_${gachaId}`, JSON.stringify(migratedHistory));
+            
+            // 旧データを削除
+            localStorage.removeItem(`vwbl_gacha_played_${gachaId}`);
+            localStorage.removeItem(`vwbl_gacha_result_${gachaId}`);
+            
+            // 移行されたデータを設定
+            playCount = 1;
+            latestResult = migratedHistory[0];
+          }
+        } catch (e) {
+          console.warn('Failed to migrate old gacha data:', e);
+          // 移行に失敗した場合は旧データを削除
+          localStorage.removeItem(`vwbl_gacha_played_${gachaId}`);
+          localStorage.removeItem(`vwbl_gacha_result_${gachaId}`);
+        }
+      }
     }
     
     setGachaPlayCount(playCount);
