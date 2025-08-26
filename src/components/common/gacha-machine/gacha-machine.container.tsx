@@ -123,6 +123,17 @@ export const GachaMachine: React.FC = () => {
           },
         );
 
+        if (!response.data || !response.data.prizeId || !response.data.tokenId || response.status !== 200) {
+          console.error('Incomplete response', {
+            status: response.status,
+            dataKeys: Object.keys(response.data ?? {}),
+          });
+          setError('ガチャ処理が完全に完了しませんでした。もう一度お試しください。');
+          setIsPlaying(false);
+          setIsLoading(false);
+          return;
+        }
+
         setFetchedData(response.data);
 
         // prizeId に基づいてアイテム選択
