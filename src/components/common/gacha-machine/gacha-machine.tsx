@@ -105,7 +105,7 @@ export const GachaMachineComponent: React.FC<GachaMachineComponentProps> = ({
               color='white'
               display='flex'
               onClick={fetchData}
-              isDisabled={isLoading || (currentItem !== null && !error)}
+              isDisabled={isLoading || gachaPlayCount >= 2}
               isLoading={isLoading}
               loadingText='ガチャ実行中...'
               spinner={<Spinner />}
